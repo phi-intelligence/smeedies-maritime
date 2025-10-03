@@ -1,0 +1,367 @@
+# **Smeedies Maritime Shipping Agency - Website Design**
+
+## **Complete Website Structure & Content**
+
+### **1. HERO SECTION**
+**Visual**: Large maritime background image (container ship at port with Ghana coastline)
+**Layout**: Full-screen hero with overlay text
+**Content**:
+- **Location Badge**: "Tema, Ghana"
+- **Company Tagline**: "Prime Maritime Solutions by Smeedies!"
+- **Main Headline**: "Deliver Excellence, Navigate Success"
+- **Subtitle**: "Your reliable local partner for shipping and logistics"
+- **Description**: "We deliver logistics solutions to our clients — on time, at the right place, in the original condition and quantity, at a low cost."
+- **Primary CTA**: "Get Quote" (with arrow icon)
+- **Secondary CTA**: "Our Services" (with arrow icon)
+
+---
+
+### **2. ABOUT US SECTION**
+**Visual**: Clean white background with statistics counters
+**Layout**: Two-column with animated statistics
+**Content**:
+- **Section Header**: "About Us"
+- **Main Heading**: "Discover the expertise behind Smeedies Maritime, your premier shipping agency and logistics partner across West Africa."
+- **Animated Statistics** (4 counters):
+  - **40+ Countries**: Network Coverage
+  - **24/7 Service**: Round-the-Clock Availability  
+  - **3 Major Ports**: Tema, Takoradi, Kotoka Airport
+  - **100% On-Time**: Delivery Success Rate
+- **Description**: "Smeedies Maritime is a shipping agency providing ship agency and logistics services across various ports in West Africa. We help customers and principals add value to their business and assist with all shipping, freight, and logistics requirements."
+- **CTA**: "Learn More" (with arrow icon)
+
+---
+
+### **3. OUR SERVICES SECTION**
+**Visual**: Four-column grid with service cards
+**Layout**: Grid of service cards with hover effects
+**Content**:
+- **Section Header**: "Our Services"
+- **Main Heading**: "Comprehensive Maritime Solutions"
+- **Subtitle**: "Professional shipping and logistics services across West Africa"
+
+**Service Cards** (4 cards):
+
+#### **Card 1: Agency Services**
+- **Icon**: Ship/Anchor icon
+- **Title**: "Agency Services"
+- **Features**:
+  - Competitive Proforma Disbursement Account (PDA)
+  - Real-time port line-up service at Tema and Takoradi
+  - Guidance on berth restrictions and regulations
+  - Daily cargo operation updates
+  - Statement of Facts (SOF)
+- **CTA**: "Learn More"
+
+#### **Card 2: Stevedoring & Shore Handling**
+- **Icon**: Cargo/Crane icon
+- **Title**: "Stevedoring & Shore Handling"
+- **Features**:
+  - Dry bulk commodities (clinker, slag, gypsum, coal, manganese)
+  - Break bulk cargo (rice, soya bean meal, wheat, maize, sugar)
+  - Containerised cargo
+  - Heavy lift cargo
+  - Warehousing and storage services
+- **CTA**: "Learn More"
+
+#### **Card 3: Project Cargo**
+- **Icon**: Globe/Map icon
+- **Title**: "Project Cargo"
+- **Features**:
+  - Clearance in 8 countries
+  - Ghana, Togo, Côte d'Ivoire
+  - Burkina Faso, Mali, Niger
+  - Benin, Nigeria
+- **CTA**: "Learn More"
+
+#### **Card 4: Customs Clearing**
+- **Icon**: Document/Check icon
+- **Title**: "Customs Clearing"
+- **Features**:
+  - Fast clearance of consignments
+  - On-time delivery guarantee
+  - Minimum cost solutions
+  - Document pre-processing
+- **CTA**: "Learn More"
+
+- **Section CTA**: "View All Services" (with arrow icon)
+
+---
+
+### **4. WHY CHOOSE US SECTION**
+**Visual**: Four-column feature grid with icons
+**Layout**: Icon + text layout
+**Content**:
+- **Section Header**: "Why Choose Us?"
+- **Main Heading**: "Excellence in Every Port, Every Time"
+
+**Feature Cards** (4 cards):
+
+#### **Feature 1: 24/7 Availability**
+- **Icon**: Clock icon
+- **Title**: "Round-the-Clock Service"
+- **Description**: "We are available to provide services 24 hours a day, 7 days a week."
+
+#### **Feature 2: On-Time Delivery**
+- **Icon**: Clock/Check icon
+- **Title**: "On-Time, On-Budget Delivery"
+- **Description**: "Single contact point and standardized billing with speedy coordination enabling fast vessel turnaround."
+
+#### **Feature 3: Local Expertise**
+- **Icon**: Map/Compass icon
+- **Title**: "Local Knowledge & Experience"
+- **Description**: "Leverage our deep understanding of West African ports and regulations."
+
+#### **Feature 4: Comprehensive Network**
+- **Icon**: Network/Globe icon
+- **Title**: "Extensive Office Network"
+- **Description**: "Seven strategic locations across Ghana for optimal coverage and service delivery."
+
+---
+
+### **5. OPERATIONAL SCOPE SECTION**
+**Visual**: Two-column layout with map visualization
+**Layout**: Text content + interactive map
+**Content**:
+- **Section Header**: "Operational Scope"
+- **Main Heading**: "Serving West Africa's Maritime Industry"
+- **Left Column**:
+  - **Core Competency**: "Our core competency is shipping agency services and all allied activities related to shipping and logistics."
+  - **Client Base**: "We serve ship owners, operators, exporters, importers, shipping lines, freight forwarders, and all connected to the shipping and freight industry."
+  - **Locations**: "Locations served include the Ports of Tema, Takoradi, and Kotoka International Airport."
+- **Right Column**:
+  - **Interactive Map**: West Africa highlighting service countries
+  - **Service Countries**: Ghana, Togo, Côte d'Ivoire, Burkina Faso, Mali, Niger, Benin, Nigeria
+
+---
+
+### **6. OFFICE NETWORK SECTION**
+**Visual**: Grid layout with location cards
+**Layout**: Seven location cards in grid
+**Content**:
+- **Section Header**: "Office Network"
+- **Main Heading**: "Strategic Locations Across Ghana"
+- **Subtitle**: "Seven offices strategically positioned for optimal coverage"
+
+**Location Cards** (7 cards):
+
+#### **Accra Office**
+- **Location**: Kotoka International Airport
+- **Services**: Air cargo handling
+- **Digital Address**: GL-125-6946
+
+#### **Kumasi Office**
+- **Location**: Central Ghana
+- **Services**: Forwarding via truck or air
+- **Digital Address**: [To be added]
+
+#### **Takoradi Office**
+- **Location**: Near seaport
+- **Services**: Cargo management
+- **Digital Address**: [To be added]
+
+#### **Paga Office**
+- **Location**: Border with Burkina Faso
+- **Services**: Transit cargo
+- **Digital Address**: [To be added]
+
+#### **Elubo Office**
+- **Location**: Border with Côte d'Ivoire
+- **Services**: Transit activities
+- **Digital Address**: [To be added]
+
+#### **Akosombo Office**
+- **Location**: Inland water transport
+- **Services**: Truck/rail/water forwarding
+- **Digital Address**: [To be added]
+
+#### **Aflao Office**
+- **Location**: Border with Togo
+- **Services**: Transit activities
+- **Digital Address**: [To be added]
+
+---
+
+### **7. WAREHOUSING SERVICES SECTION**
+**Visual**: Feature grid with warehouse icons
+**Layout**: Grid of warehouse features
+**Content**:
+- **Section Header**: "Warehousing Services"
+- **Main Heading**: "Complete Storage Solutions"
+- **Subtitle**: "Whatever your warehouse needs, we can help"
+
+**Features Grid** (7 features):
+- **Right Space Provision**: Adequate storage capacity
+- **Temperature Control**: Climate-controlled facilities
+- **24/7 CCTV Security**: Round-the-clock monitoring
+- **Consolidation Services**: Cargo consolidation and de-consolidation
+- **GCNET Availability**: Digital customs integration
+- **Insurance Coverage**: Indemnity insurance
+- **Fumigation Services**: Pest control and treatment
+
+---
+
+### **8. TESTIMONIALS SECTION**
+**Visual**: Grid of customer testimonials with photos
+**Layout**: 3x2 grid of testimonial cards
+**Content**:
+- **Section Header**: "Testimonials"
+- **Main Heading**: "Trusted by Maritime Industry Leaders"
+
+**Testimonial Cards** (6 cards):
+
+#### **Testimonial 1**
+- **Photo**: Professional headshot
+- **Quote**: "Smeedies has been our reliable partner for over 5 years. Their local expertise and 24/7 service is unmatched in West Africa."
+- **Name**: "Captain James Osei"
+- **Company**: "Atlantic Shipping Lines"
+
+#### **Testimonial 2**
+- **Photo**: Professional headshot
+- **Quote**: "Fast clearance and on-time delivery every time. They understand the complexities of West African trade."
+- **Name**: "Sarah Mensah"
+- **Company**: "Ghana Importers Association"
+
+#### **Testimonial 3**
+- **Photo**: Professional headshot
+- **Quote**: "Professional service and competitive rates. Their network across Ghana gives us complete coverage."
+- **Name**: "Michael Asante"
+- **Company**: "West Africa Freight Forwarders"
+
+#### **Testimonial 4**
+- **Photo**: Professional headshot
+- **Quote**: "Excellent handling of our project cargo requirements. They cleared everything on time and within budget."
+- **Name**: "Dr. Ama Boateng"
+- **Company**: "Infrastructure Development Corp"
+
+#### **Testimonial 5**
+- **Photo**: Professional headshot
+- **Quote**: "Their warehousing services are top-notch. Temperature control and security are exactly what we needed."
+- **Name**: "Kwame Nkrumah"
+- **Company**: "Agricultural Exporters Ltd"
+
+#### **Testimonial 6**
+- **Photo**: Professional headshot
+- **Quote**: "Smeedies made our intra-African trade operations seamless. Highly recommended for West African logistics."
+- **Name**: "Fatima Diallo"
+- **Company**: "Sahel Trading Company"
+
+---
+
+### **9. NEWS & UPDATES SECTION**
+**Visual**: Blog-style cards with news articles
+**Layout**: Three news cards in row
+**Content**:
+- **Section Header**: "News & Updates"
+- **Main Heading**: "Latest Maritime Industry News"
+
+**News Cards** (3 cards):
+
+#### **News Card 1**
+- **Image**: Port operations during COVID-19
+- **Category**: "Updates"
+- **Title**: "Port Operations Continue During Restrictions"
+- **Content**: "Port users are encouraged to continue clearing goods at Ghana's sea ports, as cargo movement remains exempt from movement restrictions."
+
+#### **News Card 2**
+- **Image**: New tugboats at Tema port
+- **Category**: "Infrastructure"
+- **Title**: "New Tugboats Commissioned at Port of Tema"
+- **Content**: "The Ghana Ports and Harbours Authority has commissioned three new tugboats at the Port of Tema to attract larger vessels and improve turnaround times."
+
+#### **News Card 3**
+- **Image**: West African trade routes
+- **Category**: "Trade"
+- **Title**: "Intra-African Trade Growth Opportunities"
+- **Content**: "As infrastructure improves across West Africa, intra-African trade will continue to grow with new opportunities emerging."
+
+- **Section CTA**: "View All News" (with arrow icon)
+
+---
+
+### **10. QUOTE SECTION**
+**Visual**: Centered quote with maritime background
+**Layout**: Full-width quote section
+**Content**:
+- **Quote**: "We are what we repeatedly do. Excellence, then, is not an act, but a habit."
+- **Author**: "— Aristotle"
+- **Background**: Subtle maritime-themed background
+
+---
+
+### **11. CONTACT SECTION**
+**Visual**: Multi-column contact information
+**Layout**: Contact details with form
+**Content**:
+- **Section Header**: "Contact Us"
+- **Main Heading**: "Get in Touch with Our Team"
+- **Availability**: "We are available to provide services 24 hours a day, 7 days a week."
+
+**Contact Information**:
+- **Tema Office**: Digital Address GT-020-5930, Tema Community 5, GPS 5.639914, -0.006311
+- **Accra Office**: Digital Address GL-125-6946, Accra, Ghana
+- **Other Location**: Digital Address WS-407-0198
+- **Phone**: [Contact number]
+- **Email**: [Contact email]
+
+**Contact Form**:
+- Name, Email, Company, Service Required, Message
+- **CTA**: "Send Message"
+
+---
+
+### **12. FOOTER SECTION**
+**Visual**: Four-column footer layout
+**Layout**: Company info, navigation, services, contact
+**Content**:
+
+#### **Column 1: Company Info**
+- **Logo**: Smeedies Maritime
+- **Description**: "Your reliable local partner for shipping and logistics across West Africa."
+- **CTA**: "Get Quote" button
+
+#### **Column 2: Main Pages**
+- Home, About, Services, Operations, Warehousing, Contact
+
+#### **Column 3: Services**
+- Agency Services, Stevedoring, Project Cargo, Customs Clearing, Warehousing
+
+#### **Column 4: Contact & Accreditations**
+- **Contact**: Phone, Email, Address
+- **Accreditations**: 
+  - Licensed by Ghana Ports & Harbours Authority (GPHA)
+  - Member of World Wide Shipagencies Association (WWSA)
+  - Ghana representative of WWSA with 40+ independent agents
+
+---
+
+## **VISUAL DESIGN ELEMENTS**
+
+### **Color Scheme**
+- **Primary**: Navy Blue (#1e3a8a) - Maritime professionalism
+- **Secondary**: Ocean Blue (#3b82f6) - Trust and reliability  
+- **Accent**: Gold (#f59e0b) - Premium service quality
+- **Success**: Green (#10b981) - On-time delivery
+- **Neutral**: Gray scale for text and backgrounds
+
+### **Typography**
+- **Headings**: Bold, professional sans-serif
+- **Body Text**: Clean, readable sans-serif
+- **Navigation**: Medium weight for clarity
+- **CTAs**: Bold for emphasis
+
+### **Animation Elements**
+- **Scroll-triggered counters** for statistics
+- **Hover effects** on service cards and office locations
+- **Staggered reveals** for testimonials and news
+- **Smooth transitions** between sections
+- **Mobile-responsive** animations
+
+### **Interactive Features**
+- **Interactive map** showing service countries
+- **Office location pins** with hover details
+- **Service card hover effects** with scale and shadow
+- **Smooth scrolling** between sections
+- **Mobile-optimized** touch interactions
+
+This design maintains the sophisticated, professional aesthetic while completely focusing on Smeedies Maritime's shipping and logistics services across West Africa.
