@@ -8,14 +8,14 @@ export default function Footer() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Ship className="w-8 h-8 text-gold" />
+              <Ship className="w-8 h-8 text-blue-300" />
               <span className="text-2xl font-bold">Smeedies</span>
             </div>
             <p className="text-sm text-primary-foreground/80 mb-6">
               Your reliable local partner for shipping and logistics across West Africa.
             </p>
             <Button 
-              className="bg-gold text-primary hover:bg-gold/90 border-gold"
+              className="bg-blue-600 text-white hover:bg-blue-700 border-blue-500"
               data-testid="button-footer-quote"
             >
               Get Quote
@@ -26,23 +26,23 @@ export default function Footer() {
           <div>
             <h3 className="font-bold mb-4">Main Pages</h3>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-home">Home</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-about">About</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-services">Services</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-operations">Operations</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-warehousing">Warehousing</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-contact">Contact</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-home">Home</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-about">About</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-services">Services</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-operations">Operations</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-warehousing">Warehousing</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-contact">Contact</a></li>
             </ul>
           </div>
           
           <div>
             <h3 className="font-bold mb-4">Services</h3>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-agency-services">Agency Services</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-stevedoring">Stevedoring</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-project-cargo">Project Cargo</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-customs">Customs Clearing</a></li>
-              <li><a href="#" className="hover:text-gold transition-colors" data-testid="link-warehouse">Warehousing</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-agency-services">Agency Services</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-stevedoring">Stevedoring</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-project-cargo">Project Cargo</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-customs">Customs Clearing</a></li>
+              <li><a href="#" className="hover:text-blue-300 transition-colors" data-testid="link-warehouse">Warehousing</a></li>
             </ul>
           </div>
           

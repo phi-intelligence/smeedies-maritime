@@ -1,7 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatCounter from "./StatCounter";
-import ContainerShipBackground from "./ContainerShipBackground";
 
 interface AboutSectionProps {
   onLearnMore?: () => void;
@@ -10,12 +9,24 @@ interface AboutSectionProps {
 export default function AboutSection({ onLearnMore }: AboutSectionProps) {
   return (
     <section className="py-20 bg-transparent relative overflow-hidden">
-      {/* Container Ship Background Animation */}
-      <ContainerShipBackground />
+      {/* Video Background */}
+      <div className="absolute inset-0 w-full h-full">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+        >
+          <source src="/src/assets/videos/background-new.mp4" type="video/mp4" />
+        </video>
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/50" />
+      </div>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-3" data-testid="text-section-header">
+          <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             About Us
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 max-w-4xl mx-auto" data-testid="text-heading">

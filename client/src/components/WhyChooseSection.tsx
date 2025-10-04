@@ -65,7 +65,7 @@ export default function WhyChooseSection() {
       
       <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 1 }}>
         <div className="text-center mb-12">
-          <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-3" data-testid="text-section-header">
+          <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             Why Choose Us?
           </p>
           <h2 className="text-3xl md:text-4xl font-bold text-white" data-testid="text-heading">

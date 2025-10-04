@@ -1,23 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Ship, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [textColor, setTextColor] = useState("text-white");
-
-  // Keep navbar transparent with white text for video visibility
-  useEffect(() => {
-    setTextColor("text-white");
-  }, []);
 
   const navItems = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Services", href: "#services" },
-    { label: "Operations", href: "#operations" },
-    { label: "Warehousing", href: "#warehousing" },
-    { label: "Contact", href: "#contact" }
+    { label: "Home", href: "/" },
+    { label: "Services", href: "/services" },
+    { label: "Operations", href: "/operations" },
+    { label: "Warehousing", href: "/warehousing" },
+    { label: "Contact", href: "/contact" }
   ];
 
   return (
@@ -25,29 +19,31 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
-            <Ship className={`w-8 h-8 ${textColor}`} />
-            <span className={`text-xl font-bold ${textColor}`}>Smeedies Maritime</span>
+            <Ship className="w-8 h-8 text-white" />
+            <span className="text-xl font-bold text-white">Smeedies Maritime</span>
           </div>
           
           <div className="hidden md:flex items-center gap-8">
             {navItems.map((item, index) => (
-              <a
+              <Link
                 key={index}
                 href={item.href}
-                className={`text-sm font-medium ${textColor}/80 hover:${textColor} transition-colors`}
+                className="text-sm font-medium text-white/80 hover:text-white transition-colors"
                 data-testid={`link-nav-${item.label.toLowerCase()}`}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
             
-            <Button size="sm" className="bg-gold text-primary hover:bg-gold/90" data-testid="button-nav-quote">
-              Get Quote
-            </Button>
+            <Link href="/contact">
+              <Button size="sm" className="bg-blue-600 text-white hover:bg-blue-700" data-testid="button-nav-quote">
+                Get Quote
+              </Button>
+            </Link>
           </div>
           
           <button
-            className={`md:hidden p-2 ${textColor}`}
+            className="md:hidden p-2 text-white"
             onClick={() => setIsOpen(!isOpen)}
             data-testid="button-menu-toggle"
           >
@@ -59,19 +55,21 @@ export default function Navigation() {
           <div className="md:hidden py-4 border-t border-white/20 bg-slate-900/60 backdrop-blur-md">
             <div className="flex flex-col gap-4">
               {navItems.map((item, index) => (
-                <a
+                <Link
                   key={index}
                   href={item.href}
-                  className={`text-sm font-medium ${textColor}/80 hover:${textColor} transition-colors`}
+                  className="text-sm font-medium text-white/80 hover:text-white transition-colors"
                   onClick={() => setIsOpen(false)}
                   data-testid={`link-mobile-${item.label.toLowerCase()}`}
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
-              <Button size="sm" className="bg-gold text-primary hover:bg-gold/90 w-full" data-testid="button-mobile-quote">
-                Get Quote
-              </Button>
+              <Link href="/contact" onClick={() => setIsOpen(false)}>
+                <Button size="sm" className="bg-blue-600 text-white hover:bg-blue-700 w-full" data-testid="button-mobile-quote">
+                  Get Quote
+                </Button>
+              </Link>
             </div>
           </div>
         )}

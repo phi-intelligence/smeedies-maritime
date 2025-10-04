@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import earthImage from '../assets/images/earth.jpg';
+import earthImage from '../assets/images/earth.jpeg';
 import earthbImage from '../assets/images/earthb.jpg';
 import earthcImage from '../assets/images/earthc.jpg';
 import lightImage from '../assets/images/light.jpg';
@@ -35,13 +35,23 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
     renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
     mountRef.current.appendChild(renderer.domElement);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Enhanced lighting for glassmorphic effect
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
     
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2);
     directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
+    
+    // Add rim lighting for glass effect
+    const rimLight = new THREE.DirectionalLight(0xbfdbfe, 0.3);
+    rimLight.position.set(-5, -3, -5);
+    scene.add(rimLight);
+    
+    // Add subtle point light for glow
+    const pointLight = new THREE.PointLight(0xffffff, 0.5, 10);
+    pointLight.position.set(0, 0, 2);
+    scene.add(pointLight);
 
     // Load earth texture
     const textureLoader = new THREE.TextureLoader();
@@ -50,21 +60,31 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
     const earthSpecularMap = textureLoader.load(earthcImage);
     const earthCloudsMap = textureLoader.load(lightImage);
 
-    // Create Earth globe with texture
-    const globeGeometry = new THREE.SphereGeometry(0.7, 64, 64);
-    const globeMaterial = new THREE.MeshPhongMaterial({
-      map: earthTexture,
-      normalMap: earthNormalMap,
-      specularMap: earthSpecularMap,
-      shininess: glassmorphic ? 30 : 10,
+    // Create continent outlines using earth texture with proper visibility
+    const continentGeometry = new THREE.SphereGeometry(1.0, 64, 64);
+    const continentMaterial = new THREE.MeshBasicMaterial({
+      // Use earth.jpeg for natural Earth colors but make oceans transparent
+      map: earthTexture, // Use earth.jpeg for natural Earth colors
+      alphaMap: earthTexture, // Use same texture for alpha mapping
       transparent: true,
-      opacity: glassmorphic ? 0.95 : 0.95,
-      color: glassmorphic ? new THREE.Color(0xbfdbfe) : undefined // Lighter blue
+      opacity: 0.4, // Reduced opacity for more transparency
+      color: new THREE.Color(0xffffff), // White color to preserve natural colors
+      side: THREE.DoubleSide,
+      alphaTest: 0.05 // Reduced alphaTest to show more of the texture
+    });
+    const continentMesh = new THREE.Mesh(continentGeometry, continentMaterial);
+    scene.add(continentMesh);
+
+    // Create invisible globe sphere (completely hidden) - only for positioning routes
+    const globeGeometry = new THREE.SphereGeometry(1.0, 64, 64);
+    const globeMaterial = new THREE.MeshBasicMaterial({
+      transparent: true,
+      opacity: 0, // Completely invisible
+      visible: false // Ensure it's not visible
     });
     const globe = new THREE.Mesh(globeGeometry, globeMaterial);
-    scene.add(globe);
-
-    // Clouds removed - only globe and lines
+    globe.visible = false; // Force invisible
+    // Don't add to scene - just use for positioning
 
     // Grid lines removed for cleaner look
 
@@ -132,20 +152,18 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
 
     // Port markers removed - keeping only shipping route lines
 
-    // Pastel rainbow colors for glassmorphic effect
-    const pastelColors = [
-      0xa7f3d0, // mint green
-      0xfde68a, // pastel yellow
-      0xfbcfe8, // pastel pink
-      0xbfdbfe, // pastel blue
-      0xe9d5ff, // pastel purple
-      0xfecaca, // pastel red
-      0xddd6fe, // lavender
-      0x86efac, // light green
-      0xfbbf24, // amber
-      0xfb7185, // rose
-      0x60a5fa, // sky blue
-      0xc084fc, // violet
+    // White route colors for all lines
+    const routeColors = [
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
+      0xffffff, // White
     ];
 
     // Globally distributed shipping routes for even coverage
@@ -194,8 +212,8 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
       
       if (!fromPort || !toPort) return;
 
-      const start = latLonToVector3(fromPort.lat, fromPort.lon, 0.71);
-      const end = latLonToVector3(toPort.lat, toPort.lon, 0.71);
+      const start = latLonToVector3(fromPort.lat, fromPort.lon, 1.0);
+      const end = latLonToVector3(toPort.lat, toPort.lon, 1.0);
       
       // Create arc between ports
       const distance = start.distanceTo(end);
@@ -208,13 +226,18 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
       const points = curve.getPoints(50);
       
-      // Route line with custom color and animated drawing effect
+      // Get colorful route color
+      const routeColor = routeColors[idx % routeColors.length];
+      
+      // Route line with white styling and proper visibility
       const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
       const lineMaterial = new THREE.LineBasicMaterial({ 
-        color: 0xffffff, // Pure white
+        color: 0xffffff, // White color for visibility
         transparent: true, 
-        opacity: glassmorphic ? 0.9 : 1.0,
-        linewidth: 3
+        opacity: 1.0, // Full opacity for visibility
+        linewidth: 4, // Increased line width for better visibility
+        depthTest: true,
+        depthWrite: false
       });
       
       const line = new THREE.Line(lineGeometry, lineMaterial);
@@ -222,17 +245,32 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
         route, 
         totalLength: points.length,
         currentLength: 0,
-        animationSpeed: 0.005 + Math.random() * 0.003, // Slower, more subtle speed
-        originalPoints: points.slice(), // Store original points for restoration
-        startPoint: points[0], // First point (origin)
-        endPoint: points[points.length - 1] // Last point (destination)
+        animationSpeed: 0.008 + Math.random() * 0.004, // Faster animation
+        originalPoints: points.slice(),
+        startPoint: points[0],
+        endPoint: points[points.length - 1],
+        routeColor: routeColor
       };
       
-      globe.add(line);
+      continentMesh.add(line);
 
-      // Connection points removed - only lines are shown
-
-      // Containers removed - only lines are shown
+      // Add connection nodes (white circular markers)
+      const nodeGeometry = new THREE.SphereGeometry(0.015, 16, 16); // Smaller dots
+      const nodeMaterial = new THREE.MeshBasicMaterial({ 
+        color: 0xffffff, // White color for visibility
+        transparent: true,
+        opacity: 1.0 // Full opacity for better visibility
+      });
+      
+      // Start node
+      const startNode = new THREE.Mesh(nodeGeometry, nodeMaterial);
+      startNode.position.copy(start);
+      continentMesh.add(startNode);
+      
+      // End node
+      const endNode = new THREE.Mesh(nodeGeometry, nodeMaterial);
+      endNode.position.copy(end);
+      continentMesh.add(endNode);
     });
 
     // Mouse interaction
@@ -252,10 +290,10 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
         const deltaX = event.clientX - previousMousePosition.x;
         const deltaY = event.clientY - previousMousePosition.y;
         
-        globe.rotation.y += deltaX * 0.005;
-        globe.rotation.x += deltaY * 0.005;
+        continentMesh.rotation.y += deltaX * 0.005;
+        continentMesh.rotation.x += deltaY * 0.005;
         
-        globe.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, globe.rotation.x));
+        continentMesh.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, continentMesh.rotation.x));
       }
 
       previousMousePosition = { x: event.clientX, y: event.clientY };
@@ -314,14 +352,22 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
     renderer.domElement.addEventListener('mouseup', onMouseUp);
     renderer.domElement.addEventListener('click', onClick);
 
-    // Animation loop
+    // Enhanced animation variables
     let animationId: number;
+    let time = 0;
     const animate = () => {
       animationId = requestAnimationFrame(animate);
+      time += 0.016; // ~60fps
 
-      // Auto-rotate globe slowly (slower for glassmorphic effect)
+      // Enhanced auto-rotation with subtle variations
       if (!isDragging) {
-        globe.rotation.y += glassmorphic ? 0.0005 : 0.001;
+        const baseRotation = glassmorphic ? 0.001 : 0.002;
+        const variation = Math.sin(time * 0.5) * 0.0002; // Subtle speed variation
+        continentMesh.rotation.y += baseRotation + variation;
+        
+        // Add subtle bobbing motion
+        const bobAmount = Math.sin(time * 0.3) * 0.02;
+        continentMesh.position.y = bobAmount;
       }
 
       // Clouds removed - no animation needed

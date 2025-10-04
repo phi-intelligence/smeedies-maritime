@@ -12,28 +12,23 @@ import QuoteSection from "@/components/QuoteSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import ScrollAnimation from "@/components/ScrollAnimation";
-import heroImage from '@assets/generated_images/Maritime_hero_background_image_0cc6412a.png';
-import heroVideo from '@/assets/videos/underwater.mp4';
+import { Link } from "wouter";
+import temaPortImage from '@assets/generated_images/Tema_Port_aerial_view_2afebff1.png';
 
 export default function Home() {
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    element?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <div className="min-h-screen bg-background relative">
-      {/* Full Page Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
+      {/* Full Page Background Image */}
+      <div 
         className="fixed inset-0 w-full h-full object-cover z-0"
-      >
-        <source src={heroVideo} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+        style={{
+          backgroundImage: `url(${temaPortImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat'
+        }}
+      />
       
       {/* Dark overlay for better text readability across entire page */}
       <div className="fixed inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
@@ -46,23 +41,22 @@ export default function Home() {
         {/* Hero Section with Globe Animation */}
         <section id="home">
           <Hero 
-            backgroundImage={heroImage}
-            backgroundVideo={heroVideo}
-            onGetQuote={() => scrollToSection('contact')}
-            onViewServices={() => scrollToSection('services')}
+            backgroundImage={temaPortImage}
+            onGetQuote={() => window.location.href = '/contact'}
+            onViewServices={() => window.location.href = '/services'}
           />
         </section>
         
         {/* Content Sections */}
         <ScrollAnimation animation="fadeInUp">
           <section id="about">
-            <AboutSection onLearnMore={() => scrollToSection('services')} />
+            <AboutSection onLearnMore={() => window.location.href = '/services'} />
           </section>
         </ScrollAnimation>
         
         <ScrollAnimation animation="fadeInUp" delay={100}>
           <section id="services">
-            <ServicesSection onViewAllServices={() => console.log('View all services')} />
+            <ServicesSection onViewAllServices={() => window.location.href = '/services'} />
           </section>
         </ScrollAnimation>
         
