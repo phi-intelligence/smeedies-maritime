@@ -15,11 +15,16 @@ export default function StatCounter({ end, suffix = "", label, duration = 2000 }
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !isVisible) {
+        if (entry.isIntersecting) {
+          // Reset and restart animation every time element comes into view
+          setCount(0);
           setIsVisible(true);
+        } else {
+          // Reset when element goes out of view
+          setIsVisible(false);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.3 }
     );
 
     if (ref.current) {
@@ -27,7 +32,7 @@ export default function StatCounter({ end, suffix = "", label, duration = 2000 }
     }
 
     return () => observer.disconnect();
-  }, [isVisible]);
+  }, []);
 
   useEffect(() => {
     if (!isVisible) return;
@@ -50,10 +55,10 @@ export default function StatCounter({ end, suffix = "", label, duration = 2000 }
 
   return (
     <div ref={ref} className="text-center" data-testid="stat-counter">
-      <div className="text-4xl md:text-5xl font-bold text-primary mb-2" data-testid="stat-value">
+      <div className="text-4xl md:text-5xl font-bold text-white mb-2" data-testid="stat-value">
         {count}{suffix}
       </div>
-      <div className="text-sm md:text-base text-muted-foreground" data-testid="stat-label">
+      <div className="text-sm md:text-base text-gray-200" data-testid="stat-label">
         {label}
       </div>
     </div>

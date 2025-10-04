@@ -44,13 +44,13 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-20 bg-muted/30">
+    <section className="py-20 bg-transparent">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-3" data-testid="text-section-header">
             Testimonials
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground" data-testid="text-heading">
+          <h2 className="text-3xl md:text-4xl font-bold text-white" data-testid="text-heading">
             Trusted by Maritime Industry Leaders
           </h2>
         </div>

@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatCounter from "./StatCounter";
+import ContainerShipBackground from "./ContainerShipBackground";
 
 interface AboutSectionProps {
   onLearnMore?: () => void;
@@ -8,13 +9,16 @@ interface AboutSectionProps {
 
 export default function AboutSection({ onLearnMore }: AboutSectionProps) {
   return (
-    <section className="py-20 bg-background">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-20 bg-transparent relative overflow-hidden">
+      {/* Container Ship Background Animation */}
+      <ContainerShipBackground />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-3" data-testid="text-section-header">
             About Us
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-6 max-w-4xl mx-auto" data-testid="text-heading">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 max-w-4xl mx-auto" data-testid="text-heading">
             Discover the expertise behind Smeedies Maritime, your premier shipping agency and logistics partner across West Africa.
           </h2>
         </div>
@@ -29,7 +33,7 @@ export default function AboutSection({ onLearnMore }: AboutSectionProps) {
         </div>
         
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-lg text-muted-foreground mb-8" data-testid="text-description">
+          <p className="text-lg text-gray-200 mb-8" data-testid="text-description">
             Smeedies Maritime is a shipping agency providing ship agency and logistics services across various ports in West Africa. We help customers and principals add value to their business and assist with all shipping, freight, and logistics requirements.
           </p>
           

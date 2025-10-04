@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import shipVideo from "@/assets/videos/Ship.mp4";
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -28,16 +29,32 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="py-20 bg-muted/30">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-20 bg-transparent relative overflow-hidden">
+      {/* Background Video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ zIndex: -1 }}
+      >
+        <source src={shipVideo} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70" style={{ zIndex: 0 }} />
+      
+      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 1 }}>
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-gold uppercase tracking-wider mb-3" data-testid="text-section-header">
             Contact Us
           </p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4" data-testid="text-heading">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4" data-testid="text-heading">
             Get in Touch with Our Team
           </h2>
-          <p className="text-lg text-muted-foreground" data-testid="text-availability">
+          <p className="text-lg text-gray-200" data-testid="text-availability">
             We are available to provide services 24 hours a day, 7 days a week.
           </p>
         </div>
@@ -114,40 +131,40 @@ export default function ContactSection() {
           
           <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-bold text-foreground mb-6">Our Offices</h3>
+              <h3 className="text-xl font-bold text-white mb-6">Our Offices</h3>
               
               <div className="space-y-6">
                 <div className="flex gap-3">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-foreground">Tema Office</p>
-                    <p className="text-sm text-muted-foreground">Digital Address: GT-020-5930</p>
-                    <p className="text-sm text-muted-foreground">Tema Community 5, Ghana</p>
+                    <p className="font-semibold text-white">Tema Office</p>
+                    <p className="text-sm text-gray-200">Digital Address: GT-020-5930</p>
+                    <p className="text-sm text-gray-200">Tema Community 5, Ghana</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-foreground">Accra Office</p>
-                    <p className="text-sm text-muted-foreground">Digital Address: GL-125-6946</p>
-                    <p className="text-sm text-muted-foreground">Accra, Ghana</p>
+                    <p className="font-semibold text-white">Accra Office</p>
+                    <p className="text-sm text-gray-200">Digital Address: GL-125-6946</p>
+                    <p className="text-sm text-gray-200">Accra, Ghana</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
                   <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-foreground">Phone</p>
-                    <p className="text-sm text-muted-foreground">+233 XXX XXX XXX</p>
+                    <p className="font-semibold text-white">Phone</p>
+                    <p className="text-sm text-gray-200">+233 XXX XXX XXX</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
                   <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-foreground">Email</p>
-                    <p className="text-sm text-muted-foreground">info@smeediesmaritime.com</p>
+                    <p className="font-semibold text-white">Email</p>
+                    <p className="text-sm text-gray-200">info@smeediesmaritime.com</p>
                   </div>
                 </div>
               </div>

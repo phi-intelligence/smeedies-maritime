@@ -1,0 +1,196 @@
+.sectionSlider {
+  height: 100vh; /* Normal viewport height */
+  width: 100%;
+  position: relative;
+  background: linear-gradient(to right bottom, #2a1f30 50%, #383d44 50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sliderContainer {
+  height: 80vh;
+  width: 90vw;
+  position: sticky;
+  top: 10vh; /* Stick to top 10% of viewport */
+  z-index: 10;
+}
+
+.swiperContainer {
+  height: 100%;
+  width: 100%;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.swiperSlide {
+  display: flex;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.swiperImage {
+  width: 50%;
+  height: 100%;
+  position: relative;
+}
+
+.swiperImageInner {
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: hsla(0, 0%, 0%, 0.2);
+  background-blend-mode: overlay;
+  padding: 4rem;
+}
+
+.swiperImageLeft {
+  filter: sepia(100%);
+  transition: all 1s linear;
+  transition-delay: 1s;
+}
+
+.swiperSlideActive .swiperImageLeft {
+  filter: sepia(0%);
+}
+
+.swiperImageRight {
+  filter: hue-rotate(-60deg);
+  transition: all 1s linear;
+  transition-delay: 1s;
+  background-color: hsla(0, 0%, 0%, 0.5);
+  background-blend-mode: multiply;
+}
+
+.swiperSlideActive .swiperImageRight {
+  filter: hue-rotate(90deg);
+}
+
+.slideTitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  color: #fff;
+  align-self: flex-start;
+  margin: 0 0 auto 0;
+  font-size: 4.5rem;
+  line-height: 1;
+  transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) 1.1s;
+  transform: translate3d(-20%, 0, 0);
+  opacity: 0;
+}
+
+.slideTitle .emphasis {
+  font-weight: 700;
+  font-style: italic;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) 1.2s;
+  transform: translate3d(-20%, 0, 0);
+  display: inline-block;
+}
+
+.slideTitle span:not(.emphasis) {
+  font-size: 3.5rem;
+}
+
+.slideSubtitle {
+  font-family: 'Cormorant SC', serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin: 0;
+  line-height: 1;
+  margin-bottom: auto;
+  align-self: flex-end;
+  text-transform: uppercase;
+  transition: all 0.8s cubic-bezier(0.215, 0.61, 0.355, 1) 1.3s;
+  transform: translate3d(-20%, 0, 0);
+  opacity: 0;
+  font-weight: 500;
+  color: #fff;
+  padding-right: 8rem;
+}
+
+.slideDescription {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  color: #fff;
+  width: 100%;
+  max-width: 350px;
+  text-align: justify;
+  font-size: 1.2rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) 1.4s;
+  transform: translate3d(-20%, 0, 0);
+}
+
+/* Active slide animations */
+:global(.swiper-slide-active) .slideTitle,
+:global(.swiper-slide-active) .slideDescription,
+:global(.swiper-slide-active) .slideTitle .emphasis,
+:global(.swiper-slide-active) .slideSubtitle {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+
+:global(.swiper-slide-active) .swiperImageLeft {
+  filter: sepia(0%);
+}
+
+:global(.swiper-slide-active) .swiperImageRight {
+  filter: hue-rotate(90deg);
+}
+
+/* Navigation removed - autoplay only */
+
+/* Responsive Design */
+@media screen and (max-width: 1280px) {
+  .slideTitle {
+    font-size: 3.9rem;
+  }
+  .slideTitle span:not(.emphasis) {
+    font-size: 2.9rem;
+  }
+  .slideSubtitle {
+    font-size: 13px;
+  }
+  .slideDescription {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .slideTitle {
+    font-size: 3.5rem;
+  }
+  .slideTitle span:not(.emphasis) {
+    font-size: 2.5rem;
+  }
+  .slideDescription {
+    max-width: 90%;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .sectionSlider {
+    height: 86vh;
+    width: 96vw;
+  }
+  .slideTitle {
+    font-size: 3.2rem;
+    align-self: center;
+  }
+  .slideTitle span:not(.emphasis) {
+    font-size: 2.1rem;
+  }
+  .slideDescription {
+    max-width: 94%;
+  }
+  .swiperImageInner {
+    padding: 2rem;
+  }
+}
