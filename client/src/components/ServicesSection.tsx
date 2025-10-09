@@ -2,7 +2,8 @@ import { ArrowRight, Ship, Truck, Globe, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ServiceCard from "./ServiceCard";
 import ScrollAnimation from "./ScrollAnimation";
-import logistics3Video from "@/assets/videos/logsitics 3.mp4";
+import ParallaxBackground from "./ParallaxBackground";
+import logistics3Video from "@/assets/videos/logistics-3.mp4";
 import { useEffect, useRef, useState } from "react";
 
 interface ServicesSectionProps {
@@ -78,24 +79,30 @@ export default function ServicesSection({ onViewAllServices }: ServicesSectionPr
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 bg-transparent relative overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
-      >
-        <source src={logistics3Video} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+    <section ref={sectionRef} className="py-20 relative overflow-hidden prevent-white-flash">
+      
+      {/* Background Video with Parallax */}
+      <ParallaxBackground speed={0.4} direction="up" className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          onLoadStart={() => console.log('Services video loading started')}
+          onCanPlay={() => console.log('Services video can play')}
+          onError={(e) => console.error('Services video error:', e)}
+        >
+          <source src={logistics3Video} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </ParallaxBackground>
       
       {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70" style={{ zIndex: 0 }} />
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70" style={{ zIndex: 2 }} /> */}
       
-      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 1 }}>
+      {/* Header content */}
+      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 3 }}>
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             Our Services
@@ -107,8 +114,11 @@ export default function ServicesSection({ onViewAllServices }: ServicesSectionPr
             Professional shipping and logistics services across West Africa
           </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      </div>
+
+      {/* Full width cards container */}
+      <div className="w-full px-4 mb-12 relative" style={{ zIndex: 3 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {services.map((service, index) => (
             <div 
               key={index} 
@@ -128,7 +138,9 @@ export default function ServicesSection({ onViewAllServices }: ServicesSectionPr
             </div>
           ))}
         </div>
-        
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 3 }}>
         <div className="text-center">
           <Button 
             size="lg"

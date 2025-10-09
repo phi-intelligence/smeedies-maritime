@@ -1,10 +1,24 @@
+import 'dotenv/config';
 import express, { type Request, Response, NextFunction } from "express";
+import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { NeonStorage } from "./neon-storage";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'smeedies-maritime-secret-key-2024',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  }
+}));
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -37,7 +51,23 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  const server = await registerRoutes(app);
+  // Initialize production database storage
+  let storage;
+  try {
+    const databaseUrl = process.env.DATABASE_URL;
+    if (!databaseUrl) {
+      throw new Error('DATABASE_URL environment variable is required');
+    }
+    storage = new NeonStorage(databaseUrl);
+    console.log('✅ Connected to production database (NeonDB)');
+  } catch (error) {
+    console.error('❌ Failed to connect to database:', error);
+    console.log('🔄 Falling back to in-memory storage for development');
+    const { MemStorage } = await import('./storage');
+    storage = new MemStorage();
+  }
+
+  const server = await registerRoutes(app, storage);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;

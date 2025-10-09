@@ -4,82 +4,28 @@ import ServiceCard from "@/components/ServiceCard";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import AnimatedWorldMap from "@/components/AnimatedWorldMap";
 import cargoShipHarborImage from "@/assets/images/cargo-ship-miami-harbor.jpg";
 import portOperationsImage from "@/assets/images/port_operations_carg_5753cff0.jpg";
 import cargoShipLoadingImage from "@/assets/images/cargo_ship_loading_v_b9f8b6f4.jpg";
 import containerOperationsImage from "@/assets/images/container-cargo-freight-ship-port-twilight.jpg";
 import nightPortImage from "@/assets/images/night-time-industrial-port-scene-with-shipping-containers-reflective-surfaces.jpg";
 import exportLogisticsImage from "@/assets/images/export-ship-logistics-industrial-trade.jpg";
+import cargoShipsDockedImage from "@/assets/images/cargo-ships-docked-port-night.jpg";
+import maritimeLogisticsImage from "@/assets/images/maritime_logistics_w_d9957c6e.jpg";
+import portCraneOperationImage from "@/assets/images/port_crane_operation_01b3e60a.jpg";
+import shippingContainersImage from "@/assets/images/shipping_containers__4ae963ed.jpg";
+import warehouseLogisticsImage from "@/assets/images/warehouse_logistics__b8d9236e.jpg";
 import logistics5Video from "@/assets/videos/logistics-5.mp4";
+import servicesVideo from "@/assets/videos/Services.mp4";
 import { useEffect, useRef, useState } from "react";
 
 export default function Services() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const services = [
-    {
-      icon: Ship,
-      title: "Agency Services",
-      features: [
-        "Competitive Proforma Disbursement Account (PDA)",
-        "Real-time port line-up service at Tema and Takoradi",
-        "Guidance on berth restrictions and regulations",
-        "Daily cargo operation updates",
-        "Statement of Facts (SOF)"
-      ]
-    },
-    {
-      icon: Truck,
-      title: "Stevedoring & Shore Handling",
-      features: [
-        "Dry bulk commodities (clinker, slag, gypsum, coal, manganese)",
-        "Break bulk cargo (rice, soya bean meal, wheat, maize, sugar)",
-        "Containerised cargo",
-        "Heavy lift cargo",
-        "Warehousing and storage services"
-      ]
-    },
-    {
-      icon: Globe,
-      title: "Project Cargo",
-      features: [
-        "Clearance in 8 countries",
-        "Ghana, Togo, Côte d'Ivoire",
-        "Burkina Faso, Mali, Niger",
-        "Benin, Nigeria"
-      ]
-    },
-    {
-      icon: FileCheck,
-      title: "Customs Clearing",
-      features: [
-        "Fast clearance of consignments",
-        "On-time delivery guarantee",
-        "Minimum cost solutions",
-        "Document pre-processing"
-      ]
-    }
-  ];
+  const [currentSlide, setCurrentSlide] = useState(-1);
+  const [currentHusbandrySlide, setCurrentHusbandrySlide] = useState(-1);
+  const [currentCargoSlide, setCurrentCargoSlide] = useState(-1);
 
   const serviceProcess = [
     {
@@ -111,429 +57,847 @@ export default function Services() {
     "Full Insurance Coverage"
   ];
 
+  // Accordion slider functions
+  const setActiveSlide = (index: number) => {
+    if (currentSlide === index) {
+      setCurrentSlide(-1);
+    } else {
+      setCurrentSlide(index);
+    }
+  };
+
+  // Touch handlers for mobile
+  const handleSlideTouch = (index: number) => {
+    // Add slight delay to prevent accidental touches
+    setTimeout(() => {
+      setActiveSlide(index);
+    }, 100);
+  };
+
+  const nextSlide = () => {
+    const nextIndex = currentSlide === -1 ? 0 : (currentSlide + 1) % 4;
+    setActiveSlide(nextIndex);
+  };
+
+  const previousSlide = () => {
+    const prevIndex = currentSlide === -1 ? 3 : (currentSlide - 1 + 4) % 4;
+    setActiveSlide(prevIndex);
+  };
+
+  // Husbandry Services accordion slider functions
+  const setActiveHusbandrySlide = (index: number) => {
+    if (currentHusbandrySlide === index) {
+      setCurrentHusbandrySlide(-1);
+    } else {
+      setCurrentHusbandrySlide(index);
+    }
+  };
+
+  const handleHusbandrySlideTouch = (index: number) => {
+    setTimeout(() => {
+      setActiveHusbandrySlide(index);
+    }, 100);
+  };
+
+  const nextHusbandrySlide = () => {
+    const nextIndex = currentHusbandrySlide === -1 ? 0 : (currentHusbandrySlide + 1) % 4;
+    setActiveHusbandrySlide(nextIndex);
+  };
+
+  const previousHusbandrySlide = () => {
+    const prevIndex = currentHusbandrySlide === -1 ? 3 : (currentHusbandrySlide - 1 + 4) % 4;
+    setActiveHusbandrySlide(prevIndex);
+  };
+
+  // Cargo Services accordion slider functions
+  const setActiveCargoSlide = (index: number) => {
+    if (currentCargoSlide === index) {
+      setCurrentCargoSlide(-1);
+    } else {
+      setCurrentCargoSlide(index);
+    }
+  };
+
+  const handleCargoSlideTouch = (index: number) => {
+    setTimeout(() => {
+      setActiveCargoSlide(index);
+    }, 100);
+  };
+
+  const nextCargoSlide = () => {
+    const nextIndex = currentCargoSlide === -1 ? 0 : (currentCargoSlide + 1) % 4;
+    setActiveCargoSlide(nextIndex);
+  };
+
+  const previousCargoSlide = () => {
+    const prevIndex = currentCargoSlide === -1 ? 3 : (currentCargoSlide - 1 + 4) % 4;
+    setActiveCargoSlide(prevIndex);
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Keyboard navigation for accordion slider
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") previousSlide();
+      if (e.key === "ArrowRight") nextSlide();
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [currentSlide]);
+
+  const services = [
+    {
+      icon: Ship,
+      title: "Agency Services",
+      description: "Complete ship agency and husbanding services with competitive pricing and real-time updates.",
+      features: ["Port Lineup Service", "Competitive Proforma", "Port Regulations", "Comprehensive Reporting"]
+    },
+    {
+      icon: Truck,
+      title: "Husbandry Services", 
+      description: "Complete crew handling and vessel support services through a single contact point.",
+      features: ["Crew Handling", "Fuel & Bunker", "Ship Spares", "Single Contact"]
+    },
+    {
+      icon: Globe,
+      title: "Cargo Services",
+      description: "Comprehensive stevedoring and shore handling for all cargo types.",
+      features: ["Break Bulk", "Containerized", "Warehouse Storage", "Project Cargo"]
+    },
+    {
+      icon: FileCheck,
+      title: "Customs Clearing",
+      description: "Fast customs clearance and delivery services with minimum cost solutions.",
+      features: ["Fast Clearance", "On-Time Delivery", "Cost Effective", "Reliable Service"]
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-gray-800 relative">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
+      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden bg-gray-800">
         {/* Background Image */}
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${cargoShipHarborImage})`,
+            backgroundImage: `url(${cargoShipsDockedImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
           }}
         />
         
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+        {/* Animated World Map */}
+        <AnimatedWorldMap className="z-5" />
         
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3">
-              Our Services
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Comprehensive Maritime Solutions
-            </h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              Professional shipping and logistics services across West Africa. We deliver excellence in every port, every time.
-            </p>
+        {/* Dark overlay for better text readability */}
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" /> */}
+        
+        <div className="relative z-20 max-w-full mx-auto w-full">
+          <div className="flex flex-col items-center justify-center text-center min-h-[80vh] space-y-8">
+            <div className="space-y-8 max-w-6xl mx-auto">
+              <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3 animate-fade-in-up">
+                Our Services
+              </p>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-lg animate-fade-in-up px-4" style={{ animationDelay: '0.2s' }}>
+                <span className="text-blue-300">Comprehensive</span> Maritime Solutions
+              </h1>
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto leading-relaxed animate-fade-in-up px-4" style={{ animationDelay: '0.4s' }}>
+                Professional ship agency, husbandry, and cargo services across West Africa with competitive pricing and real-time updates
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+                <Button 
+                  size="lg" 
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={() => {
+                    const contactSection = document.getElementById('contact');
+                    if (contactSection) {
+                      contactSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Get Quote
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="border-blue-300 text-blue-300 hover:bg-blue-300 hover:text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
+                  onClick={() => {
+                    const agencySection = document.getElementById('agency-services');
+                    if (agencySection) {
+                      agencySection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Learn More
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Agency Services */}
-      <section ref={sectionRef} className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${portOperationsImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+      {/* Agency Services Accordion Slider */}
+      <section id="agency-services" ref={sectionRef} className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentSlide !== -1 ? 'section-has-active-slide' : ''}`}>
+        <div className="w-full h-full">
+          {/* Heading Overlay */}
+          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Agency Services
             </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-200 max-w-2xl mx-auto drop-shadow-md">
               Professional ship agency services with competitive pricing and real-time updates
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-gold/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
+          <div className="slider-container">
+            <div className="now-showing">Now Available</div>
+
+            <div className="accordion-slider">
+              <div 
+                className={`slide ${currentSlide === 0 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${portOperationsImage})`}}
+                onMouseEnter={() => setActiveSlide(0)}
+                onTouchStart={() => handleSlideTouch(0)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">01</div>
+                  <div className="car-brand">Agency Services</div>
+                  <div className="car-name">Competitive Proforma Disbursement</div>
+                  <div className="car-subtitle">Detailed estimates of port charges and husbanding charges</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Service:</span>
+                      <span className="spec-value">Ship Agency & Husbanding</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Competitive Proforma Disbursement Account</h3>
-                <p className="text-gray-300 mb-4">Detailed estimates of port charges and husbanding charges for ship calls with transparent pricing.</p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• Real-time cost estimates</li>
-                  <li>• Transparent pricing structure</li>
-                  <li>• No hidden fees</li>
-                </ul>
+                    <div className="spec-row">
+                      <span className="spec-label">Coverage:</span>
+                      <span className="spec-value">Tema & Takoradi Ports</span>
+              </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Updates:</span>
+                      <span className="spec-value">Real-time Cost Estimates</span>
+                </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Support:</span>
+                      <span className="spec-value">24/7 Customer Service</span>
+                    </div>
+                  </div>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Transparent Pricing</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>No Hidden Fees</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Expert Guidance</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="add-button"></div>
               </div>
               
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-gold/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+              <div 
+                className={`slide ${currentSlide === 1 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${cargoShipLoadingImage})`}}
+                onMouseEnter={() => setActiveSlide(1)}
+                onTouchStart={() => handleSlideTouch(1)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">02</div>
+                  <div className="car-brand">Real-Time Services</div>
+                  <div className="car-name">Port Lineup Service</div>
+                  <div className="car-subtitle">Live updates on port status and berth availability</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Service:</span>
+                      <span className="spec-value">Real-Time Port Monitoring</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Real-Time Port Lineup Service</h3>
-                <p className="text-gray-300 mb-4">Live updates on port status at Tema and Takoradi ports with berth availability.</p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• Live port status updates</li>
-                  <li>• Berth availability tracking</li>
-                  <li>• Queue position monitoring</li>
-                </ul>
+                    <div className="spec-row">
+                      <span className="spec-label">Coverage:</span>
+                      <span className="spec-value">Tema & Takoradi Ports</span>
               </div>
-              
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-gold/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                    <div className="spec-row">
+                      <span className="spec-label">Updates:</span>
+                      <span className="spec-value">Live Port Status</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Tracking:</span>
+                      <span className="spec-value">Queue Position Monitoring</span>
+                    </div>
+                  </div>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Live Updates</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Berth Tracking</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Queue Monitoring</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Port Regulations & Guidance</h3>
-                <p className="text-gray-300 mb-4">Expert guidance on local port regulations and berth restrictions for smooth operations.</p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• Local regulation expertise</li>
-                  <li>• Berth restriction guidance</li>
-                  <li>• Compliance assistance</li>
-                </ul>
-              </div>
+                <div className="add-button"></div>
             </div>
             
-            <div className="bg-gradient-to-r from-gold/10 to-blue-500/10 rounded-xl p-8 border border-gold/20">
-              <h3 className="text-2xl font-bold text-white mb-4">Comprehensive Reporting</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="text-lg font-semibold text-gold mb-2">Time Tracking</h4>
-                  <ul className="text-gray-300 space-y-1">
-                    <li>• Estimated Time of Arrival (ETA)</li>
-                    <li>• Estimated Time of Berthing (ETB)</li>
-                    <li>• Estimated Time of Completion (ETC)</li>
-                  </ul>
+              <div 
+                className={`slide ${currentSlide === 2 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${containerOperationsImage})`}}
+                onMouseEnter={() => setActiveSlide(2)}
+                onTouchStart={() => handleSlideTouch(2)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">03</div>
+                  <div className="car-brand">Port Regulations</div>
+                  <div className="car-name">Guidance & Compliance</div>
+                  <div className="car-subtitle">Expert guidance on local port regulations</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Service:</span>
+                      <span className="spec-value">Regulatory Compliance</span>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gold mb-2">Operations Updates</h4>
-                  <ul className="text-gray-300 space-y-1">
-                    <li>• Daily cargo operations reports</li>
-                    <li>• Statement of Facts (SOF)</li>
-                    <li>• Real-time status updates</li>
-                  </ul>
+                    <div className="spec-row">
+                      <span className="spec-label">Expertise:</span>
+                      <span className="spec-value">Local Regulation Knowledge</span>
                 </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Guidance:</span>
+                      <span className="spec-value">Berth Restriction Assistance</span>
               </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Support:</span>
+                      <span className="spec-value">Compliance Assistance</span>
             </div>
           </div>
-        </section>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Local Expertise</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Berth Guidance</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Compliance Help</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="add-button"></div>
+              </div>
 
-      {/* Husbandry Services */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${cargoShipLoadingImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <div 
+                className={`slide ${currentSlide === 3 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${nightPortImage})`}}
+                onMouseEnter={() => setActiveSlide(3)}
+                onTouchStart={() => handleSlideTouch(3)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">04</div>
+                  <div className="car-brand">Comprehensive Reporting</div>
+                  <div className="car-name">Time Tracking & Operations</div>
+                  <div className="car-subtitle">Complete reporting and documentation services</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Service:</span>
+                      <span className="spec-value">Documentation & Reporting</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Tracking:</span>
+                      <span className="spec-value">ETA, ETB, ETC Monitoring</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Reports:</span>
+                      <span className="spec-value">Daily Operations Updates</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Documents:</span>
+                      <span className="spec-value">Statement of Facts (SOF)</span>
+                    </div>
+                  </div>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Time Tracking</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Daily Reports</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Real-time Updates</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="add-button"></div>
+              </div>
+            </div>
+
+            <button className="navigation-arrows nav-prev" onClick={previousSlide}>‹</button>
+            <button className="navigation-arrows nav-next" onClick={nextSlide}>›</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Husbandry Services Accordion Slider */}
+      <section className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentHusbandrySlide !== -1 ? 'section-has-active-slide' : ''}`}>
+        <div className="w-full h-full">
+          {/* Heading Overlay */}
+          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Husbandry Services
             </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-200 max-w-2xl mx-auto drop-shadow-md">
               Complete crew handling and vessel support services through a single contact point
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 gap-8 mb-12">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold text-white mb-6">Crew Handling Services</h3>
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
+          <div className="slider-container">
+            <div className="now-showing">Now Available</div>
+
+            <div className="accordion-slider">
+              <div 
+                className={`slide ${currentHusbandrySlide === 0 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${cargoShipLoadingImage})`}}
+                onMouseEnter={() => setActiveHusbandrySlide(0)}
+                onTouchStart={() => handleHusbandrySlideTouch(0)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">01</div>
+                  <div className="car-brand">Crew Handling Services</div>
+                  <div className="car-name">Complete Crew Support</div>
+                  <div className="car-subtitle">Professional crew change and travel services through single contact point</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Crew Changes:</span>
+                      <span className="spec-value">Professional crew change services</span>
                     </div>
-                    <p className="text-sm text-gray-300">Crew Changes</p>
+                    <div className="spec-row">
+                      <span className="spec-label">Meet & Greet:</span>
+                      <span className="spec-value">Airport pickup and assistance</span>
                   </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                      </svg>
+                    <div className="spec-row">
+                      <span className="spec-label">Travel Arrangements:</span>
+                      <span className="spec-value">Flight and transportation booking</span>
                     </div>
-                    <p className="text-sm text-gray-300">Meet & Greet</p>
+                    <div className="spec-row">
+                      <span className="spec-label">Hotel Accommodations:</span>
+                      <span className="spec-value">Quality hotel bookings</span>
                   </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                      </svg>
                     </div>
-                    <p className="text-sm text-gray-300">Travel Arrangements</p>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>24/7 Support</span>
                   </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                      </svg>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Fast Processing</span>
                     </div>
-                    <p className="text-sm text-gray-300">Hotel Accommodations</p>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Expert Handling</span>
                   </div>
                 </div>
+                </div>
+                <div className="add-button"></div>
               </div>
               
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold text-white mb-6">Vessel Support Services</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gold/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                      </svg>
+              <div 
+                className={`slide ${currentHusbandrySlide === 1 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${maritimeLogisticsImage})`}}
+                onMouseEnter={() => setActiveHusbandrySlide(1)}
+                onTouchStart={() => handleHusbandrySlideTouch(1)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">02</div>
+                  <div className="car-brand">Vessel Support Services</div>
+                  <div className="car-name">Complete Vessel Support</div>
+                  <div className="car-subtitle">Comprehensive vessel support including fuel, spares, and provisions</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Fuel (Bunker Supply):</span>
+                      <span className="spec-value">Premium grade marine fuel</span>
                     </div>
-                    <span className="text-gray-300">Fuel (Bunker Supply)</span>
+                    <div className="spec-row">
+                      <span className="spec-label">Ship Spares:</span>
+                      <span className="spec-value">Marine equipment and parts</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gold/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
+                    <div className="spec-row">
+                      <span className="spec-label">Cash to Master:</span>
+                      <span className="spec-value">Financial assistance services</span>
                     </div>
-                    <span className="text-gray-300">Ship Spares</span>
+                    <div className="spec-row">
+                      <span className="spec-label">Provisions & Fresh Water:</span>
+                      <span className="spec-value">Food and water supply</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gold/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                      </svg>
                     </div>
-                    <span className="text-gray-300">Cash to Master</span>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Premium Quality</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="w-8 h-8 bg-gold/20 rounded-full flex items-center justify-center">
-                      <svg className="w-4 h-4 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                      </svg>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Fast Delivery</span>
                     </div>
-                    <span className="text-gray-300">Provisions & Fresh Water</span>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Competitive Rates</span>
                   </div>
                 </div>
               </div>
+                <div className="add-button"></div>
             </div>
             
-            <div className="bg-gradient-to-r from-blue-500/10 to-gold/10 rounded-xl p-8 border border-blue-500/20">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold text-white mb-4">Single Contact, Single Invoice</h3>
-                <p className="text-lg text-gray-300 mb-6">All husbandry services through one contact point with standard rates for optimum efficiency</p>
-                <div className="grid md:grid-cols-3 gap-6 text-center">
-                  <div>
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
+              <div 
+                className={`slide ${currentHusbandrySlide === 2 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${portCraneOperationImage})`}}
+                onMouseEnter={() => setActiveHusbandrySlide(2)}
+                onTouchStart={() => handleHusbandrySlideTouch(2)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">03</div>
+                  <div className="car-brand">Single Contact</div>
+                  <div className="car-name">Single Invoice System</div>
+                  <div className="car-subtitle">All husbandry services through one contact point with standard rates</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Fast Turnaround:</span>
+                      <span className="spec-value">Speedy and well-coordinated services</span>
                     </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">Fast Turnaround</h4>
-                    <p className="text-gray-400">Speedy and well-coordinated services for optimal vessel efficiency</p>
+                    <div className="spec-row">
+                      <span className="spec-label">Standard Rates:</span>
+                      <span className="spec-value">Transparent pricing, no hidden costs</span>
                   </div>
-                  <div>
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                    <div className="spec-row">
+                      <span className="spec-label">24/7 Support:</span>
+                      <span className="spec-value">Round-the-clock assistance</span>
                     </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">Standard Rates</h4>
-                    <p className="text-gray-400">Transparent pricing with no hidden costs or surprises</p>
+                    <div className="spec-row">
+                      <span className="spec-label">Optimal Efficiency:</span>
+                      <span className="spec-value">Fast vessel turnaround</span>
                   </div>
-                  <div>
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                      </svg>
                     </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">24/7 Support</h4>
-                    <p className="text-gray-400">Round-the-clock assistance for all your vessel needs</p>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>One Contact</span>
                   </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Standard Rates</span>
                 </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Fast Turnaround</span>
               </div>
             </div>
           </div>
-        </section>
+                <div className="add-button"></div>
+              </div>
 
-      {/* Cargo Services */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${containerOperationsImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <div 
+                className={`slide ${currentHusbandrySlide === 3 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${shippingContainersImage})`}}
+                onMouseEnter={() => setActiveHusbandrySlide(3)}
+                onTouchStart={() => handleHusbandrySlideTouch(3)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">04</div>
+                  <div className="car-brand">Complete Husbandry</div>
+                  <div className="car-name">Full Service Package</div>
+                  <div className="car-subtitle">Complete crew handling and vessel support services through single contact point</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Crew Services:</span>
+                      <span className="spec-value">Changes, Meet & Greet, Travel</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Vessel Support:</span>
+                      <span className="spec-value">Fuel, Spares, Cash, Provisions</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Billing:</span>
+                      <span className="spec-value">Single Invoice System</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Efficiency:</span>
+                      <span className="spec-value">Optimum vessel turnaround</span>
+                    </div>
+                  </div>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Complete Package</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Single Contact</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>24/7 Support</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="add-button"></div>
+              </div>
+            </div>
+
+            <button className="navigation-arrows nav-prev" onClick={previousHusbandrySlide}>‹</button>
+            <button className="navigation-arrows nav-next" onClick={nextHusbandrySlide}>›</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Cargo Services Accordion Slider */}
+      <section className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentCargoSlide !== -1 ? 'section-has-active-slide' : ''}`}>
+        <div className="w-full h-full">
+          {/* Heading Overlay */}
+          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Cargo Services
             </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-200 max-w-2xl mx-auto drop-shadow-md">
               Comprehensive stevedoring and shore handling for all cargo types
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-gold/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
+          <div className="slider-container">
+            <div className="now-showing">Now Available</div>
+
+            <div className="accordion-slider">
+              <div 
+                className={`slide ${currentCargoSlide === 0 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${containerOperationsImage})`}}
+                onMouseEnter={() => setActiveCargoSlide(0)}
+                onTouchStart={() => handleCargoSlideTouch(0)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">01</div>
+                  <div className="car-brand">Break Bulk Commodities</div>
+                  <div className="car-name">Agricultural & Food Cargo</div>
+                  <div className="car-subtitle">Specialized handling for rice, soya bean meal, wheat, maize, sugar and similar cargo types</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Rice Handling:</span>
+                      <span className="spec-value">Professional rice cargo handling</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Break Bulk Commodities</h3>
-                <p className="text-gray-300 mb-4">Specialized handling for rice, soya bean meal, wheat, maize, sugar and similar cargo types.</p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• Rice handling</li>
-                  <li>• Soya Bean Meal</li>
-                  <li>• Wheat & Maize</li>
-                  <li>• Sugar cargo</li>
-                </ul>
+                    <div className="spec-row">
+                      <span className="spec-label">Soya Bean Meal:</span>
+                      <span className="spec-value">Specialized soya handling</span>
               </div>
-              
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-gold/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
+                    <div className="spec-row">
+                      <span className="spec-label">Wheat & Maize:</span>
+                      <span className="spec-value">Grain cargo expertise</span>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Containerized Cargo</h3>
-                <p className="text-gray-300 mb-4">Professional handling of containerized cargo with modern equipment and experienced personnel.</p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• Container handling</li>
-                  <li>• General cargo</li>
-                  <li>• Heavy lift operations</li>
-                  <li>• Dry bulk commodities</li>
-                </ul>
+                    <div className="spec-row">
+                      <span className="spec-label">Sugar Cargo:</span>
+                      <span className="spec-value">Sugar handling services</span>
               </div>
-              
-              <div className="bg-white/10 backdrop-blur-md rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-gold/20 rounded-lg flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-3">Warehouse & Storage</h3>
-                <p className="text-gray-300 mb-4">Comprehensive storage solutions both inside and outside port facilities.</p>
-                <ul className="text-sm text-gray-400 space-y-1">
-                  <li>• Port storage facilities</li>
-                  <li>• External warehouse options</li>
-                  <li>• Temperature controlled storage</li>
-                  <li>• Security monitoring</li>
-                </ul>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Specialized Equipment</span>
               </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Quality Control</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Expert Handling</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="add-button"></div>
             </div>
             
-            <div className="bg-gradient-to-r from-green-500/10 to-gold/10 rounded-xl p-8 border border-green-500/20 mb-12">
-              <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-white mb-4">Special Cargo Services</h3>
-                <p className="text-lg text-gray-300">Project cargo clearance and delivery across 8 countries</p>
+              <div 
+                className={`slide ${currentCargoSlide === 1 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${warehouseLogisticsImage})`}}
+                onMouseEnter={() => setActiveCargoSlide(1)}
+                onTouchStart={() => handleCargoSlideTouch(1)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">02</div>
+                  <div className="car-brand">Containerized Cargo</div>
+                  <div className="car-name">Professional Container Handling</div>
+                  <div className="car-subtitle">Professional handling of containerized cargo with modern equipment and experienced personnel</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Container Handling:</span>
+                      <span className="spec-value">Professional container operations</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">General Cargo:</span>
+                      <span className="spec-value">Various general cargo types</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Heavy Lift Operations:</span>
+                      <span className="spec-value">Specialized heavy cargo handling</span>
+                    </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Dry Bulk Commodities:</span>
+                      <span className="spec-value">Bulk cargo in containers</span>
+                    </div>
+                  </div>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Modern Equipment</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Expert Personnel</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Efficient Operations</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="add-button"></div>
               </div>
               
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="text-lg font-semibold text-gold mb-4">Coverage Countries</h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-300">
-                    <div>• Ghana</div>
-                    <div>• Togo</div>
-                    <div>• Côte d'Ivoire</div>
-                    <div>• Burkina Faso</div>
-                    <div>• Mali</div>
-                    <div>• Niger</div>
-                    <div>• Benin</div>
-                    <div>• Nigeria</div>
+              <div 
+                className={`slide ${currentCargoSlide === 2 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${nightPortImage})`}}
+                onMouseEnter={() => setActiveCargoSlide(2)}
+                onTouchStart={() => handleCargoSlideTouch(2)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">03</div>
+                  <div className="car-brand">Warehouse & Storage</div>
+                  <div className="car-name">Comprehensive Storage Solutions</div>
+                  <div className="car-subtitle">Comprehensive storage solutions both inside and outside port facilities</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Port Storage Facilities:</span>
+                      <span className="spec-value">Inside port storage options</span>
+                  </div>
+                    <div className="spec-row">
+                      <span className="spec-label">External Warehouse Options:</span>
+                      <span className="spec-value">Off-site storage solutions</span>
+                </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Temperature Controlled Storage:</span>
+                      <span className="spec-value">Climate-controlled facilities</span>
+                </div>
+                    <div className="spec-row">
+                      <span className="spec-label">Security Monitoring:</span>
+                      <span className="spec-value">24/7 security surveillance</span>
+              </div>
+                  </div>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Secure Storage</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Climate Control</span>
+                    </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>24/7 Security</span>
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <h4 className="text-lg font-semibold text-gold mb-4">Service Features</h4>
-                  <ul className="text-gray-300 space-y-2">
-                    <li>• Timely clearance and delivery</li>
-                    <li>• Project cargo expertise</li>
-                    <li>• Cross-border logistics</li>
-                    <li>• Documentation handling</li>
-                  </ul>
-                </div>
-              </div>
+                <div className="add-button"></div>
             </div>
             
-            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl p-8 border border-blue-500/20">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold text-white mb-4">Dry Bulk Commodities</h3>
-                <p className="text-lg text-gray-300 mb-6">Specialized handling for industrial materials</p>
-                <div className="grid md:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                      </svg>
+              <div 
+                className={`slide ${currentCargoSlide === 3 ? 'active' : ''}`} 
+                style={{backgroundImage: `url(${exportLogisticsImage})`}}
+                onMouseEnter={() => setActiveCargoSlide(3)}
+                onTouchStart={() => handleCargoSlideTouch(3)}
+              >
+                <div className="slide-content">
+                  <div className="slide-number">04</div>
+                  <div className="car-brand">Special Cargo Services</div>
+                  <div className="car-name">Project Cargo & Dry Bulk</div>
+                  <div className="car-subtitle">Project cargo clearance across 8 countries and specialized dry bulk handling</div>
+                  <div className="car-specs">
+                    <div className="spec-row">
+                      <span className="spec-label">Project Cargo Coverage:</span>
+                      <span className="spec-value">Ghana, Togo, Côte d'Ivoire, Burkina Faso, Mali, Niger, Benin, Nigeria</span>
                     </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">Clinker & Slog</h4>
-                    <p className="text-gray-400">Industrial materials handling</p>
+                    <div className="spec-row">
+                      <span className="spec-label">Dry Bulk Commodities:</span>
+                      <span className="spec-value">Clinker, Slag, Gypsum, Coal, Manganese</span>
                   </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                      </svg>
+                    <div className="spec-row">
+                      <span className="spec-label">Service Features:</span>
+                      <span className="spec-value">Timely clearance, project expertise, cross-border logistics</span>
                     </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">Gypsum & Coal</h4>
-                    <p className="text-gray-400">Mining materials expertise</p>
+                    <div className="spec-row">
+                      <span className="spec-label">Documentation:</span>
+                      <span className="spec-value">Complete documentation handling</span>
                   </div>
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-gold/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                      <svg className="w-8 h-8 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
-                      </svg>
                     </div>
-                    <h4 className="text-lg font-semibold text-white mb-2">Manganese</h4>
-                    <p className="text-gray-400">Mineral cargo handling</p>
+                  <div className="performance-badges">
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>8 Countries</span>
+                  </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Project Expertise</span>
+                </div>
+                    <div className="badge">
+                      <div className="badge-icon"></div>
+                      <span>Cross-Border</span>
+              </div>
                   </div>
                 </div>
+                <div className="add-button"></div>
               </div>
+            </div>
+
+            <button className="navigation-arrows nav-prev" onClick={previousCargoSlide}>‹</button>
+            <button className="navigation-arrows nav-next" onClick={nextCargoSlide}>›</button>
             </div>
           </div>
         </section>
 
       {/* Service Process */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
+      <section className="py-20 bg-gray-800 relative overflow-hidden">
         {/* Background Image */}
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
@@ -546,7 +910,7 @@ export default function Services() {
         />
         
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" /> */}
         
         <div className="max-w-7xl mx-auto px-6 relative z-20">
           <div className="text-center mb-12">
@@ -558,7 +922,7 @@ export default function Services() {
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
               {serviceProcess.map((step, index) => (
                 <div 
                   key={index}
@@ -575,50 +939,9 @@ export default function Services() {
           </div>
         </section>
 
-      {/* Service Guarantees */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${exportLogisticsImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Service Guarantees
-            </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
-              Our commitment to excellence backed by comprehensive guarantees
-            </p>
-          </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {serviceGuarantees.map((guarantee, index) => (
-                <div 
-                  key={index}
-                  className="text-center p-6 rounded-md bg-green-900/20 backdrop-blur-sm border-green-400/30 hover:bg-green-800/30 hover:border-green-300/50 transition-all duration-300 shadow-lg hover:shadow-green-500/20"
-                >
-                  <div className="w-12 h-12 bg-green-500/20 rounded-md flex items-center justify-center mx-auto mb-4 border border-green-400/30">
-                    <span className="text-green-300">✓</span>
-                  </div>
-                  <h3 className="text-lg font-bold text-white">{guarantee}</h3>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
       {/* Service Request Form */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
+      <section className="py-20 bg-gray-800 relative overflow-hidden">
         {/* Background Video */}
         <video
           autoPlay
@@ -632,7 +955,7 @@ export default function Services() {
         </video>
         
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" /> */}
         
         <div className="max-w-4xl mx-auto px-6 relative z-20">
           <div className="text-center mb-12">
@@ -646,7 +969,7 @@ export default function Services() {
             
             <div className="bg-blue-900/20 backdrop-blur-sm border-blue-400/30 p-8 rounded-md shadow-lg">
               <form className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">Name</label>
                     <input 
@@ -665,7 +988,7 @@ export default function Services() {
                   </div>
                 </div>
                 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-white mb-2">Company</label>
                     <input 
@@ -679,8 +1002,8 @@ export default function Services() {
                     <select className="w-full px-4 py-3 bg-blue-800/30 border border-blue-400/30 rounded-md text-white focus:outline-none focus:border-blue-300">
                       <option value="">Select a service</option>
                       <option value="agency">Agency Services</option>
-                      <option value="stevedoring">Stevedoring & Shore Handling</option>
-                      <option value="project-cargo">Project Cargo</option>
+                      <option value="husbandry">Husbandry Services</option>
+                      <option value="cargo">Cargo Services</option>
                       <option value="customs">Customs Clearing</option>
                     </select>
                   </div>
@@ -698,7 +1021,7 @@ export default function Services() {
                 <div className="text-center">
                   <Button 
                     size="lg"
-                    className="bg-gold text-primary hover:bg-gold/90 border-gold font-semibold text-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-lg px-8 py-4 shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     Request Quote
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -709,6 +1032,7 @@ export default function Services() {
           </div>
         </section>
         
+      {/* Footer */}
         <Footer />
     </div>
   );

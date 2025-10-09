@@ -15,6 +15,9 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
   const mountRef = useRef<HTMLDivElement>(null);
   const [selectedShipment, setSelectedShipment] = useState<any>(null);
   const [hoveredPort, setHoveredPort] = useState<any>(null);
+  
+  // Add refs to track Three.js objects for disposal
+  const texturesRef = useRef<THREE.Texture[]>([]);
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -59,18 +62,19 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
     const earthNormalMap = textureLoader.load(earthbImage);
     const earthSpecularMap = textureLoader.load(earthcImage);
     const earthCloudsMap = textureLoader.load(lightImage);
+    
+    // Track textures for disposal
+    texturesRef.current = [earthTexture, earthNormalMap, earthSpecularMap, earthCloudsMap];
 
-    // Create continent outlines using earth texture with proper visibility
+    // Create continent outlines with ash/white color (matching country meshes)
     const continentGeometry = new THREE.SphereGeometry(1.0, 64, 64);
     const continentMaterial = new THREE.MeshBasicMaterial({
-      // Use earth.jpeg for natural Earth colors but make oceans transparent
-      map: earthTexture, // Use earth.jpeg for natural Earth colors
-      alphaMap: earthTexture, // Use same texture for alpha mapping
+      color: 0xf5f5f5, // Light ash/white color (same as countries)
       transparent: true,
-      opacity: 0.4, // Reduced opacity for more transparency
-      color: new THREE.Color(0xffffff), // White color to preserve natural colors
+      opacity: 0.9, // High opacity for solid appearance
       side: THREE.DoubleSide,
-      alphaTest: 0.05 // Reduced alphaTest to show more of the texture
+      alphaMap: earthTexture, // Use texture for transparency (oceans transparent, land visible)
+      alphaTest: 0.5 // Higher alphaTest to show only land masses
     });
     const continentMesh = new THREE.Mesh(continentGeometry, continentMaterial);
     scene.add(continentMesh);
@@ -235,7 +239,7 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
         color: 0xffffff, // White color for visibility
         transparent: true, 
         opacity: 1.0, // Full opacity for visibility
-        linewidth: 4, // Increased line width for better visibility
+        linewidth: 6, // Increased line width for better visibility
         depthTest: true,
         depthWrite: false
       });
@@ -442,8 +446,33 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
     };
     window.addEventListener('resize', handleResize);
 
+    // Add intersection observer to pause animation when not visible
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Resume animation if not already running
+          if (!animationId) {
+            animate();
+          }
+        } else {
+          // Pause animation to save resources
+          cancelAnimationFrame(animationId);
+          animationId = 0;
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (mountRef.current) {
+      visibilityObserver.observe(mountRef.current);
+    }
+
     // Cleanup
     return () => {
+      // Cancel animation loop
+      cancelAnimationFrame(animationId);
+      
+      // Remove event listeners
       window.removeEventListener('resize', handleResize);
       if (renderer.domElement) {
         renderer.domElement.removeEventListener('mousemove', onMouseMove);
@@ -451,11 +480,37 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
         renderer.domElement.removeEventListener('mouseup', onMouseUp);
         renderer.domElement.removeEventListener('click', onClick);
       }
-      cancelAnimationFrame(animationId);
+      
+      // Dispose all Three.js objects
+      scene.traverse((object) => {
+        if (object instanceof THREE.Mesh) {
+          if (object.geometry) {
+            object.geometry.dispose();
+          }
+          if (object.material) {
+            if (Array.isArray(object.material)) {
+              object.material.forEach((material: THREE.Material) => material.dispose());
+            } else {
+              object.material.dispose();
+            }
+          }
+        }
+      });
+      
+      // Dispose textures
+      texturesRef.current.forEach(texture => texture.dispose());
+      
+      // Clear scene and dispose renderer
+      scene.clear();
+      renderer.dispose();
+      
+      // Remove DOM element
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
       }
-      renderer.dispose();
+      
+      // Disconnect visibility observer
+      visibilityObserver.disconnect();
     };
   }, []);
 

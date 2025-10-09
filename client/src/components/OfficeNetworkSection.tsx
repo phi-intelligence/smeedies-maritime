@@ -1,29 +1,7 @@
 import OfficeCard from "./OfficeCard";
-import { useEffect, useRef, useState } from "react";
-import tema2Video from "@/assets/videos/tem2.mp4";
+import ParallaxBackground from "./ParallaxBackground";
 
 export default function OfficeNetworkSection() {
-  const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-        } else {
-          setIsVisible(false);
-        }
-      },
-      { threshold: 0.3 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   const offices = [
     {
@@ -71,24 +49,20 @@ export default function OfficeNetworkSection() {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 bg-transparent relative overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
-      >
-        <source src={tema2Video} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+    <section className="py-20 relative overflow-hidden prevent-white-flash">
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: "url('/src/assets/images/cargo-ship-miami-harbor.jpg')",
+          zIndex: 0
+        }}
+      />
       
       {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70" style={{ zIndex: 0 }} />
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-800/70 to-slate-900/80" style={{ zIndex: 1 }} /> */}
       
-      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 1 }}>
+      <div className="max-w-full mx-auto px-6 relative" style={{ zIndex: 3 }}>
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             Office Network
@@ -101,23 +75,37 @@ export default function OfficeNetworkSection() {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Office cards container */}
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6 lg:gap-8 px-4">
           {offices.map((office, index) => (
-            <div 
-              key={index} 
-              className={`service-card-animated ${isVisible ? 'animate-fade-in-up animate-delay-' + (index + 1) * 100 : ''}`}
-              style={{
-                animationDelay: isVisible ? `${(index + 1) * 100}ms` : '0ms',
-                opacity: isVisible ? 1 : 0,
-                transition: isVisible ? 'none' : 'opacity 0.3s ease'
-              }}
-            >
-              <OfficeCard
-                name={office.name}
-                location={office.location}
-                services={office.services}
-                digitalAddress={office.digitalAddress}
-              />
+            <div key={index} className="country-card">
+              <div className="card-image">
+                <img 
+                  src={index % 4 === 0 ? '/src/assets/images/ghana_port_infrastru_7ef9101d.jpg' : 
+                       index % 4 === 1 ? '/src/assets/images/shipping_containers__4ae963ed.jpg' :
+                       index % 4 === 2 ? '/src/assets/images/port_crane_operation_01b3e60a.jpg' : 
+                       '/src/assets/images/shipping_port_cargo__47da743f.jpg'} 
+                  alt={`${office.name} operations`}
+                />
+              </div>
+              <div className="card-text">
+                <p className="card-region-type">Ghana Office</p>
+                <h2 className="card-title">{office.name}</h2>
+                <p className="card-body">
+                  {office.location && `${office.location}. `}
+                  {office.services && `Services: ${office.services}.`}
+                  {office.digitalAddress && ` Digital Address: ${office.digitalAddress}.`}
+                </p>
+              </div>
+              <div className="card-metric">
+                {office.name === 'Accra Office' ? 'Air' : 
+                 office.name === 'Kumasi Office' ? 'Central' : 
+                 office.name === 'Takoradi Office' ? 'Port' : 
+                 office.name === 'Paga Office' ? 'Border' : 
+                 office.name === 'Elubo Office' ? 'Border' : 
+                 office.name === 'Akosombo Office' ? 'Water' : 
+                 'Border'}
+              </div>
             </div>
           ))}
         </div>

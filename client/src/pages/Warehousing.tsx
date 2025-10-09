@@ -1,4 +1,5 @@
-import { Warehouse, Thermometer, Shield, Package, Wifi, FileCheck2, Bug, MapPin, Clock, Users } from "lucide-react";
+import { Warehouse, Thermometer, Shield, Package, Wifi, FileCheck2, Bug, MapPin, Clock, Users, Radio, Globe, BarChart3, Smartphone } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import Navigation from "@/components/Navigation";
@@ -13,6 +14,33 @@ import containerOperationsImage from "@/assets/images/container-cargo-freight-sh
 import cargoShipHarborImage from "@/assets/images/cargo-ship-miami-harbor.jpg";
 
 export default function Warehousing() {
+  // Accordion slider state for warehouse locations
+  const [activeWarehouseSlide, setActiveWarehouseSlideState] = useState(-1);
+
+  const setActiveWarehouseSlide = (index: number) => {
+    if (activeWarehouseSlide === index) {
+      setActiveWarehouseSlideState(-1);
+    } else {
+      setActiveWarehouseSlideState(index);
+    }
+  };
+
+  const nextWarehouseSlide = () => {
+    const nextIndex = activeWarehouseSlide === -1 ? 0 : (activeWarehouseSlide + 1) % warehouseLocations.length;
+    setActiveWarehouseSlideState(nextIndex);
+  };
+
+  const previousWarehouseSlide = () => {
+    const prevIndex = activeWarehouseSlide === -1 ? warehouseLocations.length - 1 : (activeWarehouseSlide - 1 + warehouseLocations.length) % warehouseLocations.length;
+    setActiveWarehouseSlideState(prevIndex);
+  };
+
+  // Touch handler for mobile warehouse slides
+  const handleWarehouseSlideTouch = (index: number) => {
+    setTimeout(() => {
+      setActiveWarehouseSlide(index);
+    }, 100);
+  };
   const warehousingFeatures = [
     { icon: Warehouse, title: "Right Space Provision", description: "Adequate storage capacity for all cargo types" },
     { icon: Thermometer, title: "Temperature Control", description: "Climate-controlled facilities for sensitive cargo" },
@@ -25,67 +53,120 @@ export default function Warehousing() {
 
   const warehouseLocations = [
     {
-      name: "Tema Warehouse",
-      location: "Near Tema Port",
-      services: "Port cargo handling and storage",
-      capacity: "Large capacity facility",
-      features: ["Port access", "Container handling", "Bulk storage"]
+      title: "Tema Warehouse",
+      subtitle: "Strategic Port Location",
+      description: "Located near Tema Port with direct access to major shipping routes and container terminals.",
+      features: [
+        { label: "Port Access", value: "Direct port connectivity" },
+        { label: "Container Handling", value: "Full container services" },
+        { label: "Bulk Storage", value: "Large capacity facilities" },
+        { label: "Capacity", value: "Large facility with 24/7 operations" }
+      ],
+      badges: ["Port Hub", "24/7 Access"]
     },
     {
-      name: "Accra Warehouse",
-      location: "Central Accra",
-      services: "General cargo and distribution",
-      capacity: "Medium capacity facility",
-      features: ["City access", "Distribution hub", "Office integration"]
+      title: "Accra Warehouse", 
+      subtitle: "Central Distribution Center",
+      description: "Strategic central location in Accra providing excellent connectivity to all major business districts.",
+      features: [
+        { label: "City Access", value: "Central business district location" },
+        { label: "Distribution Hub", value: "Regional distribution center" },
+        { label: "Office Integration", value: "Integrated office facilities" },
+        { label: "Capacity", value: "Medium facility with modern amenities" }
+      ],
+      badges: ["City Center", "Modern Facility"]
     },
     {
-      name: "Takoradi Warehouse",
-      location: "Western Region",
-      services: "Regional cargo and exports",
-      capacity: "Medium capacity facility",
-      features: ["Regional access", "Export processing", "Agricultural storage"]
+      title: "Takoradi Warehouse",
+      subtitle: "Western Region Operations", 
+      description: "Specialized facility in Western Region focusing on regional cargo and export processing.",
+      features: [
+        { label: "Regional Access", value: "Western Region coverage" },
+        { label: "Export Processing", value: "Specialized export services" },
+        { label: "Agricultural Storage", value: "Climate-controlled storage" },
+        { label: "Capacity", value: "Medium facility with specialized equipment" }
+      ],
+      badges: ["Export Hub", "Specialized"]
     }
   ];
 
   const securityMeasures = [
-    "24/7 CCTV Security Monitoring",
-    "Restricted Access Control Systems",
-    "Fire Safety and Protection Systems",
-    "Comprehensive Insurance Coverage",
-    "Regular Security Audits",
-    "Emergency Response Procedures"
+    {
+      title: "24/7 CCTV Security",
+      description: "Round-the-clock video surveillance with advanced monitoring systems ensuring complete coverage of all warehouse areas.",
+      type: "Monitoring",
+      metric: "24/7"
+    },
+    {
+      title: "Access Control Systems",
+      description: "Restricted access control with biometric authentication and keycard systems for authorized personnel only.",
+      type: "Access Control",
+      metric: "Secure"
+    },
+    {
+      title: "Fire Safety Systems",
+      description: "Comprehensive fire detection and suppression systems with automatic alarms and emergency response protocols.",
+      type: "Fire Protection",
+      metric: "Protected"
+    },
+    {
+      title: "Insurance Coverage",
+      description: "Complete indemnity insurance protection covering all stored cargo with comprehensive coverage policies.",
+      type: "Insurance",
+      metric: "Covered"
+    },
+    {
+      title: "Security Audits",
+      description: "Regular security assessments and compliance audits ensuring continuous improvement of security measures.",
+      type: "Compliance",
+      metric: "Audited"
+    },
+    {
+      title: "Emergency Response",
+      description: "24/7 emergency response procedures with trained personnel and established protocols for any security incidents.",
+      type: "Response",
+      metric: "Ready"
+    }
   ];
 
   const technologyIntegration = [
-    "Warehouse Management System (WMS)",
-    "Real-time Inventory Tracking",
-    "Digital Documentation System",
-    "Customs Integration (GCNET)",
-    "Automated Reporting",
-    "Mobile Access and Updates"
+    {
+      title: "Warehouse Management System (WMS)",
+      description: "Advanced WMS software for comprehensive inventory management, order processing, and warehouse optimization",
+      icon: Wifi
+    },
+    {
+      title: "Real-time Inventory Tracking",
+      description: "Live tracking system with RFID and barcode technology for instant inventory visibility and updates",
+      icon: Radio
+    },
+    {
+      title: "Digital Documentation System",
+      description: "Paperless documentation with digital forms, electronic signatures, and automated record keeping",
+      icon: FileCheck2
+    },
+    {
+      title: "Customs Integration (GCNET)",
+      description: "Seamless integration with Ghana's customs network for automated customs processing and clearance",
+      icon: Globe
+    },
+    {
+      title: "Automated Reporting",
+      description: "Automated generation of reports, analytics, and performance metrics for data-driven decision making",
+      icon: BarChart3
+    },
+    {
+      title: "Mobile Access and Updates",
+      description: "Mobile application for real-time updates, notifications, and remote access to warehouse operations",
+      icon: Smartphone
+    }
   ];
 
   const specializedServices = [
-    {
-      title: "Temperature-Controlled Storage",
-      description: "Climate-controlled facilities for pharmaceuticals, food, and sensitive materials",
-      icon: Thermometer
-    },
-    {
-      title: "Heavy Lift Storage",
-      description: "Specialized storage for oversized and heavy cargo with appropriate handling equipment",
-      icon: Package
-    },
-    {
-      title: "Hazardous Materials",
-      description: "Secure storage for hazardous materials with proper safety protocols and compliance",
-      icon: Shield
-    },
-    {
-      title: "Documentation Services",
-      description: "Complete cargo documentation, customs processing, and regulatory compliance",
-      icon: FileCheck2
-    }
+    "Temperature-Controlled Storage - Climate-controlled facilities for pharmaceuticals, food, and sensitive materials",
+    "Heavy Lift Storage - Specialized storage for oversized and heavy cargo with appropriate handling equipment",
+    "Hazardous Materials - Secure storage for hazardous materials with proper safety protocols and compliance",
+    "Documentation Services - Complete cargo documentation, customs processing, and regulatory compliance"
   ];
 
   const serviceProcess = [
@@ -112,11 +193,11 @@ export default function Warehousing() {
   ];
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-transparent relative">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
+      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden">
         {/* Background Image */}
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
@@ -131,17 +212,22 @@ export default function Warehousing() {
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
         
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3">
-              Warehousing Services
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Complete Storage Solutions
-            </h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              Whatever your warehouse needs, we can help. Professional warehousing services with state-of-the-art facilities and comprehensive security.
-            </p>
+        <div className="relative z-20 max-w-full mx-auto w-full">
+          <div className="flex flex-col items-center justify-center text-center min-h-[80vh] space-y-8">
+            <div className="space-y-8 max-w-6xl mx-auto">
+              <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3">
+                Warehousing Services
+              </p>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-lg px-4">
+                <span className="text-blue-300">Complete</span> Storage Solutions
+              </h1>
+              <p className="text-lg sm:text-xl md:text-2xl mb-4 text-white max-w-4xl mx-auto drop-shadow-md px-4">
+                Professional warehousing services with state-of-the-art facilities
+              </p>
+              <p className="text-sm sm:text-base md:text-lg mb-12 text-gray-200 max-w-3xl mx-auto drop-shadow-md px-4">
+                Whatever your warehouse needs, we can help with comprehensive security.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -172,95 +258,95 @@ export default function Warehousing() {
             </p>
           </div>
             
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8 justify-items-center">
               {warehousingFeatures.map((feature, index) => (
                 <div 
-                  key={index} 
-                  className="flex flex-col items-center text-center p-6 rounded-md bg-blue-900/20 backdrop-blur-sm border-blue-400/30 hover:bg-blue-800/30 hover:border-blue-300/50 transition-all duration-300 shadow-lg hover:shadow-blue-500/20"
+                  key={index}
+                  className="client-card-outline"
                 >
-                  <div className="w-12 h-12 bg-blue-500/20 rounded-md flex items-center justify-center mb-4 border border-blue-400/30">
-                    <feature.icon className="w-6 h-6 text-blue-300" />
+                  <div className="client-card-content">
+                    <div className="client-card-inner">
+                      <div className="w-12 h-12 bg-blue-500/20 rounded-md flex items-center justify-center mb-4 border border-blue-400/30">
+                        <feature.icon className="w-6 h-6 text-blue-300" />
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">
+                        {feature.title}
+                      </h3>
+                      <p className="text-sm text-blue-100">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-sm font-bold text-white mb-2">{feature.title}</h3>
-                  <p className="text-xs text-blue-100">{feature.description}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-      {/* Warehouse Locations */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${portOperationsImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+      {/* Warehouse Locations Accordion Slider */}
+      <section className={`relative overflow-hidden h-[80vh] ${activeWarehouseSlide !== -1 ? 'section-has-active-slide' : ''}`}>
+        <div className="w-full h-full">
+          {/* Heading Overlay */}
+          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Warehouse Locations
             </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-200 max-w-2xl mx-auto drop-shadow-md">
               Strategic warehouse locations across Ghana for optimal coverage and service delivery
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="slider-container">
+            <div className="now-showing">Now Available</div>
+
+            <div className="accordion-slider">
               {warehouseLocations.map((warehouse, index) => (
                 <div 
                   key={index}
-                  className="p-6 rounded-md bg-green-900/20 backdrop-blur-sm border-green-400/30 hover:bg-green-800/30 hover:border-green-300/50 transition-all duration-300 shadow-lg hover:shadow-green-500/20"
+                  className={`slide ${activeWarehouseSlide === index ? 'active' : ''}`} 
+                  style={{
+                    backgroundImage: `url(${
+                      index === 0 ? warehouseLogisticsImage :
+                      index === 1 ? warehouseOperationsImage :
+                      portOperationsImage
+                    })`
+                  }}
+                  onMouseEnter={() => setActiveWarehouseSlide(index)}
+                  onTouchStart={() => handleWarehouseSlideTouch(index)}
                 >
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="w-10 h-10 bg-green-500/20 rounded-md flex items-center justify-center flex-shrink-0 border border-green-400/30">
-                      <MapPin className="w-5 h-5 text-green-300" />
+                  <div className="slide-content">
+                    <div className="slide-number">0{index + 1}</div>
+                    <div className="car-brand">Warehouse</div>
+                    <div className="car-name">{warehouse.title}</div>
+                    <div className="car-subtitle">{warehouse.subtitle}</div>
+                    <div className="car-specs">
+                      {warehouse.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="spec-row">
+                          <span className="spec-label">{feature.label}:</span>
+                          <span className="spec-value">{feature.value}</span>
+                        </div>
+                      ))}
                     </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-white">{warehouse.name}</h3>
-                      <p className="text-sm text-green-100">{warehouse.location}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs font-semibold text-white mb-1">Services:</p>
-                      <p className="text-sm text-green-100">{warehouse.services}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-xs font-semibold text-white mb-1">Capacity:</p>
-                      <p className="text-sm text-green-100">{warehouse.capacity}</p>
-                    </div>
-                    
-                    <div>
-                      <p className="text-xs font-semibold text-white mb-2">Key Features:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {warehouse.features.map((feature, featureIndex) => (
-                          <span 
-                            key={featureIndex}
-                            className="text-xs bg-green-500/20 text-green-200 px-2 py-1 rounded border border-green-400/30"
-                          >
-                            {feature}
-                          </span>
-                        ))}
-                      </div>
+                    <div className="performance-badges">
+                      {warehouse.badges.map((badge, badgeIndex) => (
+                        <div key={badgeIndex} className="badge">
+                          <div className="badge-icon"></div>
+                          <span>{badge}</span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
+            
+            <div className="navigation-arrows-container">
+              <button className="navigation-arrows nav-prev" onClick={previousWarehouseSlide}>‹</button>
+              <button className="navigation-arrows nav-next" onClick={nextWarehouseSlide}>›</button>
+            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
       {/* Security Measures */}
       <section className="py-20 bg-transparent relative overflow-hidden">
@@ -288,19 +374,30 @@ export default function Warehousing() {
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {securityMeasures.map((measure, index) => (
-                <div 
-                  key={index}
-                  className="flex items-center gap-4 p-6 rounded-md bg-red-900/20 backdrop-blur-sm border-red-400/30 hover:bg-red-800/30 hover:border-red-300/50 transition-all duration-300 shadow-lg hover:shadow-red-500/20"
-                >
-                  <div className="w-10 h-10 bg-red-500/20 rounded-md flex items-center justify-center border border-red-400/30">
-                    <Shield className="w-5 h-5 text-red-300" />
-                  </div>
-                  <p className="text-red-100 font-medium">{measure}</p>
+          {/* Security Cards Container */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center px-4">
+            {securityMeasures.map((measure, index) => (
+              <div key={index} className="country-card">
+                <div className="card-image">
+                  <img 
+                    src={index % 4 === 0 ? nightPortImage : 
+                         index % 4 === 1 ? warehouseLogisticsImage :
+                         index % 4 === 2 ? warehouseOperationsImage : 
+                         specializedCargoImage} 
+                    alt={`${measure.title} security`}
+                  />
                 </div>
-              ))}
-            </div>
+                <div className="card-text">
+                  <p className="card-region-type">{measure.type}</p>
+                  <h2 className="card-title">{measure.title}</h2>
+                  <p className="card-body">{measure.description}</p>
+                </div>
+                <div className="card-metric">
+                  {measure.metric}
+                </div>
+              </div>
+            ))}
+          </div>
           </div>
         </section>
 
@@ -331,16 +428,25 @@ export default function Warehousing() {
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 justify-items-center">
               {technologyIntegration.map((tech, index) => (
                 <div 
                   key={index}
-                  className="flex items-center gap-4 p-6 rounded-md bg-purple-900/20 backdrop-blur-sm border-purple-400/30 hover:bg-purple-800/30 hover:border-purple-300/50 transition-all duration-300 shadow-lg hover:shadow-purple-500/20"
+                  className="square-card-outline"
                 >
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-md flex items-center justify-center border border-purple-400/30">
-                    <Wifi className="w-5 h-5 text-purple-300" />
+                  <div className="square-card-content">
+                    <div className="square-card-inner">
+                      <div className="w-12 h-12 bg-purple-500/20 flex items-center justify-center mb-4 border border-purple-400/30">
+                        <tech.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <h3 className="text-lg font-bold text-white mb-2">
+                        {tech.title}
+                      </h3>
+                      <p className="text-sm text-purple-100">
+                        {tech.description}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-purple-100 font-medium">{tech}</p>
                 </div>
               ))}
             </div>
@@ -373,17 +479,22 @@ export default function Warehousing() {
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 justify-items-center">
               {specializedServices.map((service, index) => (
-                <div 
-                  key={index}
-                  className="text-center p-6 rounded-md bg-orange-900/20 backdrop-blur-sm border-orange-400/30 hover:bg-orange-800/30 hover:border-orange-300/50 transition-all duration-300 shadow-lg hover:shadow-orange-500/20"
-                >
-                  <div className="w-16 h-16 bg-orange-500/20 rounded-md flex items-center justify-center mx-auto mb-4 border border-orange-400/30">
-                    <service.icon className="w-8 h-8 text-orange-300" />
+                <div key={index} className="compliance-card">
+                  <div className="compliance-imgBox">
+                    <div className="w-16 h-16 bg-white/20 rounded-md flex items-center justify-center">
+                      <Package className="w-8 h-8 text-white" />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-3">{service.title}</h3>
-                  <p className="text-orange-100 text-sm">{service.description}</p>
+                  <div className="compliance-contentBox">
+                    <h3 className="text-lg font-medium text-white uppercase tracking-wide">
+                      {service.split(' - ')[0]}
+                    </h3>
+                    <h2 className="text-xl text-white font-bold tracking-wide mt-2">
+                      {service.split(' - ')[1]}
+                    </h2>
+                  </div>
                 </div>
               ))}
             </div>
@@ -416,7 +527,7 @@ export default function Warehousing() {
             </p>
           </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
               {serviceProcess.map((step, index) => (
                 <div 
                   key={index}

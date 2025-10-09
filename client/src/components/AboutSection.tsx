@@ -1,6 +1,7 @@
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatCounter from "./StatCounter";
+import ParallaxBackground from "./ParallaxBackground";
 
 interface AboutSectionProps {
   onLearnMore?: () => void;
@@ -8,21 +9,17 @@ interface AboutSectionProps {
 
 export default function AboutSection({ onLearnMore }: AboutSectionProps) {
   return (
-    <section className="py-20 bg-transparent relative overflow-hidden">
-      {/* Video Background */}
-      <div className="absolute inset-0 w-full h-full">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
-        >
-          <source src="/src/assets/videos/background-new.mp4" type="video/mp4" />
-        </video>
+    <section className="py-20 relative overflow-hidden prevent-white-flash">
+      
+      {/* Background Image with Parallax */}
+      <ParallaxBackground speed={0.3} direction="up" className="absolute inset-0 w-full h-full">
+        <div 
+          className="w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url('/src/assets/images/Tema_Port_aerial_view_2afebff1.png')` }}
+        />
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-black/50" />
-      </div>
+      </ParallaxBackground>
       
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         <div className="text-center mb-12">
@@ -34,12 +31,37 @@ export default function AboutSection({ onLearnMore }: AboutSectionProps) {
           </h2>
         </div>
         
-        <div className="bg-primary py-16 rounded-md mb-12">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-white">
-            <StatCounter end={40} suffix="+" label="Countries Network Coverage" />
-            <StatCounter end={24} suffix="/7" label="Round-the-Clock Availability" />
-            <StatCounter end={3} label="Major Ports Served" />
-            <StatCounter end={100} suffix="%" label="On-Time Delivery Success" />
+        <div className="flex flex-wrap justify-center items-center gap-8 mb-12">
+          <div className="stat-card-container">
+            <div className="stat-card stat-card-1">
+              <div className="stat-card-content">
+                <StatCounter end={40} suffix="+" label="Countries Network Coverage" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="stat-card-container">
+            <div className="stat-card stat-card-2">
+              <div className="stat-card-content">
+                <StatCounter end={24} suffix="/7" label="Round-the-Clock Availability" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="stat-card-container">
+            <div className="stat-card stat-card-3">
+              <div className="stat-card-content">
+                <StatCounter end={3} label="Major Ports Served" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="stat-card-container">
+            <div className="stat-card stat-card-4">
+              <div className="stat-card-content">
+                <StatCounter end={100} suffix="%" label="On-Time Delivery Success" />
+              </div>
+            </div>
           </div>
         </div>
         

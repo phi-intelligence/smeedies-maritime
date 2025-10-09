@@ -1,4 +1,5 @@
 import { Warehouse, Thermometer, Shield, Package, Wifi, FileCheck2, Bug } from "lucide-react";
+import ParallaxBackground from "./ParallaxBackground";
 import logistics5Video from "@/assets/videos/logistics-5.mp4";
 
 export default function WarehousingSection() {
@@ -13,24 +14,29 @@ export default function WarehousingSection() {
   ];
 
   return (
-    <section className="py-20 bg-transparent relative overflow-hidden">
-      {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: -1 }}
-      >
-        <source src={logistics5Video} type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+    <section className="py-20 relative overflow-hidden prevent-white-flash">
+      
+      {/* Background Video with Parallax */}
+      <ParallaxBackground speed={0.5} direction="up" className="absolute inset-0 w-full h-full" style={{ zIndex: 1 }}>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          onLoadStart={() => console.log('Warehousing video loading started')}
+          onCanPlay={() => console.log('Warehousing video can play')}
+          onError={(e) => console.error('Warehousing video error:', e)}
+        >
+          <source src={logistics5Video} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </ParallaxBackground>
       
       {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70" style={{ zIndex: 0 }} />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70" style={{ zIndex: 2 }} />
       
-      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 1 }}>
+      <div className="max-w-7xl mx-auto px-6 relative" style={{ zIndex: 3 }}>
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             Warehousing Services
@@ -43,22 +49,26 @@ export default function WarehousingSection() {
           </p>
         </div>
         
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="flex flex-wrap justify-center items-start gap-8">
           {features.map((feature, index) => (
             <div 
               key={index} 
-              className="flex flex-col items-center text-center p-6 rounded-md bg-blue-900/20 backdrop-blur-sm border-blue-400/30 hover:bg-blue-800/30 hover:border-blue-300/50 transition-all duration-300 shadow-lg hover:shadow-blue-500/20"
+              className="storage-card-outline"
               data-testid={`feature-${feature.title.toLowerCase().replace(/\s+/g, '-')}`}
             >
-              <div className="w-12 h-12 bg-blue-500/20 rounded-md flex items-center justify-center mb-4 border border-blue-400/30">
-                <feature.icon className="w-6 h-6 text-blue-300" />
+              <div className="storage-card-content">
+                <div className="storage-card-inner">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-md flex items-center justify-center mb-4 border border-blue-400/30">
+                    <feature.icon className="w-6 h-6 text-blue-300" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2" data-testid="text-feature-title">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-blue-100" data-testid="text-feature-description">
+                    {feature.description}
+                  </p>
+                </div>
               </div>
-              <h3 className="text-sm font-bold text-white mb-2" data-testid="text-feature-title">
-                {feature.title}
-              </h3>
-              <p className="text-xs text-blue-100" data-testid="text-feature-description">
-                {feature.description}
-              </p>
             </div>
           ))}
         </div>

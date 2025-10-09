@@ -2,6 +2,7 @@ import { ArrowRight, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import ShippingGlobe from "./ShippingGlobe";
+import WebGLErrorBoundary from "./WebGLErrorBoundary";
 
 interface HeroProps {
   backgroundImage?: string;
@@ -36,21 +37,23 @@ export default function Hero({ backgroundImage, backgroundVideo, onGetQuote, onV
       )}
       
       {/* Enhanced overlay for hero section for better text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-800/50 to-slate-900/60" />
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-800/50 to-slate-900/60" /> */}
       
       {/* Content Container */}
           <div className="relative z-10 max-w-full mx-auto w-full">
             <div className="relative w-full h-full">
           {/* Background Globe Animation */}
-          <div className="absolute inset-0 flex justify-center items-start -mt-20">
-            <div className="relative w-full max-w-[1200px] h-[800px] lg:max-w-[1400px] lg:h-[900px]">
+          <div className="absolute inset-0 flex justify-center items-start -mt-20 md:-mt-20 mt-20">
+            <div className="relative w-full max-w-[400px] h-[300px] md:max-w-[800px] md:h-[600px] lg:max-w-[1200px] lg:h-[800px] xl:max-w-[1400px] xl:h-[900px]">
               {/* Globe container */}
               <div className="absolute inset-0 animate-float animate-fade-in-scale z-0">
-                <ShippingGlobe 
-                  className="w-full h-full rounded-full" 
-                  showUI={false}
-                  glassmorphic={true}
-                />
+                <WebGLErrorBoundary>
+                  <ShippingGlobe 
+                    className="w-full h-full rounded-full" 
+                    showUI={false}
+                    glassmorphic={true}
+                  />
+                </WebGLErrorBoundary>
               </div>
             </div>
           </div>
@@ -67,42 +70,42 @@ export default function Hero({ backgroundImage, backgroundVideo, onGetQuote, onV
                 Tema, Ghana
               </Badge>
               
-              <h2 className="text-xl md:text-2xl font-semibold mb-4 text-blue-300" data-testid="text-tagline">
+              <h2 className="text-lg md:text-xl lg:text-2xl font-semibold mb-4 text-blue-300" data-testid="text-tagline">
                 Prime Maritime Solutions
               </h2>
               
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-lg" data-testid="text-headline">
+              <h1 className="text-3xl md:text-4xl lg:text-6xl xl:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-lg" data-testid="text-headline">
                 <span className="text-blue-300">Smeedies</span> - Deliver Excellence, Navigate Success
               </h1>
           
-              <p className="text-xl md:text-2xl mb-4 text-white max-w-4xl mx-auto drop-shadow-md" data-testid="text-subtitle">
+              <p className="text-lg md:text-xl lg:text-2xl mb-4 text-white max-w-3xl md:max-w-4xl mx-auto drop-shadow-md" data-testid="text-subtitle">
                 Smeedies - Your reliable local partner for shipping and logistics
               </p>
               
-              <p className="text-base md:text-lg mb-12 text-gray-200 max-w-3xl mx-auto drop-shadow-md" data-testid="text-description">
+              <p className="text-sm md:text-base lg:text-lg mb-12 text-gray-200 max-w-2xl md:max-w-3xl mx-auto drop-shadow-md" data-testid="text-description">
                 We deliver logistics solutions to our clients — on time, at the right place, in the original condition and quantity, at a low cost.
               </p>
           
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
                   size="lg" 
-                  className="bg-blue-600 text-white hover:bg-blue-700 border-blue-500 font-semibold text-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-blue-600 text-white hover:bg-blue-700 border-blue-500 font-semibold text-base md:text-lg px-6 md:px-8 shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={onGetQuote}
                   data-testid="button-get-quote"
                 >
                   Get Quote
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                 </Button>
                 
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="bg-white/90 backdrop-blur-sm border-blue-200/50 text-blue-700 hover:bg-blue-50/90 font-semibold text-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="bg-white/90 backdrop-blur-sm border-blue-200/50 text-blue-700 hover:bg-blue-50/90 font-semibold text-base md:text-lg px-6 md:px-8 shadow-lg hover:shadow-xl transition-all duration-300"
                   onClick={onViewServices}
                   data-testid="button-view-services"
                 >
                   Our Services
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
                 </Button>
               </div>
             </div>

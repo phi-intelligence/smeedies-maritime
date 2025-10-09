@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, Users, ArrowRight } from "lucide-react";
+import { MapPin, Phone, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,11 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import QuoteSection from "@/components/QuoteSection";
 import shipVideo from "@/assets/videos/Ship.mp4";
 import nightPortImage from "@/assets/images/cargo-ships-docked-port-night.jpg";
-import nightPortSecurityImage from "@/assets/images/night-time-industrial-port-scene-with-shipping-containers-reflective-surfaces.jpg";
-import portOperationsImage from "@/assets/images/port_operations_carg_5753cff0.jpg";
-import backgroundNewVideo from "@/assets/videos/background-new.mp4";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -24,98 +22,112 @@ export default function Contact() {
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contact form submitted:', formData);
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    setFormData({ name: "", email: "", company: "", service: "", message: "" });
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Message Sent!",
+          description: "We'll get back to you within 24 hours.",
+        });
+        setFormData({ name: "", email: "", company: "", service: "", message: "" });
+      } else {
+        throw new Error('Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to send message. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
+
+  const departments = [
+    {
+      name: "Management",
+      location: "Head Office",
+      digitalAddress: "",
+      services: "Executive leadership and strategic planning",
+      phone: "+233 (54) 167-1660",
+      email: "management@smeediesmaritime.com",
+      icon: "👔"
+    },
+    {
+      name: "Accounting",
+      location: "Finance Department",
+      digitalAddress: "",
+      services: "Financial management and billing",
+      phone: "+233 (54) 944-3126",
+      email: "accounting@smeediesmaritime.com",
+      icon: "💰"
+    },
+    {
+      name: "Marketing/Sales",
+      location: "Business Development",
+      digitalAddress: "",
+      services: "Business development and client relations",
+      phone: "+1 (240) 495-8068",
+      email: "marketing@smeediesmaritime.com",
+      icon: "📈",
+      secondaryPhone: "+233 (24) 650-5158"
+    },
+    {
+      name: "Operations",
+      location: "Operations Center",
+      digitalAddress: "",
+      services: "Port operations and logistics coordination",
+      phone: "+233 (24) 458-2071",
+      email: "operations@smeediesmaritime.com",
+      icon: "⚙️"
+    }
+  ];
 
   const offices = [
     {
-      name: "Tema Office",
-      location: "Tema Community 5, Ghana",
+      name: "Port of Tema",
+      location: "Tema, Community 5, GT020",
       digitalAddress: "GT-020-5930",
-      services: "Port operations and cargo handling",
-      phone: "+233 XXX XXX XXX",
-      email: "tema@smeediesmaritime.com"
+      services: "Main port operations and cargo handling",
+      phone: "+233 (303) 321-5401",
+      email: "operations@smeediesmaritime.com",
+      coordinates: "5.639914, -0.006311"
     },
     {
-      name: "Accra Office",
+      name: "Kotoka International Airport",
       location: "Accra, Ghana",
       digitalAddress: "GL-125-6946",
-      services: "Air cargo and general operations",
-      phone: "+233 XXX XXX XXX",
-      email: "accra@smeediesmaritime.com"
+      services: "Air cargo and international operations",
+      phone: "+233 (24) 458-2071",
+      email: "operations@smeediesmaritime.com"
     },
     {
-      name: "Takoradi Office",
+      name: "Port of Takoradi",
       location: "Takoradi, Western Region",
-      digitalAddress: "",
-      services: "Regional cargo management",
-      phone: "+233 XXX XXX XXX",
-      email: "takoradi@smeediesmaritime.com"
-    },
-    {
-      name: "Kumasi Office",
-      location: "Kumasi, Central Ghana",
-      digitalAddress: "",
-      services: "Forwarding and distribution",
-      phone: "+233 XXX XXX XXX",
-      email: "kumasi@smeediesmaritime.com"
+      digitalAddress: "WS-407-0198",
+      services: "Regional port operations",
+      phone: "+233 (24) 458-2071",
+      email: "operations@smeediesmaritime.com"
     }
   ];
 
-  const emergencyContacts = [
-    {
-      title: "24/7 Emergency Line",
-      description: "Available round-the-clock for urgent maritime operations",
-      phone: "+233 XXX XXX XXX"
-    },
-    {
-      title: "Port Operations",
-      description: "Direct contact for port-related emergencies",
-      phone: "+233 XXX XXX XXX"
-    },
-    {
-      title: "Customs Clearance",
-      description: "Emergency customs clearance services",
-      phone: "+233 XXX XXX XXX"
-    }
-  ];
-
-  const businessHours = [
-    {
-      service: "Regular Business Hours",
-      hours: "Monday - Friday: 8:00 AM - 6:00 PM",
-      description: "General inquiries and operations"
-    },
-    {
-      service: "Emergency Services",
-      hours: "24/7 Availability",
-      description: "Urgent maritime operations and emergencies"
-    },
-    {
-      service: "Port Operations",
-      hours: "24/7 Port Services",
-      description: "Continuous port operations and vessel services"
-    },
-    {
-      service: "Customs Clearance",
-      hours: "Business Days + Emergency",
-      description: "Regular and emergency customs processing"
-    }
-  ];
 
   return (
-    <div className="min-h-screen bg-background relative">
+    <div className="min-h-screen bg-transparent relative">
       <Navigation />
       
       {/* Hero Section */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
+      <section className="relative h-screen min-h-[600px] flex items-center overflow-hidden">
         {/* Background Video */}
         <video
           autoPlay
@@ -129,19 +141,24 @@ export default function Contact() {
         </video>
         
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" /> */}
         
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3">
-              Contact Us
-            </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Get in Touch with Our Team
-            </h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto">
-              We are available to provide services 24 hours a day, 7 days a week. Contact us for all your maritime and logistics needs.
-            </p>
+        <div className="relative z-20 max-w-full mx-auto w-full">
+          <div className="flex flex-col items-center justify-center text-center min-h-[80vh] space-y-8">
+            <div className="space-y-8 max-w-6xl mx-auto">
+              <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3">
+                Contact Us
+              </p>
+              <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-lg px-4">
+                <span className="text-blue-300">Get in Touch</span> with Our Team
+              </h1>
+              <p className="text-lg sm:text-xl md:text-2xl mb-4 text-white max-w-4xl mx-auto drop-shadow-md px-4">
+                We are available 24 hours a day, 7 days a week
+              </p>
+              <p className="text-sm sm:text-base md:text-lg mb-12 text-gray-200 max-w-3xl mx-auto drop-shadow-md px-4">
+                Contact us for all your maritime and logistics needs.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -160,10 +177,10 @@ export default function Contact() {
         />
         
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" /> */}
         
         <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="grid lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Contact Form */}
               <div>
                 <div className="mb-8">
@@ -171,116 +188,159 @@ export default function Contact() {
                   <p className="text-gray-200">Fill out the form below and we'll get back to you within 24 hours.</p>
                 </div>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="name" className="text-white font-medium">Name *</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                        className="mt-2 bg-blue-800/30 border-blue-400/30 text-white placeholder-gray-300 focus:border-blue-300"
-                        placeholder="Your full name"
-                      />
+                <div className="bg-blue-900/40 backdrop-blur-md rounded-xl p-8 border border-blue-400/30 shadow-2xl">
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="name" className="text-white font-semibold text-base">Name *</Label>
+                        <Input
+                          id="name"
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          required
+                          className="mt-2 bg-blue-800/60 border-blue-400/50 text-white placeholder-blue-200 focus:border-blue-300 focus:bg-blue-800/80 transition-all duration-300 h-12 text-base"
+                          placeholder="Your full name"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="email" className="text-white font-semibold text-base">Email *</Label>
+                        <Input
+                          id="email"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          required
+                          className="mt-2 bg-blue-800/60 border-blue-400/50 text-white placeholder-blue-200 focus:border-blue-300 focus:bg-blue-800/80 transition-all duration-300 h-12 text-base"
+                          placeholder="your.email@company.com"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div>
+                        <Label htmlFor="company" className="text-white font-semibold text-base">Company</Label>
+                        <Input
+                          id="company"
+                          value={formData.company}
+                          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                          className="mt-2 bg-blue-800/60 border-blue-400/50 text-white placeholder-blue-200 focus:border-blue-300 focus:bg-blue-800/80 transition-all duration-300 h-12 text-base"
+                          placeholder="Your company name"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="service" className="text-white font-semibold text-base">Service Required</Label>
+                        <Select value={formData.service} onValueChange={(value) => setFormData({ ...formData, service: value })}>
+                          <SelectTrigger className="mt-2 bg-blue-800/60 border-blue-400/50 text-white focus:border-blue-300 focus:bg-blue-800/80 transition-all duration-300 h-12 text-base">
+                            <SelectValue placeholder="Select a service" className="text-blue-200" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-blue-900 border-blue-400">
+                            <SelectItem value="agency" className="text-white hover:bg-blue-800 focus:bg-blue-800">Agency Services</SelectItem>
+                            <SelectItem value="stevedoring" className="text-white hover:bg-blue-800 focus:bg-blue-800">Stevedoring & Shore Handling</SelectItem>
+                            <SelectItem value="project-cargo" className="text-white hover:bg-blue-800 focus:bg-blue-800">Project Cargo</SelectItem>
+                            <SelectItem value="customs" className="text-white hover:bg-blue-800 focus:bg-blue-800">Customs Clearing</SelectItem>
+                            <SelectItem value="warehousing" className="text-white hover:bg-blue-800 focus:bg-blue-800">Warehousing</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                     
                     <div>
-                      <Label htmlFor="email" className="text-white font-medium">Email *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      <Label htmlFor="message" className="text-white font-semibold text-base">Message *</Label>
+                      <Textarea
+                        id="message"
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        rows={5}
                         required
-                        className="mt-2 bg-blue-800/30 border-blue-400/30 text-white placeholder-gray-300 focus:border-blue-300"
-                        placeholder="your.email@company.com"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div>
-                      <Label htmlFor="company" className="text-white font-medium">Company</Label>
-                      <Input
-                        id="company"
-                        value={formData.company}
-                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                        className="mt-2 bg-blue-800/30 border-blue-400/30 text-white placeholder-gray-300 focus:border-blue-300"
-                        placeholder="Your company name"
+                        className="mt-2 bg-blue-800/60 border-blue-400/50 text-white placeholder-blue-200 focus:border-blue-300 focus:bg-blue-800/80 transition-all duration-300 text-base resize-none"
+                        placeholder="Please describe your requirements, cargo details, timeline, and any special needs..."
                       />
                     </div>
                     
-                    <div>
-                      <Label htmlFor="service" className="text-white font-medium">Service Required</Label>
-                      <Select value={formData.service} onValueChange={(value) => setFormData({ ...formData, service: value })}>
-                        <SelectTrigger className="mt-2 bg-blue-800/30 border-blue-400/30 text-white focus:border-blue-300">
-                          <SelectValue placeholder="Select a service" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="agency">Agency Services</SelectItem>
-                          <SelectItem value="stevedoring">Stevedoring & Shore Handling</SelectItem>
-                          <SelectItem value="project-cargo">Project Cargo</SelectItem>
-                          <SelectItem value="customs">Customs Clearing</SelectItem>
-                          <SelectItem value="warehousing">Warehousing</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="message" className="text-white font-medium">Message *</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      rows={5}
-                      required
-                      className="mt-2 bg-blue-800/30 border-blue-400/30 text-white placeholder-gray-300 focus:border-blue-300"
-                      placeholder="Please describe your requirements, cargo details, timeline, and any special needs..."
-                    />
-                  </div>
-                  
-                  <Button 
-                    type="submit" 
-                    size="lg" 
-                    className="w-full bg-gold text-primary hover:bg-gold/90 border-gold font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300"
-                  >
-                    Send Message
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </form>
+                    <Button 
+                      type="submit" 
+                      size="lg" 
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white border-blue-500 font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 h-14 rounded-lg"
+                    >
+                      Send Message
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </form>
+                </div>
               </div>
               
               {/* Contact Information */}
               <div className="space-y-8">
+                {/* Departments */}
                 <div>
-                  <h3 className="text-2xl font-bold text-white mb-6">Our Offices</h3>
+                  <h3 className="text-2xl font-bold text-white mb-6">Contact Departments</h3>
                   
-                  <div className="space-y-6">
+                  <div className="contact-info-grid space-y-4">
+                    {departments.map((dept, index) => (
+                      <div key={index} className="contact-card p-6 rounded-xl bg-gradient-to-r from-blue-900/60 to-blue-800/60 backdrop-blur-md border border-blue-400/50 hover:border-blue-300/70 hover:bg-gradient-to-r hover:from-blue-800/70 hover:to-blue-700/70 transition-all duration-300 shadow-xl hover:shadow-blue-500/30">
+                        <div className="flex items-start gap-4 mb-4">
+                          <span className="text-3xl bg-blue-700/50 p-2 rounded-lg">{dept.icon}</span>
+                          <div className="flex-1">
+                            <h4 className="font-bold text-white text-xl mb-1">{dept.name}</h4>
+                            <p className="text-blue-200 font-medium">{dept.location}</p>
+                            <p className="text-blue-300 text-sm mt-2">{dept.services}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="space-y-3 bg-blue-800/40 rounded-lg p-4">
+                          <div className="flex items-center gap-3">
+                            <Phone className="w-5 h-5 text-blue-300 flex-shrink-0" />
+                            <span className="text-blue-100 font-medium">{dept.phone}</span>
+                          </div>
+                          {dept.secondaryPhone && (
+                            <div className="flex items-center gap-3">
+                              <Phone className="w-5 h-5 text-blue-300 flex-shrink-0" />
+                              <span className="text-blue-100 font-medium">{dept.secondaryPhone}</span>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-3">
+                            <Mail className="w-5 h-5 text-blue-300 flex-shrink-0" />
+                            <span className="text-blue-100 font-medium break-all">{dept.email}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Office Locations */}
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-6">Office Locations</h3>
+                  
+                  <div className="contact-info-grid space-y-4">
                     {offices.map((office, index) => (
-                      <div key={index} className="p-6 rounded-md bg-blue-900/20 backdrop-blur-sm border-blue-400/30 hover:bg-blue-800/30 hover:border-blue-300/50 transition-all duration-300 shadow-lg hover:shadow-blue-500/20">
-                        <div className="flex items-start gap-3 mb-3">
-                          <MapPin className="w-5 h-5 text-blue-300 flex-shrink-0 mt-1" />
-                          <div>
-                            <h4 className="font-bold text-white text-lg">{office.name}</h4>
-                            <p className="text-sm text-blue-100">{office.location}</p>
+                      <div key={index} className="contact-card p-6 rounded-xl bg-gradient-to-r from-blue-900/60 to-cyan-900/60 backdrop-blur-md border border-blue-400/50 hover:border-blue-300/70 hover:bg-gradient-to-r hover:from-blue-800/70 hover:to-cyan-800/70 transition-all duration-300 shadow-xl hover:shadow-blue-500/30">
+                        <div className="flex items-start gap-4 mb-4">
+                          <MapPin className="w-6 h-6 text-blue-300 flex-shrink-0 mt-1 bg-blue-700/50 p-2 rounded-lg" />
+                          <div className="flex-1">
+                            <h4 className="font-bold text-white text-xl mb-1">{office.name}</h4>
+                            <p className="text-blue-200 font-medium">{office.location}</p>
                             {office.digitalAddress && (
-                              <p className="text-sm text-blue-200 font-mono">Digital: {office.digitalAddress}</p>
+                              <p className="text-blue-300 text-sm font-mono mt-1">Digital: {office.digitalAddress}</p>
+                            )}
+                            {office.coordinates && (
+                              <p className="text-blue-400 text-xs font-mono mt-1">Coordinates: {office.coordinates}</p>
                             )}
                           </div>
                         </div>
                         
-                        <div className="space-y-2">
-                          <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4 text-blue-300" />
-                            <span className="text-sm text-blue-100">{office.phone}</span>
+                        <div className="space-y-3 bg-blue-800/40 rounded-lg p-4">
+                          <div className="flex items-center gap-3">
+                            <Phone className="w-5 h-5 text-blue-300 flex-shrink-0" />
+                            <span className="text-blue-100 font-medium">{office.phone}</span>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <Mail className="w-4 h-4 text-blue-300" />
-                            <span className="text-sm text-blue-100">{office.email}</span>
+                          <div className="flex items-center gap-3">
+                            <Mail className="w-5 h-5 text-blue-300 flex-shrink-0" />
+                            <span className="text-blue-100 font-medium break-all">{office.email}</span>
                           </div>
-                          <p className="text-xs text-blue-200 mt-2">{office.services}</p>
+                          <p className="text-blue-300 text-sm mt-2 bg-blue-900/40 rounded p-2">{office.services}</p>
                         </div>
                       </div>
                     ))}
@@ -291,156 +351,8 @@ export default function Contact() {
           </div>
         </section>
 
-      {/* Emergency Contacts */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${nightPortSecurityImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Emergency Contacts
-            </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
-              Available 24/7 for urgent maritime operations and emergencies
-            </p>
-          </div>
-            
-            <div className="grid md:grid-cols-3 gap-8">
-              {emergencyContacts.map((contact, index) => (
-                <div 
-                  key={index}
-                  className="text-center p-6 rounded-md bg-red-900/20 backdrop-blur-sm border-red-400/30 hover:bg-red-800/30 hover:border-red-300/50 transition-all duration-300 shadow-lg hover:shadow-red-500/20"
-                >
-                  <div className="w-16 h-16 bg-red-500/20 rounded-md flex items-center justify-center mx-auto mb-4 border border-red-400/30">
-                    <Phone className="w-8 h-8 text-red-300" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{contact.title}</h3>
-                  <p className="text-red-100 text-sm mb-3">{contact.description}</p>
-                  <p className="text-red-200 font-mono font-semibold">{contact.phone}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      {/* Business Hours */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 w-full h-full object-cover z-0"
-          style={{
-            backgroundImage: `url(${portOperationsImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-7xl mx-auto px-6 relative z-20">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Business Hours
-            </h2>
-            <p className="text-lg text-gray-200 max-w-2xl mx-auto">
-              Our service availability across different operational areas
-            </p>
-          </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {businessHours.map((schedule, index) => (
-                <div 
-                  key={index}
-                  className="p-6 rounded-md bg-green-900/20 backdrop-blur-sm border-green-400/30 hover:bg-green-800/30 hover:border-green-300/50 transition-all duration-300 shadow-lg hover:shadow-green-500/20"
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <Clock className="w-5 h-5 text-green-300" />
-                    <h3 className="font-bold text-white">{schedule.service}</h3>
-                  </div>
-                  <p className="text-green-200 font-semibold mb-2">{schedule.hours}</p>
-                  <p className="text-green-100 text-sm">{schedule.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      {/* Quote Request Section */}
-      <section className="py-20 bg-transparent relative overflow-hidden">
-        {/* Background Video */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover z-0"
-        >
-          <source src={backgroundNewVideo} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
-        
-        <div className="max-w-4xl mx-auto px-6 relative z-20">
-          <div className="bg-blue-900/20 backdrop-blur-sm border-blue-400/30 p-8 rounded-md shadow-lg">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-white mb-4">Request a Quote</h2>
-              <p className="text-lg text-gray-200">
-                Get a detailed quote for your maritime and logistics requirements
-              </p>
-            </div>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-4">Service Types</h3>
-                  <ul className="space-y-2 text-blue-100">
-                    <li>• Agency Services</li>
-                    <li>• Stevedoring & Shore Handling</li>
-                    <li>• Project Cargo</li>
-                    <li>• Customs Clearing</li>
-                    <li>• Warehousing</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-4">What We Need</h3>
-                  <ul className="space-y-2 text-blue-100">
-                    <li>• Cargo type and quantity</li>
-                    <li>• Origin and destination</li>
-                    <li>• Timeline requirements</li>
-                    <li>• Special handling needs</li>
-                    <li>• Documentation requirements</li>
-                  </ul>
-                </div>
-              </div>
-              
-            <div className="text-center mt-8">
-              <Button 
-                size="lg"
-                className="bg-blue-600 text-white hover:bg-blue-700 border-blue-500 font-semibold text-lg px-8 shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Get Quote Now
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Quote Section */}
+      <QuoteSection />
       
       <Footer />
     </div>

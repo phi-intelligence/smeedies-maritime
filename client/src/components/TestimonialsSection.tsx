@@ -2,6 +2,7 @@ import TestimonialCard from "./TestimonialCard";
 import captainPhoto from '@assets/generated_images/Captain_testimonial_photo_b5983bf6.png';
 import femaleExecPhoto from '@assets/generated_images/Female_executive_testimonial_photo_aec506e9.png';
 import maleProfPhoto from '@assets/generated_images/Male_professional_testimonial_photo_15922d3a.png';
+import portOperationsImage from '@/assets/images/port_operations_carg_5753cff0.jpg';
 
 export default function TestimonialsSection() {
   const testimonials = [
@@ -44,8 +45,19 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-20 bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-20 bg-transparent relative overflow-hidden">
+      {/* Static Background Image */}
+      <div 
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
+        style={{
+          backgroundImage: `url(${portOperationsImage})`
+        }}
+      />
+      
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-20">
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             Testimonials

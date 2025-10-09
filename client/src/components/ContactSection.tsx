@@ -130,41 +130,120 @@ export default function ContactSection() {
           </div>
           
           <div className="space-y-8">
+            {/* Management Contact */}
             <div>
-              <h3 className="text-xl font-bold text-white mb-6">Our Offices</h3>
-              
+              <h3 className="text-xl font-bold text-white mb-6">Management</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Mail className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Email</p>
+                    <p className="text-sm text-gray-200">management@smeediesmaritime.com</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Phone className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Phone</p>
+                    <p className="text-sm text-gray-200">+233 (54) 167-1660</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Accounting Contact */}
+            <div>
+              <h3 className="text-xl font-bold text-white mb-6">Accounting</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Mail className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Email</p>
+                    <p className="text-sm text-gray-200">accounting@smeediesmaritime.com</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Phone className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Phone</p>
+                    <p className="text-sm text-gray-200">+233 (54) 944-3126</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Marketing/Sales Contact */}
+            <div>
+              <h3 className="text-xl font-bold text-white mb-6">Marketing/Sales</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Mail className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Email</p>
+                    <p className="text-sm text-gray-200">marketing@smeediesmaritime.com</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Phone className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Phone</p>
+                    <p className="text-sm text-gray-200">+1 (240) 495-8068</p>
+                    <p className="text-sm text-gray-200">+233 (24) 650-5158</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Operations Contact */}
+            <div>
+              <h3 className="text-xl font-bold text-white mb-6">Operations</h3>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <Mail className="w-5 h-5 text-orange-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Email</p>
+                    <p className="text-sm text-gray-200">operations@smeediesmaritime.com</p>
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <Phone className="w-5 h-5 text-orange-400 flex-shrink-0 mt-1" />
+                  <div>
+                    <p className="font-semibold text-white">Phone</p>
+                    <p className="text-sm text-gray-200">+233 (24) 458-2071</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Locations */}
+            <div>
+              <h3 className="text-xl font-bold text-white mb-6">Locations</h3>
               <div className="space-y-6">
                 <div className="flex gap-3">
-                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
+                  <MapPin className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-white">Tema Office</p>
+                    <p className="font-semibold text-white">Port of Tema, Ghana</p>
                     <p className="text-sm text-gray-200">Digital Address: GT-020-5930</p>
-                    <p className="text-sm text-gray-200">Tema Community 5, Ghana</p>
+                    <p className="text-sm text-gray-200">Tema, Community 5, GT020</p>
+                    <p className="text-sm text-gray-200">5.639914, -0.006311</p>
+                    <p className="text-sm text-gray-200 mt-1">Phone: +233 (303) 321-5401</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
-                  <MapPin className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
+                  <MapPin className="w-5 h-5 text-green-400 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-white">Accra Office</p>
+                    <p className="font-semibold text-white">Kotoka International Airport</p>
                     <p className="text-sm text-gray-200">Digital Address: GL-125-6946</p>
                     <p className="text-sm text-gray-200">Accra, Ghana</p>
                   </div>
                 </div>
                 
                 <div className="flex gap-3">
-                  <Phone className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
+                  <MapPin className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-white">Phone</p>
-                    <p className="text-sm text-gray-200">+233 XXX XXX XXX</p>
-                  </div>
-                </div>
-                
-                <div className="flex gap-3">
-                  <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                  <div>
-                    <p className="font-semibold text-white">Email</p>
-                    <p className="text-sm text-gray-200">info@smeediesmaritime.com</p>
+                    <p className="font-semibold text-white">Port of Takoradi, Ghana</p>
+                    <p className="text-sm text-gray-200">Digital Address: WS-407-0198</p>
                   </div>
                 </div>
               </div>

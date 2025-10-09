@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import portOpsImage from '@assets/generated_images/Port_operations_news_image_24646142.png';
 import tugboatsImage from '@assets/generated_images/Tugboats_news_image_1741c7dd.png';
 import tradeRoutesImage from '@assets/generated_images/Trade_routes_news_image_3fdbe485.png';
+import cargoShipImage from '@/assets/images/cargo-ship-miami-harbor.jpg';
 
 interface NewsSectionProps {
   onViewAllNews?: () => void;
@@ -55,8 +56,19 @@ export default function NewsSection({ onViewAllNews }: NewsSectionProps) {
   ];
 
   return (
-    <section ref={sectionRef} className="py-20 bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
+    <section ref={sectionRef} className="py-20 bg-transparent relative overflow-hidden">
+      {/* Static Background Image */}
+      <div 
+        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
+        style={{
+          backgroundImage: `url(${cargoShipImage})`
+        }}
+      />
+      
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-900/70 via-slate-800/60 to-slate-900/70 z-10" />
+      
+      <div className="max-w-7xl mx-auto px-6 relative z-20">
         <div className="text-center mb-12">
           <p className="text-sm font-semibold text-blue-300 uppercase tracking-wider mb-3" data-testid="text-section-header">
             News & Updates
