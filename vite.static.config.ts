@@ -8,7 +8,7 @@ export default defineConfig({
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
       "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets"),
+      "@assets": path.resolve(import.meta.dirname, "client", "src", "assets"),
     },
   },
   root: path.resolve(import.meta.dirname, "client"),
@@ -20,7 +20,7 @@ export default defineConfig({
         manualChunks: {
           // Separate vendor libraries
           vendor: ['react', 'react-dom', 'wouter'],
-          three: ['three', '@react-three/fiber', '@react-three/drei'],
+          three: ['three'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-toast', '@radix-ui/react-tooltip']
         }
       }
@@ -33,9 +33,8 @@ export default defineConfig({
   base: '/', // Base path for static hosting
   define: {
     // Define environment variables for build
-    'process.env.VITE_S3_BUCKET_NAME': JSON.stringify(process.env.VITE_S3_BUCKET_NAME || ''),
+    'process.env.VITE_S3_BUCKET_NAME': JSON.stringify(process.env.VITE_S3_BUCKET_NAME || 'smeedies-maritime-assets'),
     'process.env.VITE_AWS_REGION': JSON.stringify(process.env.VITE_AWS_REGION || 'us-east-1'),
-    'process.env.VITE_DYNAMODB_TABLE_NAME': JSON.stringify(process.env.VITE_DYNAMODB_TABLE_NAME || ''),
   },
 });
 
