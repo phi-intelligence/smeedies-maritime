@@ -10,4 +10,4 @@ vite.config.ts.*
 .env.local
 .env.production
 .env.development
-client/src/.env
+client/src/.env.serverless/
