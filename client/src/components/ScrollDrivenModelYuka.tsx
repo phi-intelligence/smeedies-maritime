@@ -51,7 +51,7 @@ const CAMERA_FOV_VALUES = [25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47, 50];
 
 const ScrollDrivenModelYuka: React.FC<ScrollDrivenModelYukaProps> = ({ 
   className = "", 
-  modelPath = "/src/assets/models/smeediessnew1.glb",
+  modelPath = "/assets/models/smeediessnew1.glb",
   scale = 1.5,
   onError,
   onLoad,

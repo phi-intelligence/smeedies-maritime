@@ -17,10 +17,8 @@ import FeatureCard from "@/components/FeatureCard";
 import TestimonialCard from "@/components/TestimonialCard";
 import { ArrowRight, Ship, Truck, Globe, FileCheck, Clock, CheckCircle2, Compass, Network, Warehouse, Thermometer, Shield, Package, Wifi, FileCheck2, Bug } from "lucide-react";
 // Import testimonial images
-import captainPhoto from '@assets/generated_images/Captain_testimonial_photo_b5983bf6.png';
-import femaleExecPhoto from '@assets/generated_images/Female_executive_testimonial_photo_aec506e9.png';
-import maleProfPhoto from '@assets/generated_images/Male_professional_testimonial_photo_15922d3a.png';
-import { getImageUrl, getVideoUrl } from '@/config/assets';
+// Testimonial images are now handled through the asset system
+import { getImageUrl, getVideoUrl, getModelUrl } from '@/config/assets';
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 
@@ -161,37 +159,31 @@ export default function NewHome() {
 
   const testimonials = [
     {
-      photo: captainPhoto,
       quote: "Smeedies has been our reliable partner for over 5 years. Their local expertise and 24/7 service is unmatched in West Africa.",
       name: "Captain James Osei",
       company: "Atlantic Shipping Lines"
     },
     {
-      photo: femaleExecPhoto,
       quote: "Fast clearance and on-time delivery every time. They understand the complexities of West African trade.",
       name: "Sarah Mensah",
       company: "Ghana Importers Association"
     },
     {
-      photo: maleProfPhoto,
       quote: "Professional service and competitive rates. Their network across Ghana gives us complete coverage.",
       name: "Michael Asante",
       company: "West Africa Freight Forwarders"
     },
     {
-      photo: femaleExecPhoto,
       quote: "Excellent handling of our project cargo requirements. They cleared everything on time and within budget.",
       name: "Dr. Ama Boateng",
       company: "Infrastructure Development Corp"
     },
     {
-      photo: maleProfPhoto,
       quote: "Their warehousing services are top-notch. Temperature control and security are exactly what we needed.",
       name: "Kwame Nkrumah",
       company: "Agricultural Exporters Ltd"
     },
     {
-      photo: femaleExecPhoto,
       quote: "Smeedies made our intra-African trade operations seamless. Highly recommended for West African logistics.",
       name: "Fatima Diallo",
       company: "Sahel Trading Company"
@@ -316,7 +308,7 @@ export default function NewHome() {
       <div>
                 <ScrollDrivenModelYuka 
                   className="fixed inset-0"
-                  modelPath="/src/assets/models/smeediessnew1.glb"
+                  modelPath={getModelUrl('SMEEDIES_NEW_1')}
                   scale={3.0}
                 />
       </div>
@@ -325,7 +317,7 @@ export default function NewHome() {
         {/* Hero Section with Globe Animation - Independent Section */}
         <section id="home" className="relative min-h-screen overflow-hidden">
           <Hero 
-            backgroundVideo={getVideoUrl('backgroundNew')}
+            backgroundVideo={getVideoUrl('BACKGROUND_NEW')}
             onGetQuote={() => window.location.href = '/contact'}
             onViewServices={() => window.location.href = '/services'}
           />
@@ -539,7 +531,7 @@ export default function NewHome() {
                         <div className="operational-image-card">
                           <div className="operational-image-card-content">
                             <img 
-                              src="/src/assets/images/westafrica.jpg" 
+                              src={getImageUrl('WEST_AFRICA')} 
                               alt="West Africa Region Map" 
                               data-testid="west-africa-image"
                             />
@@ -626,10 +618,10 @@ export default function NewHome() {
                       >
                         <div className="card-image">
                           <img 
-                            src={index % 4 === 0 ? '/src/assets/images/ghana_port_infrastru_7ef9101d.jpg' : 
-                                 index % 4 === 1 ? '/src/assets/images/shipping_containers__4ae963ed.jpg' :
-                                 index % 4 === 2 ? '/src/assets/images/port_crane_operation_01b3e60a.jpg' : 
-                                 '/src/assets/images/shipping_port_cargo__47da743f.jpg'} 
+                            src={index % 4 === 0 ? getImageUrl('GHANA_PORT') : 
+                                 index % 4 === 1 ? getImageUrl('SHIPPING_CONTAINERS') :
+                                 index % 4 === 2 ? getImageUrl('PORT_CRANE_OPERATION') : 
+                                 getImageUrl('SHIPPING_PORT_47DA')} 
                             alt={`${office.name} operations`}
                           />
                         </div>
@@ -715,7 +707,6 @@ export default function NewHome() {
                         }}
                       >
                         <TestimonialCard
-                          photo={testimonial.photo}
                           quote={testimonial.quote}
                           name={testimonial.name}
                           company={testimonial.company}

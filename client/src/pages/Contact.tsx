@@ -9,8 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import QuoteSection from "@/components/QuoteSection";
-import shipVideo from "@/assets/videos/Ship.mp4";
-import nightPortImage from "@/assets/images/cargo-ships-docked-port-night.jpg";
+import { getImageUrl, getVideoUrl } from '@/config/assets';
 
 export default function Contact() {
   const { toast } = useToast();
@@ -136,7 +135,7 @@ export default function Contact() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          <source src={shipVideo} type="video/mp4" />
+          <source src={getVideoUrl('SHIP')} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
@@ -169,7 +168,7 @@ export default function Contact() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${nightPortImage})`,
+            backgroundImage: `url(${getImageUrl('CARGO_SHIPS_DOCKED')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'

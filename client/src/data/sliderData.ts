@@ -1,7 +1,5 @@
 import heroImage from '@assets/generated_images/Maritime_hero_background_image_0cc6412a.png';
-import captainImage from '@assets/generated_images/Captain_testimonial_photo_b5983bf6.png';
-import executiveImage from '@assets/generated_images/Female_executive_testimonial_photo_aec506e9.png';
-import professionalImage from '@assets/generated_images/Male_professional_testimonial_photo_15922d3a.png';
+// Testimonial photos removed - using initials instead
 import portImage from '@assets/generated_images/Port_operations_news_image_24646142.png';
 import tradeImage from '@assets/generated_images/Trade_routes_news_image_3fdbe485.png';
 
@@ -13,7 +11,6 @@ export const heroServicesSlider = [
     subtitle: 'Chapter I, page XV',
     description: 'Prime maritime solutions by Smeedies! Your reliable local partner for shipping and logistics. We deliver excellence and navigate success across West Africa and beyond.',
     leftImage: heroImage,
-    rightImage: captainImage,
     emphasis: 'Maritime'
   },
   {
@@ -30,8 +27,6 @@ export const heroServicesSlider = [
     title: 'Trusted by Industry Leaders',
     subtitle: 'Chapter III, page XI',
     description: 'Join thousands of satisfied clients who trust Smeedies for their maritime needs. Our 24/7 service, 40+ country network, and 100% on-time delivery record speak for themselves.',
-    leftImage: executiveImage,
-    rightImage: professionalImage,
     emphasis: 'Leaders'
   }
 ];
@@ -44,7 +39,6 @@ export const aboutCompanySlider = [
     subtitle: 'Established 1995',
     description: 'For over three decades, Smeedies has been the cornerstone of maritime excellence in West Africa. Built on a foundation of trust, reliability, and unwavering commitment to our clients.',
     leftImage: portImage,
-    rightImage: captainImage,
     emphasis: 'Heritage'
   },
   {
@@ -52,8 +46,6 @@ export const aboutCompanySlider = [
     title: 'Mission & Vision',
     subtitle: 'Driving Excellence',
     description: 'Our mission is to provide seamless maritime solutions that connect West Africa to the world. We envision becoming the leading maritime agency that sets industry standards for service excellence.',
-    leftImage: executiveImage,
-    rightImage: professionalImage,
     emphasis: 'Excellence'
   },
   {
@@ -75,7 +67,6 @@ export const servicesPortfolioSlider = [
     subtitle: 'Port Operations',
     description: 'Comprehensive ship agency services including port clearance, customs documentation, crew assistance, and vessel coordination. We ensure smooth operations from arrival to departure.',
     leftImage: portImage,
-    rightImage: captainImage,
     emphasis: 'Agency'
   },
   {
@@ -84,7 +75,6 @@ export const servicesPortfolioSlider = [
     subtitle: 'Supply Chain Excellence',
     description: 'End-to-end logistics solutions including cargo handling, warehousing, transportation, and distribution. Our integrated approach ensures efficient movement of goods across all touchpoints.',
     leftImage: tradeImage,
-    rightImage: executiveImage,
     emphasis: 'Logistics'
   },
   {
@@ -92,7 +82,6 @@ export const servicesPortfolioSlider = [
     title: 'Freight Forwarding',
     subtitle: 'Global Connections',
     description: 'Expert freight forwarding services connecting West Africa to global markets. We handle air, sea, and land freight with precision, ensuring your cargo reaches its destination on time.',
-    leftImage: professionalImage,
     rightImage: heroImage,
     emphasis: 'Forwarding'
   }
@@ -105,8 +94,6 @@ export const testimonialsSuccessSlider = [
     title: 'Client Success Stories',
     subtitle: 'Proven Results',
     description: 'Our clients consistently achieve their business objectives through our maritime solutions. From small enterprises to multinational corporations, we deliver results that exceed expectations.',
-    leftImage: executiveImage,
-    rightImage: professionalImage,
     emphasis: 'Success'
   },
   {
@@ -114,7 +101,6 @@ export const testimonialsSuccessSlider = [
     title: 'Industry Recognition',
     subtitle: 'Award-Winning Service',
     description: 'Recognized by industry leaders and trade associations for our outstanding service delivery. Our commitment to excellence has earned us prestigious awards and certifications.',
-    leftImage: captainImage,
     rightImage: portImage,
     emphasis: 'Recognition'
   },

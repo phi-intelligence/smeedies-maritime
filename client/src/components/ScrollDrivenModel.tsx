@@ -45,7 +45,7 @@ const CAMERA_POSITIONS = {
 
 const ScrollDrivenModel: React.FC<ScrollDrivenModelProps> = ({ 
   className = "", 
-  modelPath = "/src/assets/models/smeediessnew1.glb",
+  modelPath = "/assets/models/smeediessnew1.glb",
   scale = 1.5,
   onError,
   onLoad,

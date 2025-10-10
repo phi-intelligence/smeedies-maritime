@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import shipVideo from "@/assets/videos/Ship.mp4";
+import { getVideoUrl } from '@/config/assets';
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -60,7 +60,7 @@ export default function ContactSection() {
         className="absolute inset-0 w-full h-full object-cover"
         style={{ zIndex: -1 }}
       >
-        <source src={shipVideo} type="video/mp4" />
+        <source src={getVideoUrl('SHIP')} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       

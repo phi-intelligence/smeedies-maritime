@@ -1,9 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import earthImage from '../assets/images/earth.jpeg';
-import earthbImage from '../assets/images/earthb.jpg';
-import earthcImage from '../assets/images/earthc.jpg';
-import lightImage from '../assets/images/light.jpg';
+import { getImageUrl } from '@/config/assets';
 
 interface ShippingGlobeProps {
   className?: string;
@@ -58,10 +55,10 @@ const ShippingGlobe: React.FC<ShippingGlobeProps> = ({ className = "", showUI = 
 
     // Load earth texture
     const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load(earthImage);
-    const earthNormalMap = textureLoader.load(earthbImage);
-    const earthSpecularMap = textureLoader.load(earthcImage);
-    const earthCloudsMap = textureLoader.load(lightImage);
+    const earthTexture = textureLoader.load(getImageUrl('EARTH_JPEG'));
+    const earthNormalMap = textureLoader.load(getImageUrl('EARTHB'));
+    const earthSpecularMap = textureLoader.load(getImageUrl('EARTHC'));
+    const earthCloudsMap = textureLoader.load(getImageUrl('LIGHT'));
     
     // Track textures for disposal
     texturesRef.current = [earthTexture, earthNormalMap, earthSpecularMap, earthCloudsMap];

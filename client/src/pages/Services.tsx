@@ -5,19 +5,7 @@ import ScrollAnimation from "@/components/ScrollAnimation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import AnimatedWorldMap from "@/components/AnimatedWorldMap";
-import cargoShipHarborImage from "@/assets/images/cargo-ship-miami-harbor.jpg";
-import portOperationsImage from "@/assets/images/port_operations_carg_5753cff0.jpg";
-import cargoShipLoadingImage from "@/assets/images/cargo_ship_loading_v_b9f8b6f4.jpg";
-import containerOperationsImage from "@/assets/images/container-cargo-freight-ship-port-twilight.jpg";
-import nightPortImage from "@/assets/images/night-time-industrial-port-scene-with-shipping-containers-reflective-surfaces.jpg";
-import exportLogisticsImage from "@/assets/images/export-ship-logistics-industrial-trade.jpg";
-import cargoShipsDockedImage from "@/assets/images/cargo-ships-docked-port-night.jpg";
-import maritimeLogisticsImage from "@/assets/images/maritime_logistics_w_d9957c6e.jpg";
-import portCraneOperationImage from "@/assets/images/port_crane_operation_01b3e60a.jpg";
-import shippingContainersImage from "@/assets/images/shipping_containers__4ae963ed.jpg";
-import warehouseLogisticsImage from "@/assets/images/warehouse_logistics__b8d9236e.jpg";
-import logistics5Video from "@/assets/videos/logistics-5.mp4";
-import servicesVideo from "@/assets/videos/Services.mp4";
+import { getImageUrl, getVideoUrl } from '@/config/assets';
 import { useEffect, useRef, useState } from "react";
 
 export default function Services() {
@@ -201,7 +189,7 @@ export default function Services() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${cargoShipsDockedImage})`,
+            backgroundImage: `url(${getImageUrl('CARGO_SHIPS_DOCKED')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -279,7 +267,7 @@ export default function Services() {
             <div className="accordion-slider">
               <div 
                 className={`slide ${currentSlide === 0 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${portOperationsImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('PORT_OPERATIONS_5753')})`}}
                 onMouseEnter={() => setActiveSlide(0)}
                 onTouchStart={() => handleSlideTouch(0)}
               >
@@ -326,7 +314,7 @@ export default function Services() {
               
               <div 
                 className={`slide ${currentSlide === 1 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${cargoShipLoadingImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('CARGO_SHIP_LOADING')})`}}
                 onMouseEnter={() => setActiveSlide(1)}
                 onTouchStart={() => handleSlideTouch(1)}
               >
@@ -373,7 +361,7 @@ export default function Services() {
             
               <div 
                 className={`slide ${currentSlide === 2 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${containerOperationsImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('CONTAINER_CARGO_SHIP')})`}}
                 onMouseEnter={() => setActiveSlide(2)}
                 onTouchStart={() => handleSlideTouch(2)}
               >
@@ -420,7 +408,7 @@ export default function Services() {
 
               <div 
                 className={`slide ${currentSlide === 3 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${nightPortImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('NIGHT_TIME_INDUSTRIAL')})`}}
                 onMouseEnter={() => setActiveSlide(3)}
                 onTouchStart={() => handleSlideTouch(3)}
               >
@@ -491,7 +479,7 @@ export default function Services() {
             <div className="accordion-slider">
               <div 
                 className={`slide ${currentHusbandrySlide === 0 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${cargoShipLoadingImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('CARGO_SHIP_LOADING')})`}}
                 onMouseEnter={() => setActiveHusbandrySlide(0)}
                 onTouchStart={() => handleHusbandrySlideTouch(0)}
               >
@@ -538,7 +526,7 @@ export default function Services() {
               
               <div 
                 className={`slide ${currentHusbandrySlide === 1 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${maritimeLogisticsImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('MARITIME_LOGISTICS')})`}}
                 onMouseEnter={() => setActiveHusbandrySlide(1)}
                 onTouchStart={() => handleHusbandrySlideTouch(1)}
               >
@@ -585,7 +573,7 @@ export default function Services() {
             
               <div 
                 className={`slide ${currentHusbandrySlide === 2 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${portCraneOperationImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('PORT_CRANE_OPERATION')})`}}
                 onMouseEnter={() => setActiveHusbandrySlide(2)}
                 onTouchStart={() => handleHusbandrySlideTouch(2)}
               >
@@ -632,7 +620,7 @@ export default function Services() {
 
               <div 
                 className={`slide ${currentHusbandrySlide === 3 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${shippingContainersImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('SHIPPING_CONTAINERS')})`}}
                 onMouseEnter={() => setActiveHusbandrySlide(3)}
                 onTouchStart={() => handleHusbandrySlideTouch(3)}
               >
@@ -703,7 +691,7 @@ export default function Services() {
             <div className="accordion-slider">
               <div 
                 className={`slide ${currentCargoSlide === 0 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${containerOperationsImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('CONTAINER_CARGO_SHIP')})`}}
                 onMouseEnter={() => setActiveCargoSlide(0)}
                 onTouchStart={() => handleCargoSlideTouch(0)}
               >
@@ -750,7 +738,7 @@ export default function Services() {
             
               <div 
                 className={`slide ${currentCargoSlide === 1 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${warehouseLogisticsImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('WAREHOUSE_B8D9')})`}}
                 onMouseEnter={() => setActiveCargoSlide(1)}
                 onTouchStart={() => handleCargoSlideTouch(1)}
               >
@@ -797,7 +785,7 @@ export default function Services() {
               
               <div 
                 className={`slide ${currentCargoSlide === 2 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${nightPortImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('NIGHT_TIME_INDUSTRIAL')})`}}
                 onMouseEnter={() => setActiveCargoSlide(2)}
                 onTouchStart={() => handleCargoSlideTouch(2)}
               >
@@ -844,7 +832,7 @@ export default function Services() {
             
               <div 
                 className={`slide ${currentCargoSlide === 3 ? 'active' : ''}`} 
-                style={{backgroundImage: `url(${exportLogisticsImage})`}}
+                style={{backgroundImage: `url(${getImageUrl('EXPORT_SHIP_LOGISTICS')})`}}
                 onMouseEnter={() => setActiveCargoSlide(3)}
                 onTouchStart={() => handleCargoSlideTouch(3)}
               >
@@ -902,7 +890,7 @@ export default function Services() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${nightPortImage})`,
+            backgroundImage: `url(${getImageUrl('NIGHT_TIME_INDUSTRIAL')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -950,7 +938,7 @@ export default function Services() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          <source src={logistics5Video} type="video/mp4" />
+          <source src={getVideoUrl('LOGISTICS_5')} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         

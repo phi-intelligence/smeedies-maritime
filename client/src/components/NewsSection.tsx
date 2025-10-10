@@ -2,10 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NewsCard from "./NewsCard";
 import { useEffect, useRef, useState } from "react";
-import portOpsImage from '@assets/generated_images/Port_operations_news_image_24646142.png';
-import tugboatsImage from '@assets/generated_images/Tugboats_news_image_1741c7dd.png';
-import tradeRoutesImage from '@assets/generated_images/Trade_routes_news_image_3fdbe485.png';
-import cargoShipImage from '@/assets/images/cargo-ship-miami-harbor.jpg';
+import { getImageUrl } from '@/config/assets';
 
 interface NewsSectionProps {
   onViewAllNews?: () => void;
@@ -36,19 +33,19 @@ export default function NewsSection({ onViewAllNews }: NewsSectionProps) {
 
   const news = [
     {
-      image: portOpsImage,
+      image: getImageUrl('MARITIME_PORT_HERO'),
       category: "Updates",
       title: "Port Operations Continue During Restrictions",
       content: "Port users are encouraged to continue clearing goods at Ghana's sea ports, as cargo movement remains exempt from movement restrictions."
     },
     {
-      image: tugboatsImage,
+      image: getImageUrl('MARITIME_PORT_HERO'),
       category: "Infrastructure",
       title: "New Tugboats Commissioned at Port of Tema",
       content: "The Ghana Ports and Harbours Authority has commissioned three new tugboats at the Port of Tema to attract larger vessels and improve turnaround times."
     },
     {
-      image: tradeRoutesImage,
+      image: getImageUrl('MARITIME_PORT_HERO'),
       category: "Trade",
       title: "Intra-African Trade Growth Opportunities",
       content: "As infrastructure improves across West Africa, intra-African trade will continue to grow with new opportunities emerging."
@@ -61,7 +58,7 @@ export default function NewsSection({ onViewAllNews }: NewsSectionProps) {
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
         style={{
-          backgroundImage: `url(${cargoShipImage})`
+          backgroundImage: `url(${getImageUrl('CARGO_SHIP_MIAMI')})`
         }}
       />
       

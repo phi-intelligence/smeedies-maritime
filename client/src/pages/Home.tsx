@@ -10,7 +10,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import NewsSection from "@/components/NewsSection";
 import Footer from "@/components/Footer";
 import ScrollAnimation from "@/components/ScrollAnimation";
-import temaPortImage from '@assets/generated_images/Tema_Port_aerial_view_2afebff1.png';
+import { getImageUrl, getVideoUrl } from '@/config/assets';
 
 export default function Home() {
 
@@ -22,7 +22,7 @@ export default function Home() {
         {/* Hero Section with Globe Animation */}
         <section id="home">
           <Hero 
-            backgroundVideo="/src/assets/videos/background-new.mp4"
+            backgroundVideo={getVideoUrl('BACKGROUND_NEW')}
             onGetQuote={() => window.location.href = '/contact'}
             onViewServices={() => window.location.href = '/services'}
           />

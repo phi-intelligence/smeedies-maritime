@@ -1,4 +1,4 @@
-import maritimeLogisticsImage from '@/assets/images/maritime_logistics_w_d9957c6e.jpg';
+import { getImageUrl } from '@/config/assets';
 
 export default function QuoteSection() {
   return (
@@ -7,7 +7,7 @@ export default function QuoteSection() {
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat z-0"
         style={{
-          backgroundImage: `url(${maritimeLogisticsImage})`
+          backgroundImage: `url(${getImageUrl('MARITIME_LOGISTICS')})`
         }}
       />
       

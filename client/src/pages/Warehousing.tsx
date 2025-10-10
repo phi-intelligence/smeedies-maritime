@@ -4,14 +4,7 @@ import { Button } from "@/components/ui/button";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import warehouseLogisticsImage from "@/assets/images/warehouse_logistics__b8d9236e.jpg";
-import warehouseOperationsImage from "@/assets/images/warehouse_logistics__e80d910e.jpg";
-import portOperationsImage from "@/assets/images/port_operations_carg_b8c76e3c.jpg";
-import nightPortImage from "@/assets/images/night-time-industrial-port-scene-with-shipping-containers-reflective-surfaces.jpg";
-import logistics5Video from "@/assets/videos/logistics-5.mp4";
-import specializedCargoImage from "@/assets/images/shipping_port_cargo__c474df47.jpg";
-import containerOperationsImage from "@/assets/images/container-cargo-freight-ship-port-twilight.jpg";
-import cargoShipHarborImage from "@/assets/images/cargo-ship-miami-harbor.jpg";
+import { getImageUrl, getVideoUrl } from '@/config/assets';
 
 export default function Warehousing() {
   // Accordion slider state for warehouse locations
@@ -202,7 +195,7 @@ export default function Warehousing() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${warehouseLogisticsImage})`,
+            backgroundImage: `url(${getImageUrl('WAREHOUSE_B8D9')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -238,7 +231,7 @@ export default function Warehousing() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${warehouseOperationsImage})`,
+            backgroundImage: `url(${getImageUrl('WAREHOUSE_E80D')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -306,9 +299,9 @@ export default function Warehousing() {
                   className={`slide ${activeWarehouseSlide === index ? 'active' : ''}`} 
                   style={{
                     backgroundImage: `url(${
-                      index === 0 ? warehouseLogisticsImage :
-                      index === 1 ? warehouseOperationsImage :
-                      portOperationsImage
+                      index === 0 ? getImageUrl('WAREHOUSE_B8D9') :
+                      index === 1 ? getImageUrl('WAREHOUSE_E80D') :
+                      getImageUrl('PORT_OPERATIONS_B8C7')
                     })`
                   }}
                   onMouseEnter={() => setActiveWarehouseSlide(index)}
@@ -354,7 +347,7 @@ export default function Warehousing() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${nightPortImage})`,
+            backgroundImage: `url(${getImageUrl('NIGHT_TIME_INDUSTRIAL')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -380,10 +373,10 @@ export default function Warehousing() {
               <div key={index} className="country-card">
                 <div className="card-image">
                   <img 
-                    src={index % 4 === 0 ? nightPortImage : 
-                         index % 4 === 1 ? warehouseLogisticsImage :
-                         index % 4 === 2 ? warehouseOperationsImage : 
-                         specializedCargoImage} 
+                    src={index % 4 === 0 ? getImageUrl('NIGHT_TIME_INDUSTRIAL') : 
+                         index % 4 === 1 ? getImageUrl('WAREHOUSE_B8D9') :
+                         index % 4 === 2 ? getImageUrl('WAREHOUSE_E80D') : 
+                         getImageUrl('SHIPPING_PORT_C474')} 
                     alt={`${measure.title} security`}
                   />
                 </div>
@@ -411,7 +404,7 @@ export default function Warehousing() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          <source src={logistics5Video} type="video/mp4" />
+          <source src={getVideoUrl('LOGISTICS_5')} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
@@ -459,7 +452,7 @@ export default function Warehousing() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${specializedCargoImage})`,
+            backgroundImage: `url(${getImageUrl('SHIPPING_PORT_C474')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -507,7 +500,7 @@ export default function Warehousing() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${containerOperationsImage})`,
+            backgroundImage: `url(${getImageUrl('CONTAINER_CARGO_SHIP')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -550,7 +543,7 @@ export default function Warehousing() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${cargoShipHarborImage})`,
+            backgroundImage: `url(${getImageUrl('CARGO_SHIP_MIAMI')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'

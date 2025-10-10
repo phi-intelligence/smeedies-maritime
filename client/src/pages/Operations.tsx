@@ -3,18 +3,7 @@ import { Button } from "@/components/ui/button";
 import ScrollAnimation from "@/components/ScrollAnimation";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import ghanaPortImage from "@/assets/images/ghana_port_infrastru_7ef9101d.jpg";
-import maritimeLogisticsImage from "@/assets/images/maritime_logistics_w_d9957c6e.jpg";
-import industrialLogisticsImage from "@/assets/images/industrial-container-cargo-freight-ship-habor-logistic-import-export.jpg";
-import containerOperationsImage from "@/assets/images/shipping_containers__4ae963ed.jpg";
-import craneOperationsImage from "@/assets/images/port_crane_operation_01b3e60a.jpg";
-import nightPortImage from "@/assets/images/cargo-ships-docked-port-night.jpg";
-import portCargoImage from "@/assets/images/shipping_port_cargo__47da743f.jpg";
-import distantPortNightImage from "@/assets/images/distant-shot-port-with-boats-loaded-with-cargo-shipment-nighttime.jpg";
-import backgroundNewVideo from "@/assets/videos/background-new.mp4";
-import logistics3Video from "@/assets/videos/logistics-3.mp4";
-import shipVideo from "@/assets/videos/Ship.mp4";
-import tem2Video from "@/assets/videos/tem2.mp4";
+import { getImageUrl, getVideoUrl } from '@/config/assets';
 
 export default function Operations() {
   const countries = [
@@ -167,7 +156,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${distantPortNightImage})`,
+            backgroundImage: `url(${getImageUrl('DISTANT_SHOT_PORT')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -193,9 +182,9 @@ export default function Operations() {
               <div key={index} className="country-card">
                 <div className="card-image">
                   <img 
-                    src={index % 4 === 0 ? ghanaPortImage : 
-                         index % 4 === 1 ? containerOperationsImage :
-                         index % 4 === 2 ? craneOperationsImage : 
+                    src={index % 4 === 0 ? getImageUrl('GHANA_PORT') : 
+                         index % 4 === 1 ? getImageUrl('SHIPPING_CONTAINERS') :
+                         index % 4 === 2 ? getImageUrl('PORT_CRANE_OPERATION') : 
                          portCargoImage} 
                     alt={`${country} operations`}
                   />
@@ -235,7 +224,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${industrialLogisticsImage})`,
+            backgroundImage: `url(${getImageUrl('INDUSTRIAL_CONTAINER')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -279,7 +268,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${containerOperationsImage})`,
+            backgroundImage: `url(${getImageUrl('SHIPPING_CONTAINERS')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -330,7 +319,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${craneOperationsImage})`,
+            backgroundImage: `url(${getImageUrl('PORT_CRANE_OPERATION')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -377,7 +366,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${nightPortImage})`,
+            backgroundImage: `url(${getImageUrl('CARGO_SHIPS_DOCKED')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -426,7 +415,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${backgroundNewVideo})`,
+            backgroundImage: `url(${getVideoUrl('BACKGROUND_NEW')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -452,9 +441,9 @@ export default function Operations() {
               <div key={index} className="country-card">
                 <div className="card-image">
                   <img 
-                    src={index % 4 === 0 ? ghanaPortImage : 
-                         index % 4 === 1 ? containerOperationsImage :
-                         index % 4 === 2 ? craneOperationsImage : 
+                    src={index % 4 === 0 ? getImageUrl('GHANA_PORT') : 
+                         index % 4 === 1 ? getImageUrl('SHIPPING_CONTAINERS') :
+                         index % 4 === 2 ? getImageUrl('PORT_CRANE_OPERATION') : 
                          portCargoImage} 
                     alt={`${system.title} technology`}
                   />

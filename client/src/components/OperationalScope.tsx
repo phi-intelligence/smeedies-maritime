@@ -1,6 +1,5 @@
 import ParallaxBackground from './ParallaxBackground';
-import logistics2Image from '@/assets/images/logistics-2.jpg';
-import westAfricaImage from '@/assets/images/westafrica.jpg';
+import { getImageUrl } from '@/config/assets';
 
 export default function OperationalScope() {
   const countries = [
@@ -18,7 +17,7 @@ export default function OperationalScope() {
         direction="up" 
         className="absolute inset-0 w-full h-full object-cover"
         style={{
-          backgroundImage: `url(${logistics2Image})`,
+          backgroundImage: `url(${getImageUrl('LOGISTICS_2')})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -108,7 +107,7 @@ export default function OperationalScope() {
               <div className="operational-image-card">
                 <div className="operational-image-card-content">
                   <img 
-                    src={westAfricaImage} 
+                    src={getImageUrl('WEST_AFRICA')} 
                     alt="West Africa Region Map" 
                     data-testid="west-africa-image"
                   />
