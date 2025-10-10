@@ -185,7 +185,7 @@ export default function Operations() {
                     src={index % 4 === 0 ? getImageUrl('GHANA_PORT') : 
                          index % 4 === 1 ? getImageUrl('SHIPPING_CONTAINERS') :
                          index % 4 === 2 ? getImageUrl('PORT_CRANE_OPERATION') : 
-                         portCargoImage} 
+                         getImageUrl('PORT_OPERATIONS_5753')} 
                     alt={`${country} operations`}
                   />
                 </div>
@@ -444,7 +444,7 @@ export default function Operations() {
                     src={index % 4 === 0 ? getImageUrl('GHANA_PORT') : 
                          index % 4 === 1 ? getImageUrl('SHIPPING_CONTAINERS') :
                          index % 4 === 2 ? getImageUrl('PORT_CRANE_OPERATION') : 
-                         portCargoImage} 
+                         getImageUrl('PORT_OPERATIONS_5753')} 
                     alt={`${system.title} technology`}
                   />
                 </div>
