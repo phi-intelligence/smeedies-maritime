@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { getApiUrl } from '@/config/api';
 
 interface ChatMessage {
   id: string;
@@ -62,7 +63,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ className = '' }) => {
 
     try {
       // Send message to backend
-      const response = await fetch('/api/chatbot/message', {
+      const response = await fetch(getApiUrl('CHATBOT'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

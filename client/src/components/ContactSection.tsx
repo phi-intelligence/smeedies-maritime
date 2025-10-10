@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { getVideoUrl } from '@/config/assets';
+import { getApiUrl } from '@/config/api';
 
 export default function ContactSection() {
   const { toast } = useToast();
@@ -22,7 +23,7 @@ export default function ContactSection() {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/contact', {
+            const response = await fetch(getApiUrl('CONTACT'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

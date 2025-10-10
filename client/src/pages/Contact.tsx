@@ -10,6 +10,7 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import QuoteSection from "@/components/QuoteSection";
 import { getImageUrl, getVideoUrl } from '@/config/assets';
+import { getApiUrl } from '@/config/api';
 
 export default function Contact() {
   const { toast } = useToast();
@@ -25,7 +26,7 @@ export default function Contact() {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch(getApiUrl('CONTACT'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
