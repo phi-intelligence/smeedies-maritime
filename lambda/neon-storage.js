@@ -38,7 +38,7 @@ export class NeonStorage {
       const { id, sessionId, type, message, timestamp, metadata } = messageData;
       
       const result = await this.db`
-        INSERT INTO messages (id, session_id, type, message, timestamp, metadata)
+        INSERT INTO chatbot_messages (id, session_id, type, message, timestamp, metadata)
         VALUES (${id}, ${sessionId}, ${type}, ${message}, ${timestamp}, ${JSON.stringify(metadata || {})})
         RETURNING *
       `;
@@ -55,7 +55,7 @@ export class NeonStorage {
     
     try {
       const result = await this.db`
-        SELECT * FROM messages WHERE id = ${id}
+        SELECT * FROM chatbot_messages WHERE id = ${id}
       `;
       
       return result[0] || null;
@@ -70,7 +70,7 @@ export class NeonStorage {
     
     try {
       const result = await this.db`
-        SELECT * FROM messages 
+        SELECT * FROM chatbot_messages 
         ORDER BY timestamp DESC
       `;
       
@@ -86,7 +86,7 @@ export class NeonStorage {
     
     try {
       const result = await this.db`
-        UPDATE messages 
+        UPDATE chatbot_messages 
         SET metadata = jsonb_set(
           COALESCE(metadata, '{}'::jsonb), 
           '{isRead}', 
@@ -108,7 +108,7 @@ export class NeonStorage {
     
     try {
       const result = await this.db`
-        DELETE FROM messages WHERE id = ${id}
+        DELETE FROM chatbot_messages WHERE id = ${id}
       `;
       
       return result.count > 0;
@@ -123,7 +123,7 @@ export class NeonStorage {
     
     try {
       const result = await this.db`
-        SELECT * FROM messages 
+        SELECT * FROM chatbot_messages 
         WHERE session_id = ${sessionId}
         ORDER BY timestamp ASC
       `;
@@ -141,7 +141,7 @@ export class NeonStorage {
     try {
       // Update all messages in the session to mark as escalated
       await this.db`
-        UPDATE messages 
+        UPDATE chatbot_messages 
         SET metadata = jsonb_set(
           COALESCE(metadata, '{}'::jsonb), 
           '{escalated}', 

@@ -63,13 +63,13 @@ functions:
           method: GET
           cors: true
 
-plugins:
-  - serverless-offline
+# plugins:
+#   - serverless-offline
 
-custom:
-  serverless-offline:
-    httpPort: 3000
-    host: 0.0.0.0
+# custom:
+#   serverless-offline:
+#     httpPort: 3000
+#     host: 0.0.0.0
 
 package:
   patterns:

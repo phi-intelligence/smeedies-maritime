@@ -1,11 +1,12 @@
 import { NeonStorage } from './neon-storage.js';
-import OpenAI from 'openai';
+// import OpenAI from 'openai';
 
 // Initialize storage and OpenAI
 const storage = new NeonStorage(process.env.DATABASE_URL);
-const openai = process.env.OPENAI_API_KEY ? new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-}) : null;
+// const openai = process.env.OPENAI_API_KEY ? new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+// }) : null;
+const openai = null; // Temporarily disabled
 
 export const handler = async (event, context) => {
   const { httpMethod, path, body } = event;
