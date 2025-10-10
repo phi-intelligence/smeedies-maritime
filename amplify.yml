@@ -10,8 +10,6 @@ frontend:
     build:
       commands:
         - echo "Building the application..."
-        - 'echo "Current directory: $(pwd)"'
-        - 'echo "Files in directory: $(ls -la)"'
         - npm run build
         - echo "Build completed successfully"
   artifacts:
