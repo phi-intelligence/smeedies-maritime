@@ -1,0 +1,94 @@
+service: smeedies-maritime-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  stage: ${opt:stage, 'prod'}
+  region: us-east-1
+  environment:
+    NODE_ENV: production
+    DATABASE_URL: ${env:DATABASE_URL}
+    OPENAI_API_KEY: ${env:OPENAI_API_KEY}
+    SESSION_SECRET: ${env:SESSION_SECRET}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "*"
+
+functions:
+  chatbot:
+    handler: lambda/chatbot.handler
+    timeout: 30
+    memorySize: 256
+    events:
+      - http:
+          path: chatbot/{proxy+}
+          method: ANY
+          cors: true
+  
+  contact:
+    handler: lambda/contact.handler
+    timeout: 30
+    memorySize: 256
+    events:
+      - http:
+          path: contact
+          method: POST
+          cors: true
+  
+  admin:
+    handler: lambda/admin.handler
+    timeout: 30
+    memorySize: 256
+    events:
+      - http:
+          path: admin/{proxy+}
+          method: ANY
+          cors: true
+  
+  health:
+    handler: lambda/health.handler
+    timeout: 10
+    memorySize: 128
+    events:
+      - http:
+          path: health
+          method: GET
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+    host: 0.0.0.0
+
+package:
+  patterns:
+    - '!node_modules/**'
+    - '!package-lock.json'
+    - '!*.md'
+    - '!.git/**'
+    - '!client/**'
+    - '!server/**'
+    - '!shared/**'
+    - '!*.css'
+    - '!*.html'
+    - '!*.json'
+    - '!*.txt'
+    - '!*.zip'
+    - '!amplify.yml'
+    - '!.amplifyrc'
+    - '!DETAILED_MODEL_ANALYSIS.md'
+    - '!MODERN_HERO_DESIGN.md'
+    - '!SHIPPING_ROUTES.md'
+    - '!DEPLOYMENT_GUIDE.md'
+    - '!AMPLIFY_CHECKLIST.md'
