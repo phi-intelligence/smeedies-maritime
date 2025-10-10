@@ -415,7 +415,7 @@ export default function Operations() {
         <div 
           className="absolute inset-0 w-full h-full object-cover z-0"
           style={{
-            backgroundImage: `url(${getVideoUrl('BACKGROUND_NEW')})`,
+            backgroundImage: `url(${getImageUrl('MARITIME_PORT_HERO')})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -472,7 +472,7 @@ export default function Operations() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover z-0"
         >
-          <source src={shipVideo} type="video/mp4" />
+          <source src={getVideoUrl('SHIP')} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         
