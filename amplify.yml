@@ -4,8 +4,6 @@ frontend:
     preBuild:
       commands:
         - echo "Installing dependencies..."
-        - 'echo "Node version: $(node --version)"'
-        - 'echo "NPM version: $(npm --version)"'
         - npm ci
     build:
       commands:
