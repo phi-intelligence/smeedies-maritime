@@ -121,7 +121,7 @@ export default function Operations() {
             onCanPlay={() => console.log('Operations video can play')}
             onError={(e) => console.error('Operations video error:', e)}
           >
-            <source src={logistics3Video} type="video/mp4" />
+            <source src={getVideoUrl('LOGISTICS_3')} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>
