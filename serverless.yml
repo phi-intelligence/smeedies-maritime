@@ -9,7 +9,8 @@ provider:
   region: us-east-1
   environment:
     NODE_ENV: production
-    DATABASE_URL: ${env:DATABASE_URL}
+    DYNAMODB_TABLE_NAME: ${env:DYNAMODB_TABLE_NAME, 'smeedies-maritime-messages'}
+    DYNAMODB_ADMIN_TABLE_NAME: ${env:DYNAMODB_ADMIN_TABLE_NAME, 'smeedies-maritime-admin-users'}
     OPENAI_API_KEY: ${env:OPENAI_API_KEY}
     SESSION_SECRET: ${env:SESSION_SECRET}
   iam:
@@ -21,6 +22,17 @@ provider:
             - logs:CreateLogStream
             - logs:PutLogEvents
           Resource: "*"
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Scan
+            - dynamodb:Query
+          Resource: 
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/smeedies-maritime-messages"
+            - "arn:aws:dynamodb:${self:provider.region}:*:table/smeedies-maritime-admin-users"
 
 functions:
   chatbot:
@@ -77,14 +89,30 @@ package:
     - '!package-lock.json'
     - '!*.md'
     - '!.git/**'
+    - '!.cursor/**'
+    - '!.vscode/**'
+    - '!.serverless/**'
+    - '!.local/**'
+    - '!.playwright-mcp/**'
+    - '!.env'
     - '!client/**'
     - '!server/**'
     - '!shared/**'
+    - '!static-build/**'
+    - '!dist/**'
+    - '!scripts/**'
+    - '!attached_assets/**'
     - '!*.css'
     - '!*.html'
     - '!*.json'
     - '!*.txt'
     - '!*.zip'
+    - '!*.png'
+    - '!*.jpg'
+    - '!*.jpeg'
+    - '!*.gif'
+    - '!*.svg'
+    - '!*.ico'
     - '!amplify.yml'
     - '!.amplifyrc'
     - '!DETAILED_MODEL_ANALYSIS.md'
@@ -92,3 +120,10 @@ package:
     - '!SHIPPING_ROUTES.md'
     - '!DEPLOYMENT_GUIDE.md'
     - '!AMPLIFY_CHECKLIST.md'
+    - '!tailwind.config.js'
+    - '!postcss.config.js'
+    - '!vite.config.ts'
+    - '!vite.static.config.ts'
+    - '!components.json'
+    - '!drizzle.config.ts'
+    - '!tsconfig.json'

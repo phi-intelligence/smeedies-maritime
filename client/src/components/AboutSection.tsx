@@ -66,7 +66,7 @@ export default function AboutSection({ onLearnMore }: AboutSectionProps) {
         </div>
         
         <div className="max-w-3xl mx-auto text-center">
-          <p className="text-lg text-gray-200 mb-8" data-testid="text-description">
+          <p className="text-lg text-gray-200 mb-8 mt-4" data-testid="text-description">
             Smeedies Maritime is a shipping agency providing ship agency and logistics services across various ports in West Africa. We help customers and principals add value to their business and assist with all shipping, freight, and logistics requirements.
           </p>
           

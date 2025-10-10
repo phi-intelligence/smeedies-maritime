@@ -252,7 +252,7 @@ export default function Services() {
       <section id="agency-services" ref={sectionRef} className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentSlide !== -1 ? 'section-has-active-slide' : ''}`}>
         <div className="w-full h-full">
           {/* Heading Overlay */}
-          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+          <div className="section-heading absolute top-8 left-1/2 transform -translate-x-1/2 z-30 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Agency Services
             </h2>
@@ -262,7 +262,6 @@ export default function Services() {
           </div>
             
           <div className="slider-container">
-            <div className="now-showing">Now Available</div>
 
             <div className="accordion-slider">
               <div 
@@ -461,10 +460,10 @@ export default function Services() {
       </section>
 
       {/* Husbandry Services Accordion Slider */}
-      <section className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentHusbandrySlide !== -1 ? 'section-has-active-slide' : ''}`}>
+      <section id="husbandry-services" className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentHusbandrySlide !== -1 ? 'section-has-active-slide' : ''}`}>
         <div className="w-full h-full">
           {/* Heading Overlay */}
-          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+          <div className="section-heading absolute top-8 left-1/2 transform -translate-x-1/2 z-30 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Husbandry Services
             </h2>
@@ -474,7 +473,6 @@ export default function Services() {
           </div>
             
           <div className="slider-container">
-            <div className="now-showing">Now Available</div>
 
             <div className="accordion-slider">
               <div 
@@ -673,10 +671,10 @@ export default function Services() {
       </section>
 
       {/* Cargo Services Accordion Slider */}
-      <section className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentCargoSlide !== -1 ? 'section-has-active-slide' : ''}`}>
+      <section id="cargo-services" className={`relative overflow-hidden h-[80vh] bg-gray-800 ${currentCargoSlide !== -1 ? 'section-has-active-slide' : ''}`}>
         <div className="w-full h-full">
           {/* Heading Overlay */}
-          <div className="section-heading absolute top-20 left-1/2 transform -translate-x-1/2 z-30 text-center">
+          <div className="section-heading absolute top-8 left-1/2 transform -translate-x-1/2 z-30 text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 drop-shadow-lg">
               Cargo Services
             </h2>
@@ -686,7 +684,6 @@ export default function Services() {
           </div>
             
           <div className="slider-container">
-            <div className="now-showing">Now Available</div>
 
             <div className="accordion-slider">
               <div 

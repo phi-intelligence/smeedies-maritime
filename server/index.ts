@@ -3,7 +3,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import session from "express-session";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { NeonStorage } from "./neon-storage";
+import { DynamoDBStorage } from "./dynamodb-storage";
 
 const app = express();
 app.use(express.json());
@@ -51,17 +51,15 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  // Initialize production database storage
+  // Initialize DynamoDB storage
   let storage;
   try {
-    const databaseUrl = process.env.DATABASE_URL;
-    if (!databaseUrl) {
-      throw new Error('DATABASE_URL environment variable is required');
-    }
-    storage = new NeonStorage(databaseUrl);
-    console.log('✅ Connected to production database (NeonDB)');
+    storage = new DynamoDBStorage();
+    await storage.healthCheck();
+    console.log('✅ Connected to DynamoDB');
+    await storage.createDefaultAdmin();
   } catch (error) {
-    console.error('❌ Failed to connect to database:', error);
+    console.error('❌ Failed to connect to DynamoDB:', error);
     console.log('🔄 Falling back to in-memory storage for development');
     const { MemStorage } = await import('./storage');
     storage = new MemStorage();

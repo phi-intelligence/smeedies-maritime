@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
+import { getApiUrl } from '@/config/api';
 import { 
   MessageSquare, 
   Mail, 
@@ -23,18 +24,23 @@ import {
   CheckCircle,
   Clock,
   TrendingUp,
-  Users
+  Users,
+  Key,
+  Settings
 } from "lucide-react";
 
 interface Message {
   id: string;
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   company?: string;
   service?: string;
   message: string;
   isRead: boolean;
   createdAt: string;
+  type: 'contact' | 'chatbot_user' | 'chatbot_bot';
+  sessionId?: string;
+  metadata?: any;
 }
 
 interface DashboardStats {
@@ -57,7 +63,15 @@ export default function AdminDashboard() {
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "read" | "unread">("all");
+  const [filterType, setFilterType] = useState<"all" | "contact" | "chatbot">("all");
   const [isLoading, setIsLoading] = useState(true);
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: ""
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
 
   // Check authentication status
   useEffect(() => {
@@ -73,7 +87,7 @@ export default function AdminDashboard() {
 
   const checkAuthStatus = async () => {
     try {
-      const response = await fetch('/api/admin/status', {
+      const response = await fetch(getApiUrl('ADMIN') + '/status', {
         credentials: 'include',
       });
       const data = await response.json();
@@ -93,8 +107,8 @@ export default function AdminDashboard() {
     try {
       setIsLoading(true);
       const [messagesResponse, statsResponse] = await Promise.all([
-        fetch('/api/admin/messages', { credentials: 'include' }),
-        fetch('/api/admin/stats', { credentials: 'include' })
+        fetch(getApiUrl('ADMIN') + '/messages', { credentials: 'include' }),
+        fetch(getApiUrl('ADMIN') + '/stats', { credentials: 'include' })
       ]);
 
       if (messagesResponse.ok) {
@@ -120,7 +134,7 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/admin/logout', {
+      await fetch(getApiUrl('ADMIN') + '/logout', {
         method: 'POST',
         credentials: 'include',
       });
@@ -132,7 +146,7 @@ export default function AdminDashboard() {
 
   const markAsRead = async (messageId: string) => {
     try {
-      const response = await fetch(`/api/admin/messages/${messageId}/read`, {
+      const response = await fetch(`${getApiUrl('ADMIN')}/messages/${messageId}/read`, {
         method: 'PATCH',
         credentials: 'include',
       });
@@ -163,7 +177,7 @@ export default function AdminDashboard() {
 
   const deleteMessage = async (messageId: string) => {
     try {
-      const response = await fetch(`/api/admin/messages/${messageId}`, {
+      const response = await fetch(`${getApiUrl('ADMIN')}/messages/${messageId}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -192,19 +206,112 @@ export default function AdminDashboard() {
     }
   };
 
+  const handlePasswordChange = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      toast({
+        title: "Error",
+        description: "New passwords do not match.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (passwordData.newPassword.length < 8) {
+      toast({
+        title: "Error",
+        description: "New password must be at least 8 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsChangingPassword(true);
+
+    try {
+      const response = await fetch(getApiUrl('ADMIN') + '/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword
+        }),
+        credentials: 'include',
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        toast({
+          title: "Password Changed",
+          description: "Your password has been updated successfully.",
+        });
+        setShowPasswordChange(false);
+        setPasswordData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: ""
+        });
+      } else {
+        throw new Error(data.message || 'Password change failed');
+      }
+    } catch (error) {
+      console.error('Password change error:', error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to change password.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
+  // Helper function to group chatbot messages by session
+  const groupChatbotMessagesBySession = (messages: Message[]) => {
+    const sessions: { [sessionId: string]: Message[] } = {};
+    messages
+      .filter(msg => msg.type === 'chatbot_user' || msg.type === 'chatbot_bot')
+      .forEach(msg => {
+        if (msg.sessionId) {
+          if (!sessions[msg.sessionId]) {
+            sessions[msg.sessionId] = [];
+          }
+          sessions[msg.sessionId].push(msg);
+        }
+      });
+    
+    // Sort messages within each session by timestamp
+    Object.keys(sessions).forEach(sessionId => {
+      sessions[sessionId].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    });
+    
+    return sessions;
+  };
+
   // Filter and search messages
   const filteredMessages = messages.filter(message => {
-    const matchesSearch = message.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         message.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = (message.name && message.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (message.email && message.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
                          message.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (message.company && message.company.toLowerCase().includes(searchTerm.toLowerCase()));
+                         (message.company && message.company.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                         (message.sessionId && message.sessionId.toLowerCase().includes(searchTerm.toLowerCase()));
     
     const matchesFilter = filterStatus === "all" || 
                          (filterStatus === "read" && message.isRead) ||
                          (filterStatus === "unread" && !message.isRead);
     
-    return matchesSearch && matchesFilter;
+    const matchesType = filterType === "all" ||
+                       (filterType === "contact" && message.type === "contact") ||
+                       (filterType === "chatbot" && (message.type === "chatbot_user" || message.type === "chatbot_bot"));
+    
+    return matchesSearch && matchesFilter && matchesType;
   });
+
+  const chatbotSessions = groupChatbotMessagesBySession(filteredMessages);
 
   if (isLoading) {
     return (
@@ -228,6 +335,15 @@ export default function AdminDashboard() {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-300">Welcome, {user?.username}</span>
+              <Button 
+                onClick={() => setShowPasswordChange(true)} 
+                variant="outline" 
+                size="sm" 
+                className="border-slate-600 text-gray-300 hover:bg-slate-700"
+              >
+                <Key className="w-4 h-4 mr-2" />
+                Change Password
+              </Button>
               <Button onClick={handleLogout} variant="outline" size="sm" className="border-slate-600 text-gray-300 hover:bg-slate-700">
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout
@@ -305,190 +421,345 @@ export default function AdminDashboard() {
                   />
                 </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  variant={filterStatus === "all" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilterStatus("all")}
-                  className={filterStatus === "all" ? "bg-blue-600" : "border-slate-600 text-gray-300"}
-                >
-                  All
-                </Button>
-                <Button
-                  variant={filterStatus === "unread" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilterStatus("unread")}
-                  className={filterStatus === "unread" ? "bg-orange-600" : "border-slate-600 text-gray-300"}
-                >
-                  Unread
-                </Button>
-                <Button
-                  variant={filterStatus === "read" ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setFilterStatus("read")}
-                  className={filterStatus === "read" ? "bg-green-600" : "border-slate-600 text-gray-300"}
-                >
-                  Read
-                </Button>
+              <div className="flex flex-col sm:flex-row gap-2">
+                <div className="flex gap-2">
+                  <Button
+                    variant={filterType === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterType("all")}
+                    className={filterType === "all" ? "bg-blue-600" : "border-slate-600 text-gray-300"}
+                  >
+                    All Types
+                  </Button>
+                  <Button
+                    variant={filterType === "contact" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterType("contact")}
+                    className={filterType === "contact" ? "bg-purple-600" : "border-slate-600 text-gray-300"}
+                  >
+                    Contact Forms
+                  </Button>
+                  <Button
+                    variant={filterType === "chatbot" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterType("chatbot")}
+                    className={filterType === "chatbot" ? "bg-green-600" : "border-slate-600 text-gray-300"}
+                  >
+                    Chatbot
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant={filterStatus === "all" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterStatus("all")}
+                    className={filterStatus === "all" ? "bg-blue-600" : "border-slate-600 text-gray-300"}
+                  >
+                    All Status
+                  </Button>
+                  <Button
+                    variant={filterStatus === "unread" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterStatus("unread")}
+                    className={filterStatus === "unread" ? "bg-orange-600" : "border-slate-600 text-gray-300"}
+                  >
+                    Unread
+                  </Button>
+                  <Button
+                    variant={filterStatus === "read" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setFilterStatus("read")}
+                    className={filterStatus === "read" ? "bg-green-600" : "border-slate-600 text-gray-300"}
+                  >
+                    Read
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* Messages List */}
             <div className="space-y-4">
-              {filteredMessages.length === 0 ? (
+              {filteredMessages.length === 0 && Object.keys(chatbotSessions).length === 0 ? (
                 <div className="text-center py-8 text-gray-400">
                   No messages found matching your criteria.
                 </div>
               ) : (
-                filteredMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`p-4 rounded-lg border ${
-                      message.isRead 
-                        ? 'bg-slate-700 border-slate-600' 
-                        : 'bg-slate-600 border-blue-500'
-                    }`}
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-white">{message.name}</h3>
-                          {!message.isRead && (
-                            <Badge variant="secondary" className="bg-orange-600 text-white text-xs">
-                              New
+                <>
+                  {/* Contact Messages */}
+                  {filteredMessages.filter(msg => msg.type === 'contact').map((message) => (
+                    <div
+                      key={message.id}
+                      className={`p-4 rounded-lg border ${
+                        message.isRead 
+                          ? 'bg-slate-700 border-slate-600' 
+                          : 'bg-slate-600 border-purple-500'
+                      }`}
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <Badge variant="secondary" className="bg-purple-600 text-white text-xs">
+                              Contact Form
                             </Badge>
-                          )}
-                        </div>
-                        
-                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-2">
-                          <div className="flex items-center gap-1">
-                            <Mail className="w-3 h-3" />
-                            {message.email}
+                            <h3 className="font-semibold text-white">{message.name}</h3>
+                            {!message.isRead && (
+                              <Badge variant="secondary" className="bg-orange-600 text-white text-xs">
+                                New
+                              </Badge>
+                            )}
                           </div>
-                          {message.company && (
+                          
+                          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-300 mb-2">
                             <div className="flex items-center gap-1">
-                              <Building className="w-3 h-3" />
-                              {message.company}
+                              <Mail className="w-3 h-3" />
+                              {message.email}
                             </div>
-                          )}
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {new Date(message.createdAt).toLocaleDateString()}
-                          </div>
-                        </div>
-                        
-                        <p className="text-gray-300 text-sm line-clamp-2">
-                          {message.message}
-                        </p>
-                      </div>
-                      
-                      <div className="flex gap-2 ml-4">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => setSelectedMessage(message)}
-                              className="border-slate-600 text-gray-300 hover:bg-slate-600"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="bg-slate-800 border-slate-700 text-white max-w-2xl">
-                            <DialogHeader>
-                              <DialogTitle className="text-white">Message Details</DialogTitle>
-                            </DialogHeader>
-                            {selectedMessage && (
-                              <div className="space-y-4">
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div>
-                                    <Label className="text-gray-300">Name</Label>
-                                    <p className="text-white">{selectedMessage.name}</p>
-                                  </div>
-                                  <div>
-                                    <Label className="text-gray-300">Email</Label>
-                                    <p className="text-white">{selectedMessage.email}</p>
-                                  </div>
-                                </div>
-                                
-                                {selectedMessage.company && (
-                                  <div>
-                                    <Label className="text-gray-300">Company</Label>
-                                    <p className="text-white">{selectedMessage.company}</p>
-                                  </div>
-                                )}
-                                
-                                {selectedMessage.service && (
-                                  <div>
-                                    <Label className="text-gray-300">Service</Label>
-                                    <p className="text-white">{selectedMessage.service}</p>
-                                  </div>
-                                )}
-                                
-                                <div>
-                                  <Label className="text-gray-300">Message</Label>
-                                  <p className="text-white whitespace-pre-wrap">{selectedMessage.message}</p>
-                                </div>
-                                
-                                <div>
-                                  <Label className="text-gray-300">Date</Label>
-                                  <p className="text-white">
-                                    {new Date(selectedMessage.createdAt).toLocaleString()}
-                                  </p>
-                                </div>
-                                
-                                {!selectedMessage.isRead && (
-                                  <Button
-                                    onClick={() => markAsRead(selectedMessage.id)}
-                                    className="bg-blue-600 hover:bg-blue-700"
-                                  >
-                                    Mark as Read
-                                  </Button>
-                                )}
+                            {message.company && (
+                              <div className="flex items-center gap-1">
+                                <Building className="w-3 h-3" />
+                                {message.company}
                               </div>
                             )}
-                          </DialogContent>
-                        </Dialog>
+                            <div className="flex items-center gap-1">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(message.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
+                          
+                          <p className="text-gray-300 text-sm line-clamp-2">
+                            {message.message}
+                          </p>
+                        </div>
                         
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="border-red-600 text-red-400 hover:bg-red-600/20"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className="bg-slate-800 border-slate-700">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle className="text-white">Delete Message</AlertDialogTitle>
-                              <AlertDialogDescription className="text-gray-300">
-                                Are you sure you want to delete this message? This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel className="border-slate-600 text-gray-300">
-                                Cancel
-                              </AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => deleteMessage(message.id)}
-                                className="bg-red-600 hover:bg-red-700"
+                        <div className="flex gap-2 ml-4">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setSelectedMessage(message)}
+                                className="border-slate-600 text-gray-300 hover:bg-slate-600"
                               >
-                                Delete
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                                <Eye className="w-4 h-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="bg-slate-800 border-slate-700 text-white max-w-2xl">
+                              <DialogHeader>
+                                <DialogTitle className="text-white">Contact Message Details</DialogTitle>
+                              </DialogHeader>
+                              {selectedMessage && (
+                                <div className="space-y-4">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                      <Label className="text-gray-300">Name</Label>
+                                      <p className="text-white">{selectedMessage.name}</p>
+                                    </div>
+                                    <div>
+                                      <Label className="text-gray-300">Email</Label>
+                                      <p className="text-white">{selectedMessage.email}</p>
+                                    </div>
+                                  </div>
+                                  
+                                  {selectedMessage.company && (
+                                    <div>
+                                      <Label className="text-gray-300">Company</Label>
+                                      <p className="text-white">{selectedMessage.company}</p>
+                                    </div>
+                                  )}
+                                  
+                                  {selectedMessage.service && (
+                                    <div>
+                                      <Label className="text-gray-300">Service</Label>
+                                      <p className="text-white">{selectedMessage.service}</p>
+                                    </div>
+                                  )}
+                                  
+                                  <div>
+                                    <Label className="text-gray-300">Message</Label>
+                                    <p className="text-white whitespace-pre-wrap">{selectedMessage.message}</p>
+                                  </div>
+                                  
+                                  <div>
+                                    <Label className="text-gray-300">Date</Label>
+                                    <p className="text-white">
+                                      {new Date(selectedMessage.createdAt).toLocaleString()}
+                                    </p>
+                                  </div>
+                                  
+                                  {!selectedMessage.isRead && (
+                                    <Button
+                                      onClick={() => markAsRead(selectedMessage.id)}
+                                      className="bg-blue-600 hover:bg-blue-700"
+                                    >
+                                      Mark as Read
+                                    </Button>
+                                  )}
+                                </div>
+                              )}
+                            </DialogContent>
+                          </Dialog>
+                          
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="border-red-600 text-red-400 hover:bg-red-600/20"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="bg-slate-800 border-slate-700">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="text-white">Delete Message</AlertDialogTitle>
+                                <AlertDialogDescription className="text-gray-300">
+                                  Are you sure you want to delete this message? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel className="border-slate-600 text-gray-300">
+                                  Cancel
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => deleteMessage(message.id)}
+                                  className="bg-red-600 hover:bg-red-700"
+                                >
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+
+                  {/* Chatbot Conversations */}
+                  {Object.entries(chatbotSessions).map(([sessionId, sessionMessages]) => (
+                    <div
+                      key={sessionId}
+                      className="p-4 rounded-lg border bg-slate-600 border-green-500"
+                    >
+                      <div className="flex items-center gap-3 mb-4">
+                        <Badge variant="secondary" className="bg-green-600 text-white text-xs">
+                          Chatbot Conversation
+                        </Badge>
+                        <span className="text-sm text-gray-300 font-mono">{sessionId}</span>
+                        <span className="text-xs text-gray-400">
+                          {sessionMessages.length} messages
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        {sessionMessages.map((message, index) => (
+                          <div
+                            key={message.id}
+                            className={`p-3 rounded ${
+                              message.type === 'chatbot_user'
+                                ? 'bg-blue-600/20 border-l-4 border-blue-400'
+                                : 'bg-slate-700 border-l-4 border-green-400'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`text-xs font-semibold ${
+                                message.type === 'chatbot_user' ? 'text-blue-300' : 'text-green-300'
+                              }`}>
+                                {message.type === 'chatbot_user' ? 'User' : 'Bot'}
+                              </span>
+                              <span className="text-xs text-gray-400">
+                                {new Date(message.createdAt).toLocaleString()}
+                              </span>
+                            </div>
+                            <p className="text-white text-sm">{message.message}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </>
               )}
             </div>
           </CardContent>
         </Card>
       </div>
+
+      {/* Password Change Dialog */}
+      <Dialog open={showPasswordChange} onOpenChange={setShowPasswordChange}>
+        <DialogContent className="bg-slate-800 border-slate-700 text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-white flex items-center gap-2">
+              <Key className="w-5 h-5" />
+              Change Password
+            </DialogTitle>
+            <DialogDescription className="text-gray-300">
+              Update your admin account password
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handlePasswordChange} className="space-y-4">
+            <div>
+              <Label htmlFor="currentPassword" className="text-gray-300">Current Password</Label>
+              <Input
+                id="currentPassword"
+                type="password"
+                value={passwordData.currentPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                required
+                className="mt-1 bg-slate-700 border-slate-600 text-white placeholder-gray-400"
+                placeholder="Enter current password"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="newPassword" className="text-gray-300">New Password</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                value={passwordData.newPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                required
+                minLength={8}
+                className="mt-1 bg-slate-700 border-slate-600 text-white placeholder-gray-400"
+                placeholder="Enter new password (min 8 characters)"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="confirmPassword" className="text-gray-300">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                value={passwordData.confirmPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                required
+                className="mt-1 bg-slate-700 border-slate-600 text-white placeholder-gray-400"
+                placeholder="Confirm new password"
+              />
+            </div>
+            
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowPasswordChange(false);
+                  setPasswordData({ currentPassword: "", newPassword: "", confirmPassword: "" });
+                }}
+                className="flex-1 border-slate-600 text-gray-300 hover:bg-slate-700"
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isChangingPassword}
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
+              >
+                {isChangingPassword ? "Changing..." : "Change Password"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

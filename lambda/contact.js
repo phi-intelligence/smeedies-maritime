@@ -1,8 +1,8 @@
-import { NeonStorage } from './neon-storage.js';
+import { DynamoDBStorage } from './dynamodb-storage.js';
 import { z } from 'zod';
 
 // Initialize storage
-const storage = new NeonStorage(process.env.DATABASE_URL);
+const storage = new DynamoDBStorage();
 
 // Contact form validation schema
 const contactSchema = z.object({
@@ -57,24 +57,14 @@ async function handleContactSubmission(body, corsHeaders) {
     // Validate input
     const validatedData = contactSchema.parse(body);
     
-    // Create message record
-    const message = {
-      id: `contact_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      sessionId: `contact_${Date.now()}`,
-      type: 'contact',
-      message: validatedData.message,
-      timestamp: new Date().toISOString(),
-      metadata: {
-        name: validatedData.name,
-        email: validatedData.email,
-        company: validatedData.company,
-        service: validatedData.service,
-        isRead: false
-      }
-    };
-    
-    // Store in database
-    await storage.createMessage(message);
+    // Create contact record using DynamoDB storage
+    const contact = await storage.createContact({
+      name: validatedData.name,
+      email: validatedData.email,
+      company: validatedData.company,
+      service: validatedData.service,
+      message: validatedData.message
+    });
     
     // Log the contact form submission
     console.log('Contact form submitted:', {

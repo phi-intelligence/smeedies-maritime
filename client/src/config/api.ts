@@ -10,7 +10,7 @@ export const getApiBaseUrl = (): string => {
   if (process.env.NODE_ENV === 'production') {
     return API_GATEWAY_BASE_URL;
   }
-  // Development - use local server
+  // Development - use local server on same port
   return '';
 };
 

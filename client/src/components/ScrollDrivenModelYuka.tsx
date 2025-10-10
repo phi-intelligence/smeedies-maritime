@@ -515,24 +515,9 @@ const ScrollDrivenModelYuka: React.FC<ScrollDrivenModelYukaProps> = ({
         zIndex: 0
       }}
     >
-      {!isModelLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-900/50">
-          <div className="text-white text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
-            <p className="text-sm">
-              {isMobile ? 'Loading 3D Model (Mobile Optimized)...' : 'Loading 3D Model...'}
-            </p>
-            {isMobile && (
-              <p className="text-xs text-gray-400 mt-1">
-                Optimized for mobile performance
-              </p>
-            )}
-          </div>
-        </div>
-      )}
       
       {/* Mobile performance indicator */}
-      {isMobile && isModelLoaded && (
+      {isMobile && (
         <div className="absolute top-4 right-4 bg-black/50 text-white text-xs px-2 py-1 rounded opacity-50">
           Mobile Mode
         </div>

@@ -1,7 +1,7 @@
-import { NeonStorage } from './neon-storage.js';
+import { DynamoDBStorage } from './dynamodb-storage.js';
 
 // Initialize storage
-const storage = new NeonStorage(process.env.DATABASE_URL);
+const storage = new DynamoDBStorage();
 
 export const handler = async (event, context) => {
   const { httpMethod } = event;

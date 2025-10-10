@@ -172,12 +172,18 @@
 /* Accordion Slider Styles */
 .slider-container {
   width: 100%;
-  height: 80vh;
+  height: 90vh;
   position: relative;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   border-radius: 0;
   margin: 0;
+}
+
+/* Make sections auto-adjust height when slides are expanded */
+section[id$="-services"] {
+  min-height: 80vh;
+  height: auto;
 }
 
 .now-showing {
@@ -240,15 +246,26 @@
 
 .slide-content {
   position: absolute;
-  bottom: 30px;
-  left: 30px;
-  right: 30px;
+  bottom: 40px;
+  left: 40px;
+  right: 40px;
   color: white;
   z-index: 2;
+  max-height: 70%;
+  overflow-y: auto;
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.slide-content::-webkit-scrollbar {
+  display: none; /* WebKit */
 }
 
 .slide.active .slide-content {
-  bottom: 80px;
+  bottom: 100px;
+  left: 50px;
+  right: 50px;
   transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
 }
 
@@ -291,9 +308,10 @@
 }
 
 .car-name {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
+  line-height: 1.2;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -307,9 +325,10 @@
 }
 
 .car-subtitle {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 20px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 24px;
+  line-height: 1.4;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -338,8 +357,8 @@
 .spec-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
-  font-size: 14px;
+  margin-bottom: 10px;
+  font-size: 15px;
   opacity: 0;
   transform: translateX(-20px);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -375,7 +394,8 @@
 .performance-badges {
   display: flex;
   gap: 12px;
-  margin-top: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
   opacity: 0;
   transform: translateY(30px);
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
@@ -503,25 +523,345 @@
 
 @media (max-width: 768px) {
   .slider-container {
-    height: 500px;
+    height: auto;
+    min-height: 600px;
     max-width: 100%;
+    overflow: visible;
+    margin-bottom: 0.5rem;
+    padding: 1rem;
+  }
+
+  /* Add spacing between accordion sections */
+  section[id$="-services"] {
+    margin-bottom: 0.5rem;
+    min-height: 700px;
+    height: auto;
+    position: relative;
+    /* Add Tema Port background image for services sections on mobile */
+    background-image: url('/assets/images/Tema_Port_aerial_view_2afebff1.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+  }
+
+  /* Add dark overlay for better text readability */
+  section[id$="-services"]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(31, 41, 55, 0.7); /* gray-800 with 70% opacity */
+    z-index: 1;
+  }
+
+  /* Ensure content is above the overlay */
+  section[id$="-services"] > * {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Section headings */
+  .section-heading {
+    position: relative;
+    z-index: 20;
+    margin-bottom: 2rem;
   }
   
+  /* Vertical accordion layout */
   .accordion-slider {
+    display: flex;
     flex-direction: column;
+    gap: 0;
+    height: auto;
+    min-height: 480px;
+    position: relative;
   }
 
+  /* "Now Available" text */
+  .now-showing {
+    position: relative;
+    top: auto;
+    left: auto;
+    margin-bottom: 1rem;
+    z-index: 15;
+  }
+
+  /* Hide navigation arrows on mobile */
+  .navigation-arrows {
+    display: none !important;
+  }
+
+  /* Hide any add buttons or navigation elements */
+  .add-button,
+  .nav-button,
+  .prev-button,
+  .next-button {
+    display: none !important;
+  }
+
+  /* Individual slide cards - vertical stack */
   .slide {
-    flex: 1;
-    min-height: 100px;
+    flex: none;
+    height: 120px;
+    min-height: 120px;
+    max-height: 120px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    margin-bottom: 0;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
   }
 
+  /* Add gradient overlay for text readability */
+  .slide::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Ensure content is pushed down and not overlapping with any buttons */
+  .slide-content {
+    margin-top: 0;
+    padding-top: 0.5rem;
+  }
+
+  /* Ensure all content elements respect boundaries */
+  .slide-content * {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  /* Ensure specs and badges don't overflow */
+  .car-specs,
+  .performance-badges {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .spec-row {
+    max-width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .spec-label,
+  .spec-value {
+    max-width: 50%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .slide.active::before {
+    height: 100%;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.6));
+  }
+
+  /* Expanded slide */
   .slide.active {
-    flex: 3;
+    flex: none;
+    height: auto;
+    min-height: 400px;
+    max-height: 400px;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    transform: scale(1.02);
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
+  /* Slide content - preview state */
+  .slide-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    padding: 0.5rem 1rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
+    overflow: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    /* Ensure content stays within slide boundaries */
+    max-width: 100%;
+  }
+
+  /* Expanded slide content */
+  .slide.active .slide-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    min-height: 350px;
+    max-height: 350px;
+    padding: 1rem 1.5rem 1.5rem 1.5rem;
+    justify-content: flex-start;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    /* Ensure content stays within slide boundaries */
+    margin: 0;
+  }
+
+  /* Slide number styling */
   .slide-number {
-    font-size: 40px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #3b82f6;
+    margin-bottom: 0.25rem;
+    transition: all 0.3s ease;
+  }
+
+  .slide.active .slide-number {
+    font-size: 20px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Car brand/title styling */
+  .car-brand {
+    font-size: 10px;
+    font-weight: 600;
+    color: #60a5fa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.125rem;
+  }
+
+  .slide.active .car-brand {
+    font-size: 12px;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Car name styling */
+  .car-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 0.25rem;
+    line-height: 1.1;
+  }
+
+  .slide.active .car-name {
+    font-size: 18px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Car subtitle styling */
+  .car-subtitle {
+    font-size: 9px;
+    color: #d1d5db;
+    line-height: 1.2;
+    margin-bottom: 0;
+  }
+
+  .slide.active .car-subtitle {
+    font-size: 14px;
+    margin-bottom: 1rem;
+  }
+
+  /* Hide specs and badges in collapsed state */
+  .car-specs,
+  .performance-badges {
+    display: none;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+
+  /* Show only specs in expanded state, hide badges in mobile */
+  .slide.active .car-specs {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Hide performance badges completely in mobile */
+  .performance-badges {
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  .slide.active .performance-badges {
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Specs styling - more space since badges are hidden */
+  .car-specs {
+    margin-bottom: 0;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .spec-label {
+    font-size: 11px;
+    color: #9ca3af;
+    font-weight: 500;
+  }
+
+  .spec-value {
+    font-size: 11px;
+    color: white;
+    font-weight: 600;
+  }
+
+  /* Performance badges styling - hidden in mobile */
+  .performance-badges {
+    display: none !important;
+  }
+
+  .badge {
+    display: none !important;
+  }
+
+  .badge-icon {
+    display: none !important;
+  }
+
+  /* Add hover effects for better interactivity */
+  .slide:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  .slide.active:hover {
+    transform: scale(1.02) translateY(-2px);
+  }
+
+  /* Ensure smooth scrolling when expanding */
+  .slide.active {
+    scroll-margin-top: 2rem;
+  }
+
+  /* Add subtle border to active slides */
+  .slide.active {
+    border: 2px solid rgba(59, 130, 246, 0.3);
   }
 
   .car-brand {
@@ -530,29 +870,127 @@
   }
   
   .car-name {
-    font-size: 24px;
+    font-size: 26px;
   }
   
   .car-subtitle {
-    font-size: 16px;
+    font-size: 17px;
+  }
+
+  .spec-row {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .performance-badges {
+    margin-top: 16px;
+    gap: 10px;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 3px 6px;
   }
 }
 
 @media (max-width: 480px) {
   .slider-container {
-    height: 450px;
+    height: auto;
+    min-height: 500px;
+    overflow: visible;
+    margin-bottom: 0.5rem;
+    padding: 0.8rem;
+  }
+
+  /* Ensure Tema Port background image works on small mobile devices too */
+  section[id$="-services"] {
+    background-image: url('/assets/images/Tema_Port_aerial_view_2afebff1.png') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
   }
   
+  /* Smaller cards for phones */
+  .slide {
+    height: 100px;
+    min-height: 100px;
+    max-height: 100px;
+  }
+
   .slide.active {
-    flex: 4;
+    height: auto;
+    min-height: 350px;
+    max-height: 350px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    box-sizing: border-box;
   }
-  
+
+  /* Smaller content padding for phones */
+  .slide-content {
+    height: 100px;
+    padding: 0.4rem 0.8rem 0.8rem 0.8rem;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .slide.active .slide-content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    min-height: 350px;
+    max-height: 350px;
+    padding: 0.8rem 1.2rem 1.2rem 1.2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  /* Adjust font sizes for smaller screens */
   .slide-number {
-    font-size: 32px;
-  }
-  
-  .car-name {
     font-size: 20px;
+  }
+
+  .slide.active .slide-number {
+    font-size: 18px;
+  }
+
+  .car-brand {
+    font-size: 9px;
+  }
+
+  .slide.active .car-brand {
+    font-size: 11px;
+  }
+
+  .car-name {
+    font-size: 12px;
+  }
+
+  .slide.active .car-name {
+    font-size: 16px;
+  }
+
+  .car-subtitle {
+    font-size: 8px;
+  }
+
+  .slide.active .car-subtitle {
+    font-size: 12px;
+  }
+
+  /* Hide performance badges in smaller mobile screens too */
+  .performance-badges,
+  .badge,
+  .badge-icon {
+    display: none !important;
   }
 }
 
@@ -1484,18 +1922,32 @@
       width: 280px;
       height: 180px;
       padding: 20px;
+      /* Simplify 3D transform for mobile to prevent overlap */
+      transform: rotate(-5deg) skew(5deg) translate(0, 0);
+      margin: 0 auto;
     }
     
     .operational-stat-card {
       width: 280px;
       height: 180px;
       padding: 20px;
+      /* Simplify 3D transform for mobile */
+      transform: skew(5deg) translate(0, 0);
+      margin: 0 auto;
     }
     
     .operational-image-card {
       width: 280px;
       height: 180px;
       padding: 12px;
+    }
+
+    /* Center the stat cards container on mobile */
+    .flex.flex-wrap.justify-center.items-center.gap-8 {
+      justify-content: center !important;
+      align-items: center !important;
+      gap: 2rem !important;
+      padding: 0 1rem;
     }
   }
   
@@ -1504,18 +1956,48 @@
       width: 260px;
       height: 160px;
       padding: 15px;
+      /* Further simplify 3D transform for small mobile */
+      transform: rotate(-3deg) skew(3deg) translate(0, 0);
+      margin: 0 auto;
     }
     
     .operational-stat-card {
       width: 260px;
       height: 160px;
       padding: 15px;
+      /* Further simplify 3D transform for small mobile */
+      transform: skew(3deg) translate(0, 0);
+      margin: 0 auto;
     }
     
     .operational-image-card {
       width: 260px;
       height: 160px;
       padding: 10px;
+    }
+
+    /* Better spacing for small mobile */
+    .flex.flex-wrap.justify-center.items-center.gap-8 {
+      gap: 1.5rem !important;
+      padding: 0 0.5rem;
+    }
+
+    /* Prevent text overlap in About Us section on mobile */
+    .py-20.relative.overflow-hidden.prevent-white-flash {
+      padding-top: 2rem !important;
+      padding-bottom: 2rem !important;
+    }
+
+    /* Ensure proper text spacing */
+    .text-center.mb-12 {
+      margin-bottom: 1.5rem !important;
+      padding: 0 1rem;
+    }
+
+    /* Center align text properly */
+    .max-w-7xl.mx-auto.px-6.relative.z-10 {
+      padding-left: 1rem !important;
+      padding-right: 1rem !important;
     }
   }
 }

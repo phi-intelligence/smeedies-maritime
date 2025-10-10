@@ -1,12 +1,11 @@
-import { NeonStorage } from './neon-storage.js';
-// import OpenAI from 'openai';
+import { DynamoDBStorage } from './dynamodb-storage.js';
+import OpenAI from 'openai';
 
 // Initialize storage and OpenAI
-const storage = new NeonStorage(process.env.DATABASE_URL);
-// const openai = process.env.OPENAI_API_KEY ? new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-// }) : null;
-const openai = null; // Temporarily disabled
+const storage = new DynamoDBStorage();
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+}) : null;
 
 export const handler = async (event, context) => {
   const { httpMethod, path, body } = event;
@@ -88,12 +87,10 @@ async function handleChatbotMessage(body, corsHeaders) {
   
   try {
     // Store user message
-    await storage.createMessage({
-      id: `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    await storage.createChatbotMessage({
       sessionId,
-      type: 'user',
+      type: 'chatbot_user',
       message,
-      timestamp: new Date().toISOString(),
       metadata: userInfo
     });
     
@@ -140,12 +137,10 @@ async function handleChatbotMessage(body, corsHeaders) {
     }
     
     // Store AI response
-    await storage.createMessage({
-      id: `bot_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    await storage.createChatbotMessage({
       sessionId,
-      type: 'bot',
-      message: aiResponse,
-      timestamp: new Date().toISOString()
+      type: 'chatbot_bot',
+      message: aiResponse
     });
     
     return {

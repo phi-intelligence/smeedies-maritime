@@ -1,8 +1,8 @@
-import { NeonStorage } from './neon-storage.js';
+import { DynamoDBStorage } from './dynamodb-storage.js';
 import bcrypt from 'bcryptjs';
 
 // Initialize storage
-const storage = new NeonStorage(process.env.DATABASE_URL);
+const storage = new DynamoDBStorage();
 
 export const handler = async (event, context) => {
   const { httpMethod, path, body, headers } = event;
@@ -55,6 +55,12 @@ export const handler = async (event, context) => {
       case 'stats':
         if (httpMethod === 'GET') {
           return await handleGetStats(headers, corsHeaders);
+        }
+        break;
+        
+      case 'change-password':
+        if (httpMethod === 'POST') {
+          return await handleChangePassword(parsedBody, headers, corsHeaders);
         }
         break;
         
@@ -117,15 +123,10 @@ async function handleAdminLogin(body, corsHeaders) {
   }
   
   try {
-    // For Lambda, we'll use a simple admin check
-    // In production, you'd want to store admin credentials securely
-    const adminCredentials = {
-      username: 'admin',
-      password: '$2a$10$YourHashedPasswordHere' // This should be a properly hashed password
-    };
+    // Use DynamoDB to verify admin credentials
+    const adminUser = await storage.verifyAdminPassword(username, password);
     
-    // For demo purposes, use a simple check
-    if (username === 'admin' && password === 'admin123') {
+    if (adminUser) {
       // Generate a simple token (in production, use JWT)
       const token = Buffer.from(`${username}:${Date.now()}`).toString('base64');
       
@@ -138,7 +139,7 @@ async function handleAdminLogin(body, corsHeaders) {
         },
         body: JSON.stringify({ 
           success: true, 
-          user: { id: 'admin', username: 'admin' },
+          user: { id: adminUser.id, username: adminUser.username },
           token
         })
       };
@@ -178,18 +179,29 @@ async function handleAdminStatus(headers, corsHeaders) {
   const cookieHeader = headers.Cookie || headers.cookie;
   
   let isAuthenticated = false;
+  let user = null;
   
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.substring(7);
     // Decode and validate token
     try {
       const decoded = Buffer.from(token, 'base64').toString('utf-8');
-      isAuthenticated = decoded.startsWith('admin:');
+      const [username, timestamp] = decoded.split(':');
+      if (username && timestamp) {
+        // Check if user exists in DynamoDB
+        const adminUser = await storage.getAdminUserByUsername(username);
+        if (adminUser) {
+          isAuthenticated = true;
+          user = { id: adminUser.id, username: adminUser.username };
+        }
+      }
     } catch (e) {
       isAuthenticated = false;
     }
   } else if (cookieHeader && cookieHeader.includes('admin-token=')) {
-    isAuthenticated = true; // Simplified for demo
+    // Simplified for demo - in production, extract and validate the token properly
+    isAuthenticated = true;
+    user = { id: 'admin', username: 'admin' }; // Fallback for demo
   }
   
   return {
@@ -197,7 +209,7 @@ async function handleAdminStatus(headers, corsHeaders) {
     headers: { 'Content-Type': 'application/json', ...corsHeaders },
     body: JSON.stringify({ 
       authenticated: isAuthenticated,
-      user: isAuthenticated ? { id: 'admin', username: 'admin' } : null
+      user: user
     })
   };
 }
@@ -210,7 +222,12 @@ async function requireAuth(headers) {
     const token = authHeader.substring(7);
     try {
       const decoded = Buffer.from(token, 'base64').toString('utf-8');
-      return decoded.startsWith('admin:');
+      const [username, timestamp] = decoded.split(':');
+      if (username && timestamp) {
+        // Check if user exists in DynamoDB
+        const adminUser = await storage.getAdminUserByUsername(username);
+        return !!adminUser;
+      }
     } catch (e) {
       return false;
     }
@@ -380,6 +397,80 @@ async function handleGetStats(headers, corsHeaders) {
       statusCode: 500,
       headers: { 'Content-Type': 'application/json', ...corsHeaders },
       body: JSON.stringify({ message: 'Failed to fetch stats' })
+    };
+  }
+}
+
+async function handleChangePassword(body, headers, corsHeaders) {
+  if (!(await requireAuth(headers))) {
+    return {
+      statusCode: 401,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      body: JSON.stringify({ message: 'Unauthorized' })
+    };
+  }
+  
+  const { currentPassword, newPassword } = body;
+  
+  if (!currentPassword || !newPassword) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      body: JSON.stringify({ message: 'Current password and new password are required' })
+    };
+  }
+  
+  if (newPassword.length < 8) {
+    return {
+      statusCode: 400,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      body: JSON.stringify({ message: 'New password must be at least 8 characters long' })
+    };
+  }
+  
+  try {
+    // Get current user from token
+    const authHeader = headers.Authorization || headers.authorization;
+    const token = authHeader.substring(7);
+    const decoded = Buffer.from(token, 'base64').toString('utf-8');
+    const [username] = decoded.split(':');
+    
+    // Verify current password
+    const adminUser = await storage.verifyAdminPassword(username, currentPassword);
+    if (!adminUser) {
+      return {
+        statusCode: 401,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        body: JSON.stringify({ message: 'Current password is incorrect' })
+      };
+    }
+    
+    // Update password
+    const success = await storage.updateAdminPassword(username, newPassword);
+    
+    if (success) {
+      return {
+        statusCode: 200,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        body: JSON.stringify({ 
+          success: true, 
+          message: 'Password updated successfully' 
+        })
+      };
+    } else {
+      return {
+        statusCode: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        body: JSON.stringify({ message: 'Failed to update password' })
+      };
+    }
+    
+  } catch (error) {
+    console.error('Error changing password:', error);
+    return {
+      statusCode: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      body: JSON.stringify({ message: 'Failed to change password' })
     };
   }
 }

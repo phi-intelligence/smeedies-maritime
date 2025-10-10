@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Lock, User, Ship } from "lucide-react";
 import Navigation from "@/components/Navigation";
 import shipVideo from "@/assets/videos/Ship.mp4";
+import { getApiUrl } from '@/config/api';
 
 export default function AdminLogin() {
   const { toast } = useToast();
@@ -23,7 +24,7 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/admin/login', {
+      const response = await fetch(getApiUrl('ADMIN') + '/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,9 +33,20 @@ export default function AdminLogin() {
         credentials: 'include', // Important for session cookies
       });
 
+      // Check if response is ok and content-type is JSON
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(`Expected JSON response, got: ${text.substring(0, 100)}`);
+      }
+
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (data.success) {
         toast({
           title: "Login Successful!",
           description: `Welcome back, ${data.user.username}`,
@@ -143,12 +155,6 @@ export default function AdminLogin() {
                   </Button>
                 </form>
                 
-                <div className="mt-6 text-center">
-                  <p className="text-sm text-gray-400">
-                    Default credentials: <br />
-                    <span className="font-mono text-blue-300">admin / admin123</span>
-                  </p>
-                </div>
               </CardContent>
             </Card>
           </div>

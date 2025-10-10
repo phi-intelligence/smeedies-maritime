@@ -22,7 +22,7 @@ import { getImageUrl, getVideoUrl, getModelUrl } from '@/config/assets';
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 
-export default function NewHome() {
+export default function Home() {
   const [isServicesVisible, setIsServicesVisible] = useState(false);
   const [isWhyChooseVisible, setIsWhyChooseVisible] = useState(false);
   const [isWarehousingVisible, setIsWarehousingVisible] = useState(false);

@@ -1,6 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { DynamoDBStorage } from "./dynamodb-storage";
 import { insertMessageSchema } from "@shared/schema";
 import type { IStorage } from "./storage";
 import { ChatbotService } from "./chatbot";
@@ -14,8 +14,8 @@ declare module 'express-session' {
 }
 
 export async function registerRoutes(app: Express, storageInstance?: IStorage): Promise<Server> {
-  // Use provided storage instance or fallback to default
-  const storageToUse = storageInstance || storage;
+  // Use provided storage instance or fallback to DynamoDB
+  const storageToUse = storageInstance || new DynamoDBStorage();
   
   // Initialize chatbot service
   const chatbotService = new ChatbotService(storageToUse);
@@ -77,12 +77,14 @@ export async function registerRoutes(app: Express, storageInstance?: IStorage): 
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
+      console.log("Contact form data:", req.body);
       const validatedData = insertMessageSchema.parse(req.body);
-      const message = await storageToUse.createMessage(validatedData);
+      console.log("Validated data:", validatedData);
+      const message = await storageToUse.createContact(validatedData);
       res.json({ success: true, message });
     } catch (error) {
       console.error("Error creating message:", error);
-      res.status(400).json({ message: "Invalid message data" });
+      res.status(400).json({ message: `Invalid message data: ${error.message}` });
     }
   });
 
