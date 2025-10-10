@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import Chatbot from "@/components/Chatbot";
-import Home from "@/pages/Home";
 import NewHome from "@/pages/NewHome";
 import Services from "@/pages/Services";
 import Operations from "@/pages/Operations";
@@ -19,8 +18,7 @@ import NotFound from "@/pages/not-found";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/new-home" component={NewHome} />
+      <Route path="/" component={NewHome} />
       <Route path="/services" component={Services} />
       <Route path="/operations" component={Operations} />
       <Route path="/warehousing" component={Warehousing} />
