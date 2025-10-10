@@ -3,9 +3,9 @@
  * Handles asset URL generation and loading for S3 storage
  */
 
-// Asset base URL for S3 (configured during deployment)
+// Asset base URL for S3 deployment
 const ASSET_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? `https://${process.env.VITE_S3_BUCKET_NAME}.s3.${process.env.VITE_AWS_REGION}.amazonaws.com/public` 
+  ? 'https://smeedies-maritime-assets.s3.us-east-1.amazonaws.com' 
   : '/assets';
 
 /**
