@@ -4,10 +4,15 @@ frontend:
     preBuild:
       commands:
         - echo "Installing dependencies..."
+        - echo "Node version: $(node --version)"
+        - echo "NPM version: $(npm --version)"
         - npm ci
     build:
       commands:
         - echo "Building the application..."
+        - echo "Current directory: $(pwd)"
+        - echo "Files in directory: $(ls -la)"
+        - echo "Package.json build script: $(npm run build --dry-run 2>&1 || echo 'Build script check failed')"
         - npm run build
         - echo "Build completed successfully"
   artifacts:
