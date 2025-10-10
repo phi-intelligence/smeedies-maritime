@@ -1,7 +1,9 @@
-import heroImage from '@assets/generated_images/Maritime_hero_background_image_0cc6412a.png';
-// Testimonial photos removed - using initials instead
-import portImage from '@assets/generated_images/Port_operations_news_image_24646142.png';
-import tradeImage from '@assets/generated_images/Trade_routes_news_image_3fdbe485.png';
+import { getImageUrl } from '@/config/assets';
+
+// Using S3 images from generated_images folder
+const heroImage = getImageUrl('MARITIME_HERO_BACKGROUND');
+const portImage = getImageUrl('PORT_OPERATIONS_NEWS');
+const tradeImage = getImageUrl('TRADE_ROUTES_NEWS');
 
 // Hero Services Slider Data
 export const heroServicesSlider = [

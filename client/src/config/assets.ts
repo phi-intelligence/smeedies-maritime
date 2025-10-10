@@ -88,6 +88,14 @@ export const ASSET_PATHS = {
     
     // Generated images
     MARITIME_PORT_HERO: 'images/Maritime_port_hero_background_94b32449.png',
+    MARITIME_HERO_BACKGROUND: 'images/Maritime_hero_background_image_0cc6412a.png',
+    PORT_OPERATIONS_NEWS: 'images/Port_operations_news_image_24646142.png',
+    TRADE_ROUTES_NEWS: 'images/Trade_routes_news_image_3fdbe485.png',
+    CAPTAIN_TESTIMONIAL: 'images/Captain_testimonial_photo_b5983bf6.png',
+    FEMALE_EXECUTIVE_TESTIMONIAL: 'images/Female_executive_testimonial_photo_aec506e9.png',
+    MALE_PROFESSIONAL_TESTIMONIAL: 'images/Male_professional_testimonial_photo_15922d3a.png',
+    TUGBOATS_NEWS: 'images/Tugboats_news_image_1741c7dd.png',
+    WAREHOUSE_FACILITIES: 'images/Warehouse_facilities_image_05b30e41.png',
   }
 } as const;
 
