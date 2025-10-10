@@ -20,8 +20,7 @@ import { ArrowRight, Ship, Truck, Globe, FileCheck, Clock, CheckCircle2, Compass
 import captainPhoto from '@assets/generated_images/Captain_testimonial_photo_b5983bf6.png';
 import femaleExecPhoto from '@assets/generated_images/Female_executive_testimonial_photo_aec506e9.png';
 import maleProfPhoto from '@assets/generated_images/Male_professional_testimonial_photo_15922d3a.png';
-import portOperationsImage from '@/assets/images/port_operations_carg_5753cff0.jpg';
-import cargoShipImage from '@/assets/images/cargo-ship-miami-harbor.jpg';
+import { getImageUrl, getVideoUrl } from '@/config/assets';
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 
@@ -326,7 +325,7 @@ export default function NewHome() {
         {/* Hero Section with Globe Animation - Independent Section */}
         <section id="home" className="relative min-h-screen overflow-hidden">
           <Hero 
-            backgroundVideo="/src/assets/videos/background-new.mp4"
+            backgroundVideo={getVideoUrl('backgroundNew')}
             onGetQuote={() => window.location.href = '/contact'}
             onViewServices={() => window.location.href = '/services'}
           />

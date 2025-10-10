@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLB Model Analyzer - smeediessnew1.glb</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: white;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .analyzer-section {
+            background: #2a2a2a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .mesh-item {
+            background: #3a3a3a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        .ship-mesh {
+            border-left-color: #2196F3;
+        }
+        .continent-mesh {
+            border-left-color: #FF9800;
+        }
+        .container-mesh {
+            border-left-color: #9C27B0;
+            background: #3a2a3a;
+        }
+        .other-mesh {
+            border-left-color: #9E9E9E;
+        }
+        .controls {
+            margin: 20px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .console-output {
+            background: #000;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        
+        .color-category {
+            background: #3a3a3a;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .color-meshes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .color-mesh-item {
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 0.9em;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .mesh-id {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .mesh-name {
+            color: #ffffff;
+        }
+        
+        .mesh-color {
+            font-weight: bold;
+        }
+        
+        .mesh-rgb {
+            color: #9E9E9E;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌍 GLB Model Analyzer - smeediessnew1.glb</h1>
+        
+        <div class="controls">
+            <button onclick="analyzeModel()">🔍 Analyze Model</button>
+            <button onclick="clearOutput()">🗑️ Clear Output</button>
+            <button onclick="exportAnalysis()">📊 Export Analysis</button>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalMeshes">0</div>
+                <div>Total Meshes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="continentMeshes">0</div>
+                <div>Continent Meshes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="shipMeshes">0</div>
+                <div>Ship Meshes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="containerMeshes">0</div>
+                <div>Container Meshes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="otherMeshes">0</div>
+                <div>Other Meshes</div>
+            </div>
+        </div>
+
+        <div class="analyzer-section">
+            <h2>🎨 Color Tone Analysis</h2>
+            <div id="colorAnalysis"></div>
+        </div>
+
+        <div class="analyzer-section">
+            <h2>📋 Detailed Mesh Analysis</h2>
+            <div id="meshAnalysis"></div>
+        </div>
+
+        <div class="analyzer-section">
+            <h2>🖥️ Console Output</h2>
+            <div class="console-output" id="consoleOutput"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'https://unpkg.com/three@0.180.0/build/three.module.js';
+        import { GLTFLoader } from 'https://unpkg.com/three@0.180.0/examples/jsm/loaders/GLTFLoader.js';
+
+        let analysisData = {
+            totalMeshes: 0,
+            continentMeshes: 0,
+            shipMeshes: 0,
+            otherMeshes: 0,
+            meshes: []
+        };
+
+        function log(message) {
+            const consoleOutput = document.getElementById('consoleOutput');
+            consoleOutput.textContent += message + '\n';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // Helper function to determine color tone
+        function getColorTone(color) {
+            // Convert THREE.Color to RGB values (0-1)
+            const r = color.r;
+            const g = color.g;
+            const b = color.b;
+
+            // Convert to HSV for better color categorization
+            const max = Math.max(r, g, b);
+            const min = Math.min(r, g, b);
+            const diff = max - min;
+
+            let h, s, v = max;
+
+            if (max === 0) {
+                s = 0;
+                h = 0;
+            } else {
+                s = diff / max;
+                
+                if (diff === 0) {
+                    h = 0;
+                } else if (max === r) {
+                    h = ((g - b) / diff) % 6;
+                } else if (max === g) {
+                    h = (b - r) / diff + 2;
+                } else {
+                    h = (r - g) / diff + 4;
+                }
+                
+                h = h / 6;
+                if (h < 0) h += 1;
+            }
+
+            // Categorize based on HSV values
+            if (s < 0.15 && v > 0.85) return 'White/Ash'; // Very low saturation, high value
+            if (s < 0.15 && v < 0.15) return 'Black'; // Very low saturation, low value
+            if (s < 0.15) return 'Gray'; // Low saturation, mid value
+
+            // Green tones (Hue around 0.25-0.42)
+            if (h >= 0.25 && h < 0.42 && s > 0.2 && v > 0.2) return 'Green';
+            
+            // Red tones (Hue around 0-0.08 or 0.92-1)
+            if ((h >= 0 && h < 0.08 || h >= 0.92 && h <= 1) && s > 0.2 && v > 0.2) return 'Red';
+            
+            // Blue tones (Hue around 0.55-0.67)
+            if (h >= 0.55 && h < 0.67 && s > 0.2 && v > 0.2) return 'Blue';
+            
+            // Yellow tones (Hue around 0.08-0.25)
+            if (h >= 0.08 && h < 0.25 && s > 0.2 && v > 0.2) return 'Yellow';
+            
+            // Brown tones (low-mid saturation, low-mid value, hue around 0.05-0.17)
+            if (h >= 0.05 && h < 0.17 && s > 0.3 && v > 0.15 && v < 0.7) return 'Brown';
+
+            return 'Other';
+        }
+
+        function updateStats() {
+            document.getElementById('totalMeshes').textContent = analysisData.totalMeshes;
+            document.getElementById('continentMeshes').textContent = analysisData.continentMeshes;
+            document.getElementById('shipMeshes').textContent = analysisData.shipMeshes;
+            document.getElementById('containerMeshes').textContent = analysisData.containerMeshes || 0;
+            document.getElementById('otherMeshes').textContent = analysisData.otherMeshes;
+        }
+
+        function analyzeModel() {
+            log('🚀 Starting GLB Model Analysis...');
+            log('Model: smeediessnew1.glb');
+            log('==========================================');
+
+            const loader = new GLTFLoader();
+            
+            loader.load(
+                '/src/assets/models/smeediessnew1.glb',
+                (gltf) => {
+                    log('✅ Model loaded successfully!');
+                    analyzeGLTFStructure(gltf);
+                },
+                (progress) => {
+                    const percent = (progress.loaded / progress.total * 100).toFixed(1);
+                    log(`📊 Loading progress: ${percent}%`);
+                },
+                (error) => {
+                    log(`❌ Error loading model: ${error.message}`);
+                    log('💡 Make sure the model path is correct and accessible');
+                }
+            );
+        }
+
+        function analyzeGLTFStructure(gltf) {
+            log('\n🔍 ANALYZING MODEL STRUCTURE...');
+            log('==========================================');
+            
+            const scene = gltf.scene;
+            const meshes = [];
+            const materials = new Set();
+            const textures = new Set();
+
+            // Reset analysis data
+            analysisData = {
+                totalMeshes: 0,
+                continentMeshes: 0,
+                shipMeshes: 0,
+                containerMeshes: 0,
+                otherMeshes: 0,
+                meshes: []
+            };
+
+            // Color tone categorization
+            const colorCategories = {
+                'Green': [],
+                'Red': [],
+                'Blue': [],
+                'Brown': [],
+                'Yellow': [],
+                'White/Ash': [],
+                'Gray': [],
+                'Black': [],
+                'Other': []
+            };
+
+            // Define detection patterns
+            const continentPatterns = [
+                /africa/i, /europe/i, /asia/i, /america/i, /oceania/i, /antarctica/i,
+                /ghana/i, /nigeria/i, /senegal/i, /ivory/i, /mali/i, /burkina/i,
+                /germany/i, /france/i, /spain/i, /italy/i, /uk/i, /netherlands/i,
+                /china/i, /india/i, /japan/i, /korea/i, /singapore/i, /thailand/i,
+                /usa/i, /canada/i, /mexico/i, /brazil/i, /argentina/i, /chile/i,
+                /australia/i, /new zealand/i, /fiji/i, /papua/i,
+                /^[A-Z]{2}$/, // 2-letter country codes
+                /land$/i, /ia$/i, /stan$/i, /burg$/i, /ton$/i, /ville$/i,
+                /continent/i, /country/i, /nation/i, /state/i, /region/i
+            ];
+
+            const containerPatterns = [
+                /container/i, /cargo/i, /box/i, /crate/i, /freight/i,
+                /shipping/i, /load/i, /stack/i, /unit/i, /teu/i,
+                /twenty/i, /forty/i, /dry/i, /refrigerated/i, /reefer/i
+            ];
+
+            const shipPatterns = [
+                /ship/i, /vessel/i, /boat/i, /marine/i, /nautical/i,
+                /port/i, /harbor/i, /dock/i, /pier/i, /anchor/i, 
+                /mast/i, /hull/i, /deck/i, /bridge/i, /engine/i,
+                /bow/i, /stern/i, /propeller/i, /rudder/i
+            ];
+
+            // Traverse the scene and analyze all meshes
+            scene.traverse((child) => {
+                if (child instanceof THREE.Mesh) {
+                    analysisData.totalMeshes++;
+                    const meshName = child.name || 'Unnamed';
+                    
+                    // Determine mesh type
+                    const isShipMesh = shipPatterns.some(pattern => pattern.test(meshName));
+                    const isContainerMesh = containerPatterns.some(pattern => pattern.test(meshName));
+                    const isContinentMesh = !isShipMesh && !isContainerMesh && continentPatterns.some(pattern => pattern.test(meshName));
+                    
+                    if (isContinentMesh) {
+                        analysisData.continentMeshes++;
+                    } else if (isShipMesh) {
+                        analysisData.shipMeshes++;
+                    } else if (isContainerMesh) {
+                        analysisData.containerMeshes = (analysisData.containerMeshes || 0) + 1;
+                    } else {
+                        analysisData.otherMeshes++;
+                    }
+
+                    // Analyze material colors
+                    let meshColor = null;
+                    let colorTone = 'Other';
+                    
+                    if (child.material) {
+                        const materials = Array.isArray(child.material) ? child.material : [child.material];
+                        materials.forEach(mat => {
+                            if (mat.color) {
+                                meshColor = mat.color;
+                                colorTone = getColorTone(mat.color);
+                                
+                                // Add to color categories
+                                if (colorCategories[colorTone]) {
+                                    colorCategories[colorTone].push({
+                                        id: analysisData.totalMeshes,
+                                        name: meshName,
+                                        color: `#${mat.color.getHexString()}`,
+                                        rgb: {
+                                            r: Math.round(mat.color.r * 255),
+                                            g: Math.round(mat.color.g * 255),
+                                            b: Math.round(mat.color.b * 255)
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                    // Create detailed mesh info
+                    const meshInfo = {
+                        id: analysisData.totalMeshes,
+                        name: meshName,
+                        type: isContinentMesh ? 'continent' : isShipMesh ? 'ship' : isContainerMesh ? 'container' : 'other',
+                        colorTone: colorTone,
+                        color: meshColor ? `#${meshColor.getHexString()}` : 'N/A',
+                        geometry: {
+                            type: child.geometry.type,
+                            vertices: child.geometry.attributes.position?.count || 0,
+                            faces: child.geometry.index ? child.geometry.index.count / 3 : 0
+                        },
+                        material: {
+                            type: child.material.type,
+                            name: child.material.name || 'Unnamed Material'
+                        },
+                        transform: {
+                            position: {
+                                x: child.position.x.toFixed(3),
+                                y: child.position.y.toFixed(3),
+                                z: child.position.z.toFixed(3)
+                            },
+                            rotation: {
+                                x: child.rotation.x.toFixed(3),
+                                y: child.rotation.y.toFixed(3),
+                                z: child.rotation.z.toFixed(3)
+                            },
+                            scale: {
+                                x: child.scale.x.toFixed(3),
+                                y: child.scale.y.toFixed(3),
+                                z: child.scale.z.toFixed(3)
+                            }
+                        },
+                        boundingBox: child.geometry.boundingBox ? {
+                            min: {
+                                x: child.geometry.boundingBox.min.x.toFixed(3),
+                                y: child.geometry.boundingBox.min.y.toFixed(3),
+                                z: child.geometry.boundingBox.min.z.toFixed(3)
+                            },
+                            max: {
+                                x: child.geometry.boundingBox.max.x.toFixed(3),
+                                y: child.geometry.boundingBox.max.y.toFixed(3),
+                                z: child.geometry.boundingBox.max.z.toFixed(3)
+                            }
+                        } : null
+                    };
+
+                    analysisData.meshes.push(meshInfo);
+
+                    // Collect materials and textures
+                    materials.add(child.material.type);
+                    if (child.material.map) textures.add(child.material.map.image?.src || 'embedded');
+                    if (child.material.normalMap) textures.add('normal_map');
+                    if (child.material.roughnessMap) textures.add('roughness_map');
+                    if (child.material.metalnessMap) textures.add('metalness_map');
+
+                    // Log detailed mesh info
+                    log(`\n🔸 MESH ${meshInfo.id}: "${meshName}"`);
+                    log(`   Type: ${meshInfo.type.toUpperCase()}`);
+                    log(`   Geometry: ${meshInfo.geometry.type} (${meshInfo.geometry.vertices} vertices, ${meshInfo.geometry.faces} faces)`);
+                    log(`   Material: ${meshInfo.material.type} - ${meshInfo.material.name}`);
+                    log(`   Position: (${meshInfo.transform.position.x}, ${meshInfo.transform.position.y}, ${meshInfo.transform.position.z})`);
+                    log(`   Rotation: (${meshInfo.transform.rotation.x}, ${meshInfo.transform.rotation.y}, ${meshInfo.transform.rotation.z})`);
+                    log(`   Scale: (${meshInfo.transform.scale.x}, ${meshInfo.transform.scale.y}, ${meshInfo.transform.scale.z})`);
+                    
+                    if (meshInfo.boundingBox) {
+                        log(`   Bounding Box Min: (${meshInfo.boundingBox.min.x}, ${meshInfo.boundingBox.min.y}, ${meshInfo.boundingBox.min.z})`);
+                        log(`   Bounding Box Max: (${meshInfo.boundingBox.max.x}, ${meshInfo.boundingBox.max.y}, ${meshInfo.boundingBox.max.z})`);
+                    }
+                }
+            });
+
+            // Display summary
+            log('\n📊 ANALYSIS SUMMARY');
+            log('==========================================');
+            log(`Total Meshes: ${analysisData.totalMeshes}`);
+            log(`Continent/Country Meshes: ${analysisData.continentMeshes}`);
+            log(`Ship Meshes: ${analysisData.shipMeshes}`);
+            log(`Other Meshes: ${analysisData.otherMeshes}`);
+            log(`Material Types: ${Array.from(materials).join(', ')}`);
+            log(`Texture Types: ${Array.from(textures).join(', ')}`);
+
+            // Analyze continents by position
+            const continents = analysisData.meshes.filter(m => m.type === 'continent');
+            const topContinents = continents.filter(m => parseFloat(m.transform.position.y) > 0);
+            const bottomContinents = continents.filter(m => parseFloat(m.transform.position.y) <= 0);
+
+            log('\n🌍 CONTINENT POSITION ANALYSIS');
+            log('==========================================');
+            log(`Top Side Continents (Y > 0): ${topContinents.length}`);
+            topContinents.forEach((mesh, index) => {
+                log(`  ${index + 1}. "${mesh.name}" at Y: ${mesh.transform.position.y}`);
+            });
+
+            log(`\nBottom Side Continents (Y ≤ 0): ${bottomContinents.length}`);
+            bottomContinents.forEach((mesh, index) => {
+                log(`  ${index + 1}. "${mesh.name}" at Y: ${mesh.transform.position.y}`);
+            });
+
+            // Display color analysis
+            displayColorAnalysis(colorCategories);
+
+            // Update UI
+            updateStats();
+            displayMeshAnalysis();
+
+            log('\n✅ Analysis Complete!');
+        }
+
+        function displayColorAnalysis(colorCategories) {
+            log('\n🎨 COLOR TONE ANALYSIS');
+            log('==========================================');
+            
+            const colorContainer = document.getElementById('colorAnalysis');
+            let colorHtml = '';
+            
+            for (const tone in colorCategories) {
+                if (colorCategories[tone].length > 0) {
+                    log(`\n${tone} Tones (${colorCategories[tone].length} meshes):`);
+                    
+                    colorHtml += `<div class="color-category">
+                        <h3 style="color: ${getColorForTone(tone)}">${tone} Tones (${colorCategories[tone].length} meshes)</h3>
+                        <div class="color-meshes">`;
+                    
+                    colorCategories[tone].forEach(mesh => {
+                        log(`   ${mesh.id}: "${mesh.name}" - Color: ${mesh.color} (RGB: ${mesh.rgb.r}, ${mesh.rgb.g}, ${mesh.rgb.b})`);
+                        
+                        colorHtml += `
+                            <div class="color-mesh-item">
+                                <span class="mesh-id">${mesh.id}</span>
+                                <span class="mesh-name">"${mesh.name}"</span>
+                                <span class="mesh-color" style="color: ${mesh.color}">${mesh.color}</span>
+                                <span class="mesh-rgb">RGB(${mesh.rgb.r}, ${mesh.rgb.g}, ${mesh.rgb.b})</span>
+                            </div>
+                        `;
+                    });
+                    
+                    colorHtml += '</div></div>';
+                }
+            }
+            
+            colorContainer.innerHTML = colorHtml;
+        }
+
+        function getColorForTone(tone) {
+            const colors = {
+                'Green': '#4CAF50',
+                'Red': '#F44336',
+                'Blue': '#2196F3',
+                'Brown': '#8D6E63',
+                'Yellow': '#FFEB3B',
+                'White/Ash': '#9E9E9E',
+                'Gray': '#757575',
+                'Black': '#424242',
+                'Other': '#FF9800'
+            };
+            return colors[tone] || '#000000';
+        }
+
+        function displayMeshAnalysis() {
+            const container = document.getElementById('meshAnalysis');
+            container.innerHTML = '';
+
+            analysisData.meshes.forEach(mesh => {
+                const meshDiv = document.createElement('div');
+                meshDiv.className = `mesh-item ${mesh.type}-mesh`;
+                
+                const typeEmoji = mesh.type === 'continent' ? '🌍' : mesh.type === 'ship' ? '🚢' : mesh.type === 'container' ? '📦' : '❓';
+                const colorStyle = mesh.color !== 'N/A' ? `style="color: ${mesh.color}; font-weight: bold;"` : '';
+                const containerClass = mesh.type === 'container' ? 'container-mesh' : '';
+                
+                meshDiv.innerHTML = `
+                    <h3>${typeEmoji} ${mesh.name}</h3>
+                    <p><strong>Type:</strong> ${mesh.type.toUpperCase()}</p>
+                    <p><strong>Color Tone:</strong> <span ${colorStyle}>${mesh.colorTone}</span></p>
+                    <p><strong>Color:</strong> <span ${colorStyle}>${mesh.color}</span></p>
+                    <p><strong>Geometry:</strong> ${mesh.geometry.type} (${mesh.geometry.vertices} vertices, ${mesh.geometry.faces} faces)</p>
+                    <p><strong>Material:</strong> ${mesh.material.type} - ${mesh.material.name}</p>
+                    <p><strong>Position:</strong> (${mesh.transform.position.x}, ${mesh.transform.position.y}, ${mesh.transform.position.z})</p>
+                    <p><strong>Scale:</strong> (${mesh.transform.scale.x}, ${mesh.transform.scale.y}, ${mesh.transform.scale.z})</p>
+                `;
+                
+                container.appendChild(meshDiv);
+            });
+        }
+
+        function clearOutput() {
+            document.getElementById('consoleOutput').textContent = '';
+            document.getElementById('meshAnalysis').innerHTML = '';
+            analysisData = {
+                totalMeshes: 0,
+                continentMeshes: 0,
+                shipMeshes: 0,
+                containerMeshes: 0,
+                otherMeshes: 0,
+                meshes: []
+            };
+            updateStats();
+        }
+
+        function exportAnalysis() {
+            const dataStr = JSON.stringify(analysisData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'smeediessnew1-glb-analysis.json';
+            link.click();
+        }
+
+        // Make functions globally available
+        window.analyzeModel = analyzeModel;
+        window.clearOutput = clearOutput;
+        window.exportAnalysis = exportAnalysis;
+
+        // Auto-analyze on page load
+        window.addEventListener('load', () => {
+            log('🌍 GLB Model Analyzer Ready');
+            log('Click "Analyze Model" to start analysis...');
+        });
+    </script>
+</body>
+</html>

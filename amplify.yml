@@ -3,17 +3,17 @@ frontend:
   phases:
     preBuild:
       commands:
+        - echo "Installing dependencies..."
         - npm ci
     build:
       commands:
-        - npm run build:frontend
+        - echo "Building the application..."
+        - npm run build
+        - echo "Build completed successfully"
   artifacts:
-    baseDirectory: dist
+    baseDirectory: static-build
     files:
       - '**/*'
   cache:
     paths:
       - node_modules/**/*
-  environment:
-    variables:
-      NODE_ENV: production

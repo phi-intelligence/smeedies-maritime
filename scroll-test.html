@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Animation Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        .scroll-content {
+            height: 300vh; /* Make page scrollable */
+            background: linear-gradient(to bottom, #1e3a8a, #3b82f6, #60a5fa, #93c5fd);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 2rem;
+        }
+        
+        .scroll-section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+        }
+        
+        .debug-info {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-content">
+        <div class="scroll-section">
+            <h1>Scroll Down to Test Animation</h1>
+            <p>Use mouse wheel or keyboard (W/S keys)</p>
+        </div>
+        
+        <div class="scroll-section">
+            <h2>Keep Scrolling...</h2>
+            <p>Camera should be moving closer to the model</p>
+        </div>
+        
+        <div class="scroll-section">
+            <h3>Almost There!</h3>
+            <p>You should see the camera at surface level</p>
+        </div>
+    </div>
+    
+    <div class="debug-info">
+        <div>Scroll Position: <span id="scroll-pos">0</span>px</div>
+        <div>Scroll Progress: <span id="scroll-progress">0</span>%</div>
+        <div>Instructions:</div>
+        <div>• Use mouse wheel to scroll</div>
+        <div>• Press W to scroll down</div>
+        <div>• Press S to scroll up</div>
+        <div>• Press R to reset</div>
+    </div>
+    
+    <script>
+        // Debug scroll tracking
+        function updateScrollDebug() {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = Math.min(scrollTop / documentHeight, 1);
+            
+            document.getElementById('scroll-pos').textContent = Math.round(scrollTop);
+            document.getElementById('scroll-progress').textContent = Math.round(progress * 100);
+        }
+        
+        window.addEventListener('scroll', updateScrollDebug);
+        updateScrollDebug();
+        
+        // Keyboard controls
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'w' || event.key === 'W') {
+                window.scrollBy(0, 100);
+            } else if (event.key === 's' || event.key === 'S') {
+                window.scrollBy(0, -100);
+            } else if (event.key === 'r' || event.key === 'R') {
+                window.scrollTo(0, 0);
+            }
+        });
+    </script>
+</body>
+</html>
