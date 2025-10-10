@@ -20,7 +20,7 @@ export default defineConfig({
         manualChunks: {
           // Separate vendor libraries
           vendor: ['react', 'react-dom', 'wouter'],
-          three: ['three'],
+          three: ['three', '@react-three/fiber', '@react-three/drei'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-toast', '@radix-ui/react-tooltip']
         }
       }
